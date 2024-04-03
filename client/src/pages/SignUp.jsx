@@ -86,9 +86,10 @@ function SignUp() {
       },
     });
     res = await res.json();
-    localStorage.setItem("token", res.token);
+    sessionStorage.setItem("token", res.token);
     if (res.success) {
       navigate("/home");
+      window.location.reload();
     } else {
       alert("User already exists...");
     }

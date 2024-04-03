@@ -52,6 +52,7 @@ function SignIn() {
       },
     });
     res = await res.json();
+    sessionStorage.setItem("token", res.token);
     if (res.success) {
       navigate("/home");
     } else {

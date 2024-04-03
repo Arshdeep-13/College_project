@@ -13,11 +13,18 @@ import Error404 from "./pages/Error404";
 import LandingPage from "./components/LandingPage";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
-
-let isAuth = localStorage.getItem("token");
-console.log(isAuth);
+import { useEffect, useState } from "react";
 
 function App() {
+  const [isAuth, setIsAuth] = useState(null);
+
+  useEffect(() => {
+    const validate = sessionStorage.getItem("token");
+    if (validate) {
+      setIsAuth(validate);
+    }
+  }, []);
+
   return (
     <Router>
       {/* <Navbar/> */}
