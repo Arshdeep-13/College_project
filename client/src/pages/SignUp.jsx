@@ -86,6 +86,7 @@ function SignUp() {
       },
     });
     res = await res.json();
+    localStorage.setItem("token", res.token);
     if (res.success) {
       navigate("/home");
     } else {
