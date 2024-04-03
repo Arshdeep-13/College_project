@@ -40,9 +40,13 @@ const login = async (req, res) => {
     const dbPass = userExit.password;
     const passMatch = await bcrypt.compare(userPass, dbPass);
     if (passMatch) {
+        const token = jwt.sign({userId:userExit._id},process.env.SECRET_KEY,{
+                expiresIn:'30d'
+            })
       return res.status(200).send({
         message: "Login successfully",
         success: true,
+        token:token
       });
     } else {
       return res.status(401).send({
