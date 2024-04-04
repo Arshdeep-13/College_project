@@ -23,21 +23,20 @@ const expSchema = mongoose.Schema({
   },
   batch: {
     type: String,
-    required: true,
+
   },
   name: {
     type: String,
-    required: true,
+
   },
   email: {
     type: String,
-    required: true,
+
   },
-  uid: {
-    type: String,
-    required: true,
+  universityID: {
+    type: String
   },
-  mob: {
+  mobileNo: {
     type: String,
     required: true,
   },
@@ -55,14 +54,14 @@ const expSchema = mongoose.Schema({
   eligibility: {
     type: String,
   },
-  preptips: {
+  preparationTips: {
     type: String,
   },
   mistakes: {
     type: String,
   },
-  techques: {
-    type: String,
+  techQuestions: {
+    type: [],
   },
   othercompany: {
     type: String,
@@ -76,6 +75,9 @@ const expSchema = mongoose.Schema({
     required: true,
     default: 0,
   },
+  hrQuestions:{
+    type:[]
+  }
 });
 
 const expModel = new mongoose.model("expModel", expSchema);

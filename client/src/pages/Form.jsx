@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "../firebase";
+// import { addDoc, collection } from "firebase/firestore";
+// import { db } from "../firebase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -26,7 +26,7 @@ function Form() {
   const [hrQuestions, setHRQuestions] = useState([""]);
   const [mistakes, setMistakes] = useState("");
   const [techQuestions, setTechQuestions] = useState([""]);
-  const [otherCompany, setOtherCompany] = useState("");
+  // const [otherCompany, setOtherCompany] = useState("");
   const [expyr, setExpyr] = useState(0);
   const isApproved = false;
 
