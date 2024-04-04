@@ -97,6 +97,7 @@ function Login() {
                 placeholder="user@chitkarauniversity.edu.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div className="mt-8">
@@ -116,6 +117,7 @@ function Login() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
             <div className="mt-10">
