@@ -27,6 +27,7 @@ function Form() {
   const [mistakes, setMistakes] = useState("");
   const [techQuestions, setTechQuestions] = useState([""]);
   const [otherCompany, setOtherCompany] = useState("");
+  const [expyr, setExpyr] = useState(0);
   const isApproved = false;
 
   const addHRQuestion = () => {
@@ -112,7 +113,8 @@ function Form() {
           <div className="lg:mx-[12%] my-16 p-10">
             <p className="font-bold text-3xl">Interview Experience</p>
             <p className="font-semibold text-xl mt-10 font-sans">ROLE INFO.</p>
-            <div className="flex flex-col lg:flex-row md:flex-row lg:space-x-64 md:space-x-52">
+
+            <div className="flex lg:flex-row md:flex-row lg:space-x-64 md:space-x-52">
               <div className="w-80">
                 <label className="block font-semibold mt-8 mb-5">
                   Company you Applied to?*
@@ -126,7 +128,32 @@ function Form() {
                   className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
+              <div className="w-80">
+                <label className="block font-semibold mt-8 mb-5">
+                  No. of Rounds*
+                </label>
+                <input
+                  type="number"
+                  onChange={(e) => setExpyr(e.target.value)}
+                  value={expyr}
+                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                />
+
+                <div className="w-80">
+                  <label className="block font-semibold mt-8 mb-5">
+                    Batch*
+                  </label>
+                  <input
+                    type="number"
+                    onChange={(e) => setBatch(e.target.value)}
+                    placeholder="Eg. 2021"
+                    value={batch}
+                    className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  />
+                </div>
+              </div>
             </div>
+
             <div className="flex flex-col lg:flex-row md:flex-row lg:space-x-64 md:space-x-52">
               <div className="w-80">
                 <label className="block font-semibold mt-8 mb-5">
@@ -212,6 +239,7 @@ function Form() {
                   className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
+
               <div className="w-80">
                 <label className="block font-semibold mt-8 mb-5">Batch*</label>
                 <input

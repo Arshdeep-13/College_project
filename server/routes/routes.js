@@ -7,5 +7,6 @@ Route.get("/", userController.Func);
 Route.post("/signup", userController.signup);
 Route.post("/login", userController.login);
 Route.post("/experience", middleware, expController.expData);
+Route.get("/get-experience", expController.getExp);
 
 module.exports = Route;

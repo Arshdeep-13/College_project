@@ -1,45 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import Loader from './Loader';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+// import { db } from "../firebase";
+// import { collection, getDocs } from "firebase/firestore";
+import Loader from "./Loader";
 
 const getCompanyLogo = (company) => {
   switch (company) {
-    case 'Microsoft':
-      return 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png';
-    case 'Google':
-      return 'https://imgs.search.brave.com/RhIO_Tc-OGhbwwdc61rqGCfFacsUlQPNcaIZxOl_CZk/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9ibG9n/LmxvZ29teXdheS5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MjEvMDEvZ29vZ2xl/LXN5bWJvbC5qcGc';
-    case 'Adobe':
-      return 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Adobe_Acrobat_DC_logo_2020.svg/1200px-Adobe_Acrobat_DC_logo_2020.svg.png';
+    case "Microsoft":
+      return "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png";
+    case "Google":
+      return "https://imgs.search.brave.com/RhIO_Tc-OGhbwwdc61rqGCfFacsUlQPNcaIZxOl_CZk/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9ibG9n/LmxvZ29teXdheS5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MjEvMDEvZ29vZ2xl/LXN5bWJvbC5qcGc";
+    case "Adobe":
+      return "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Adobe_Acrobat_DC_logo_2020.svg/1200px-Adobe_Acrobat_DC_logo_2020.svg.png";
     default:
-      return 'https://files.codingninjas.in/company-25223.svg';
+      return "https://files.codingninjas.in/company-25223.svg";
   }
 };
 
-const popularCompanies = ['Microsoft', 'Google', 'Adobe', 'Atlassian','Amazon'];
+const popularCompanies = [
+  "Microsoft",
+  "Google",
+  "Adobe",
+  "Atlassian",
+  "Amazon",
+];
 
 function BlogItem() {
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchedPosts, setSearchedPosts] = useState([]);
-  const [selectedCompany, setSelectedCompany] = useState('');
+  const [selectedCompany, setSelectedCompany] = useState("");
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await getDocs(collection(db, 'formResponses'));
-      const data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      setPosts(data);
-      setSearchedPosts(data);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
-  };
+  // const fetchData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await getDocs(collection(db, "formResponses"));
+  //     const data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  //     setPosts(data);
+  //     setSearchedPosts(data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //   setLoading(false);
+  // };
 
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        let response = await fetch("http://localhost:8000/get-experience");
+        response = await response.json();
+        console.log(response.exp);
+        setSearchedPosts(response.exp);
+        // const data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        // setPosts(data);
+        // setSearchedPosts(data);
+      } catch (error) {
+        console.error(error);
+      }
+      setLoading(false);
+    };
+
     fetchData();
   }, []);
 
@@ -47,7 +69,9 @@ function BlogItem() {
     let filteredPosts = posts;
 
     if (selectedCompany) {
-      filteredPosts = filteredPosts.filter((post) => post.company === selectedCompany);
+      filteredPosts = filteredPosts.filter(
+        (post) => post.company === selectedCompany
+      );
     }
 
     filteredPosts = filteredPosts.filter((post) =>
@@ -81,15 +105,14 @@ function BlogItem() {
         </button>
       </div>
 
-
       {loading ? (
         <Loader />
       ) : (
         searchedPosts.map(
           (post) =>
             post.isApproved && (
-              <div className="py-3 " key={post.id}>
-                <Link to={`/post/${post.id}`}>
+              <div className="py-3 " key={post._id}>
+                <Link to={`/post/${post._id}`}>
                   <div className="max-w-[85%] mx-auto bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow mt-8 p-2 shadow">
                     {/* Title block */}
                     <div className="p-4 flex items-center ">
@@ -128,10 +151,14 @@ function BlogItem() {
                       <div className="ml-auto flex">
                         <p
                           className={`font-bold ${
-                            post.gotOffer === 'yes' ? 'text-green-500' : 'text-red-900'
+                            post.gotOffer === "yes"
+                              ? "text-green-500"
+                              : "text-red-900"
                           }`}
                         >
-                          {post.gotOffer === 'yes' ? 'Selected' : 'Not-Selected'}
+                          {post.gotOffer === "yes"
+                            ? "Selected"
+                            : "Not-Selected"}
                         </p>
                       </div>
                     </div>

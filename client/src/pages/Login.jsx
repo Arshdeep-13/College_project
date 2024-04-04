@@ -44,6 +44,7 @@ function Login() {
       },
     });
     res = await res.json();
+    console.log(res);
     sessionStorage.setItem("token", res.token);
     if (res.success) {
       navigate("/home");

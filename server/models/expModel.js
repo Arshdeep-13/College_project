@@ -67,6 +67,15 @@ const expSchema = mongoose.Schema({
   othercompany: {
     type: String,
   },
+  isApproved: {
+    type: Boolean,
+    default: false,
+  },
+  expyr: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
 });
 
 const expModel = new mongoose.model("expModel", expSchema);
