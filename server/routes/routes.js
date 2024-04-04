@@ -8,5 +8,6 @@ Route.post("/signup", userController.signup);
 Route.post("/login", userController.login);
 Route.post("/experience",expController.expData);
 Route.get("/get-experience", expController.getExp);
+Route.get("/get-experience-question",expController.getQues)
 
 module.exports = Route;

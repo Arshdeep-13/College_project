@@ -5,29 +5,44 @@ import { db } from '../firebase';
 import Loader from './Loader';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { FaLinkedin, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import axios from "axios"
 
 const BlogPost = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hrques,setHrques] = useState([])
+  const [techques,setTechques] = useState([])
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const docRef = doc(db, 'formResponses', id);
-      const docSnap = await getDoc(docRef);
+  // const fetchData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const docRef = doc(db, 'formResponses', id);
+  //     const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        setPost({ id: docSnap.id, ...docSnap.data() });
-      } else {
-        console.log('No such document!');
-      }
-    } catch (error) {
-      console.error('Error fetching document: ', error);
-    }
-    setLoading(false);
-  };
-
+  //     if (docSnap.exists()) {
+  //       setPost({ id: docSnap.id, ...docSnap.data() });
+  //     } else {
+  //       console.log('No such document!');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching document: ', error);
+  //   }
+  //   setLoading(false);
+  // };
+const fetchData = async() =>{
+  console.log(id)
+try {
+  const response = await axios.get(`http://localhost:8000/get-experience-question?id=${id}`)
+  console.log(response.data)
+  setPost(response.data.data)
+  setHrques(response.data.hrques)
+  setTechques(response.data.techques)
+  setLoading(false);
+} catch (error) {
+  console.log("Error from getting data in question page" + error)
+}
+}
   useEffect(() => {
     fetchData();
   }, [id]);
@@ -66,7 +81,9 @@ const BlogPost = () => {
             className="mt-6"
           >
             <h2 className="text-3xl font-bold lg:text-4xl mb-4">
-              {post.company} | {post.role} | Fresher
+              {post.company} | {post.role} |  {post.expyr == 0
+                            ? "Fresher"
+                            : `Experience ${post.expyr} year`}
             </h2>
 
             <div className="flex items-center gap-x-5 mb-4">
@@ -148,7 +165,7 @@ const BlogPost = () => {
                 <p className="text-lg text-gray-800">
                   I would like to share some questions with you all. I hope it will help you in your preparation.
                   <ul className="list-disc list-inside">
-                    {post.hrQuestions.map((question, index) => (
+                    {hrques.map((question, index) => (
                       <li key={index}>{question}</li>
                     ))}
                   </ul>
@@ -163,7 +180,7 @@ const BlogPost = () => {
                 <p className="text-lg text-gray-800">
                   I would like to share some technical questions which were asked in my interview. I hope it will help you in your preparation.
                   <ul className="list-disc list-inside">
-                    {post.techQuestions.map((question, index) => (
+                    {techques.map((question, index) => (
                       <li key={index}>{question}</li>
                     ))}
                   </ul>

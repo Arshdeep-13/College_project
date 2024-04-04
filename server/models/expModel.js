@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const expSchema = mongoose.Schema({
+  // id:{
+  //   type:String,
+  //   required:true
+  // },
   company: {
     type: String,
     required: true,
