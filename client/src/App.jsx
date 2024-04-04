@@ -31,14 +31,13 @@ function App() {
       <Routes>
         <Route path="/admin" element={<Admin />} />
         <Route path="/formSubmitted" element={<Submitted />} />
-        <Route path="/Login" element={isAuth == null ? <Login /> : <Home />} />
+        <Route path="/login" element={isAuth == null ? <Login /> : <Home />} />
         <Route
           path="/sign-in"
           element={isAuth == null ? <SignIn /> : <Home />}
         />
         <Route path="/home" element={isAuth == null ? <Login /> : <Home />} />
-        <Route path="/" element={<LandingPage />} />
-        {/* <Route path="/" element={<Home/>}/> */}
+        <Route path="/" element={isAuth == null ? <LandingPage /> : <Home />} />
         <Route path="/form" element={<Form />} />
 
         <Route path="/signup" element={<SignUp />} />

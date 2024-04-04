@@ -51,7 +51,6 @@ function BlogItem() {
       try {
         let response = await fetch("http://localhost:8000/get-experience");
         response = await response.json();
-        console.log(response.exp);
         setSearchedPosts(response.exp);
         // const data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         // setPosts(data);
@@ -125,7 +124,10 @@ function BlogItem() {
                       </div>
                       <div className="ml-4">
                         <p className="text-xl font-semibold">
-                          {post.company} | {post.role} | {post.expyr == 0 ? 'Fresher' : `Experience ${post.expyr} year` }
+                          {post.company} | {post.role} |{" "}
+                          {post.expyr == 0
+                            ? "Fresher"
+                            : `Experience ${post.expyr} year`}
                         </p>
                         <p className="text-gray-600 font-bold">
                           {post.rounds} Rounds | 6 Coding Problems
