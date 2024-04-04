@@ -1,33 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, Link, useParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { db } from '../firebase';
-import Loader from './Loader';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import { FaLinkedin, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import React, { useEffect, useState } from "react";
+import { useLocation, Link, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+// import { db } from "../firebase";
+import Loader from "./Loader";
+// import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { FaLinkedin, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import axios from "axios";
 
 const BlogPost = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hrques, setHrques] = useState([]);
+  const [techques, setTechques] = useState([]);
 
+  // const fetchData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const docRef = doc(db, 'formResponses', id);
+  //     const docSnap = await getDoc(docRef);
+
+  //     if (docSnap.exists()) {
+  //       setPost({ id: docSnap.id, ...docSnap.data() });
+  //     } else {
+  //       console.log('No such document!');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching document: ', error);
+  //   }
+  //   setLoading(false);
+  // };
   const fetchData = async () => {
-    setLoading(true);
+    console.log(id);
     try {
-      const docRef = doc(db, 'formResponses', id);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setPost({ id: docSnap.id, ...docSnap.data() });
-      } else {
-        console.log('No such document!');
-      }
+      const response = await axios.get(
+        `http://localhost:8000/get-experience-question?id=${id}`
+      );
+      console.log(response.data);
+      setPost(response.data.data);
+      setHrques(response.data.hrques);
+      setTechques(response.data.techques);
+      setLoading(false);
     } catch (error) {
-      console.error('Error fetching document: ', error);
+      console.log("Error from getting data in question page" + error);
     }
-    setLoading(false);
   };
-
   useEffect(() => {
     fetchData();
   }, [id]);
@@ -66,7 +83,8 @@ const BlogPost = () => {
             className="mt-6"
           >
             <h2 className="text-3xl font-bold lg:text-4xl mb-4">
-              {post.company} | {post.role} | Fresher
+              {post.company} | {post.role} |{" "}
+              {post.expyr == 0 ? "Fresher" : `Experience ${post.expyr} year`}
             </h2>
 
             <div className="flex items-center gap-x-5 mb-4">
@@ -85,7 +103,13 @@ const BlogPost = () => {
                   Introduction
                 </h3>
                 <p className="text-lg text-gray-800">
-                  My name is {post.name}. I am an undergraduate student at Chitkara University. I am currently in my {post.batch} batch. I have been selected for the role of {post.role} at {post.company}. Chitkara University Placement Cell has played a major role in my success. I would like to share my interview experience with you all. I hope it will help you in your preparation.
+                  My name is {post.name}. I am an undergraduate student at
+                  Chitkara University. I am currently in my {post.batch} batch.
+                  I have been selected for the role of {post.role} at{" "}
+                  {post.company}. Chitkara University Placement Cell has played
+                  a major role in my success. I would like to share my interview
+                  experience with you all. I hope it will help you in your
+                  preparation.
                 </p>
               </section>
 
@@ -94,7 +118,12 @@ const BlogPost = () => {
                   Application Process
                 </h3>
                 <p className="text-lg text-gray-800">
-                  I got to know about the placement drive through the Placement Cell of Chitkara University. I applied for the role of {post.role} at {post.company}. I was shortlisted for the interview round. There were {post.rounds} rounds in total. I would like to share my interview experience with you all. I hope it will help you in your preparation.
+                  I got to know about the placement drive through the Placement
+                  Cell of Chitkara University. I applied for the role of{" "}
+                  {post.role} at {post.company}. I was shortlisted for the
+                  interview round. There were {post.rounds} rounds in total. I
+                  would like to share my interview experience with you all. I
+                  hope it will help you in your preparation.
                 </p>
               </section>
 
@@ -103,7 +132,9 @@ const BlogPost = () => {
                   Eligibility and Resume
                 </h3>
                 <p className="text-lg text-gray-800">
-                  The eligibility criteria for the role was {post.eligibility}. I was shortlisted for the interview based on my resume. I had mentioned my projects, achievements, and skills in my resume.
+                  The eligibility criteria for the role was {post.eligibility}.
+                  I was shortlisted for the interview based on my resume. I had
+                  mentioned my projects, achievements, and skills in my resume.
                 </p>
               </section>
 
@@ -130,13 +161,17 @@ const BlogPost = () => {
                   Tips for Preparation
                 </h3>
                 <p className="text-lg text-gray-800">
-                  I would like to share some tips with you all. I hope it will help you in your preparation.
+                  I would like to share some tips with you all. I hope it will
+                  help you in your preparation.
                   <ul className="list-disc list-inside">
                     <li>{post.preparationTips}</li>
                     <li>Start your preparation early.</li>
                     <li>Practice coding questions on a regular basis.</li>
                     <li>Practice previous year interview questions.</li>
-                    <li>Focus on your resume. Mention your projects, achievements, and skills in your resume.</li>
+                    <li>
+                      Focus on your resume. Mention your projects, achievements,
+                      and skills in your resume.
+                    </li>
                   </ul>
                 </p>
               </section>
@@ -146,13 +181,15 @@ const BlogPost = () => {
                   HR Interview Round Questions
                 </h3>
                 <p className="text-lg text-gray-800">
-                  I would like to share some questions with you all. I hope it will help you in your preparation.
+                  I would like to share some questions with you all. I hope it
+                  will help you in your preparation.
                   <ul className="list-disc list-inside">
-                    {post.hrQuestions.map((question, index) => (
+                    {hrques.map((question, index) => (
                       <li key={index}>{question}</li>
                     ))}
                   </ul>
-                  Prepare answers for these questions. This will help you in your preparation.
+                  Prepare answers for these questions. This will help you in
+                  your preparation.
                 </p>
               </section>
 
@@ -161,13 +198,17 @@ const BlogPost = () => {
                   Technical Interview Round Questions
                 </h3>
                 <p className="text-lg text-gray-800">
-                  I would like to share some technical questions which were asked in my interview. I hope it will help you in your preparation.
+                  I would like to share some technical questions which were
+                  asked in my interview. I hope it will help you in your
+                  preparation.
                   <ul className="list-disc list-inside">
-                    {post.techQuestions.map((question, index) => (
+                    {techques.map((question, index) => (
                       <li key={index}>{question}</li>
                     ))}
                   </ul>
-                  Understand the constraints of the problem before writing the code. Try to code from brute force approach to optimized approach. This will help you in your preparation.
+                  Understand the constraints of the problem before writing the
+                  code. Try to code from brute force approach to optimized
+                  approach. This will help you in your preparation.
                 </p>
               </section>
 
@@ -176,7 +217,18 @@ const BlogPost = () => {
                   Final Outcome
                 </h3>
                 <p className="text-lg text-gray-800">
-                  I was {post.gotOffer === 'yes' ? <span className="text-green-500">selected</span> : <span className="text-red-500">not selected</span>} for the role of {post.role} at {post.company}. I would like to thank Chitkara University Placement Cell for providing me this opportunity. I would also like to thank PrepHelp for providing me the platform to share my interview experience with you all. I hope it will help you in your preparation. All the best for your interviews.
+                  I was{" "}
+                  {post.gotOffer === "yes" ? (
+                    <span className="text-green-500">selected</span>
+                  ) : (
+                    <span className="text-red-500">not selected</span>
+                  )}{" "}
+                  for the role of {post.role} at {post.company}. I would like to
+                  thank Chitkara University Placement Cell for providing me this
+                  opportunity. I would also like to thank PrepHelp for providing
+                  me the platform to share my interview experience with you all.
+                  I hope it will help you in your preparation. All the best for
+                  your interviews.
                 </p>
               </section>
             </div>
@@ -215,12 +267,17 @@ const BlogPost = () => {
 
             {/* Contact Info */}
             <p className="text-base text-gray-800 mt-4">
-              Hey everyone, I am {post.name}. I am an undergraduate student at Chitkara University. I am currently in my {post.batch} batch.
+              Hey everyone, I am {post.name}. I am an undergraduate student at
+              Chitkara University. I am currently in my {post.batch} batch.
               <br />
-              If you have any queries regarding the interview process, you can contact me on my email id {post.email}.
-              You can also connect with me on LinkedIn.
+              If you have any queries regarding the interview process, you can
+              contact me on my email id {post.email}. You can also connect with
+              me on LinkedIn.
               <br />
-              <FaLinkedin className='inline-block text-2xl text-blue-500 hover:text-blue-700 cursor-pointer my-4' onClick={() => window.open(post.linkedin, '_blank')} />
+              <FaLinkedin
+                className="inline-block text-2xl text-blue-500 hover:text-blue-700 cursor-pointer my-4"
+                onClick={() => window.open(post.linkedin, "_blank")}
+              />
             </p>
           </motion.div>
         </div>

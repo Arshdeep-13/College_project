@@ -125,7 +125,7 @@ function Form() {
                   onChange={(e) => setCompany(e.target.value)}
                   value={company}
                   placeholder="Eg. Amazon,Google etc."
-                  className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
               <div className="w-80">
@@ -136,7 +136,7 @@ function Form() {
                   type="number"
                   onChange={(e) => setExpyr(e.target.value)}
                   value={expyr}
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
 
                 <div className="w-80">
@@ -148,7 +148,7 @@ function Form() {
                     onChange={(e) => setBatch(e.target.value)}
                     placeholder="Eg. 2021"
                     value={batch}
-                    className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                    className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                   />
                 </div>
               </div>
@@ -178,7 +178,7 @@ function Form() {
                   placeholder="Eg. Sde,Analyst etc"
                   onChange={(e) => setRole(e.target.value)}
                   value={role}
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
             </div>
@@ -223,7 +223,7 @@ function Form() {
                   required
                   onChange={(e) => setLocation(e.target.value)}
                   value={location}
-                  className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
             </div>
@@ -236,7 +236,7 @@ function Form() {
                   type="number"
                   onChange={(e) => setRounds(e.target.value)}
                   value={rounds}
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
 
@@ -247,7 +247,7 @@ function Form() {
                   onChange={(e) => setBatch(e.target.value)}
                   placeholder="Eg. 2021"
                   value={batch}
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
             </div>
@@ -278,7 +278,7 @@ function Form() {
                   required
                   onChange={(e) => setName(e.target.value)}
                   value={name}
-                  className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
               <div className="w-80">
@@ -291,7 +291,7 @@ function Form() {
                   placeholder="Eg. ABC@xyz.com"
                   onChange={(e) => setEmail(e.target.value)}
                   value={email}
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
             </div>
@@ -306,7 +306,7 @@ function Form() {
                   required
                   onChange={(e) => setUniversityID(e.target.value)}
                   value={universityID}
-                  className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
               <div className="w-80">
@@ -317,7 +317,7 @@ function Form() {
                   type="number"
                   onChange={(e) => setMobileNo(e.target.value)}
                   value={mobileNo}
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
             </div>
@@ -330,7 +330,7 @@ function Form() {
                   type="url"
                   onChange={(e) => setLinkedin(e.target.value)}
                   value={linkedin}
-                  className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
               <div className="w-80">
@@ -341,7 +341,7 @@ function Form() {
                   type="number"
                   onChange={(e) => setCgpa(e.target.value)}
                   value={cgpa}
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
             </div>

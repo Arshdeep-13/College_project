@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 // import { db } from "../firebase";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -44,7 +45,7 @@ function SignIn() {
       password: password,
     };
 
-    let res = await fetch("http://localhost:8000/login", {
+    let res = await fetch("http://localhost:8000/adminlogin", {
       method: "POST",
       body: JSON.stringify(obj),
       headers: {
@@ -55,8 +56,18 @@ function SignIn() {
     sessionStorage.setItem("token", res.token);
     if (res.success) {
       navigate("/home");
+      window.location.reload();
     } else {
-      alert(res.message);
+      toast.error("Invalid credentials", {
+        position: "top-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
 
@@ -74,6 +85,19 @@ function SignIn() {
 
   return (
     <>
+      <ToastContainer
+        position="top-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition:Bounce
+      />
       <Navbar />
       <div className="relative h-screen flex items-center justify-center bg-gray-100 overflow-hidden">
         {/* Random Circles */}
@@ -89,7 +113,7 @@ function SignIn() {
         <div className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]">
           <div className="text-center mb-8">
             <div className="text-2xl text-indigo-800 tracking-wide font-semibold">
-              Sign In to Your Admin Account
+              Login to Your Admin Account
             </div>
             <p className="text-gray-500 mt-3">Sign in to proceed.</p>
           </div>
@@ -104,6 +128,7 @@ function SignIn() {
                 placeholder="Enter your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div className="mt-8">
@@ -123,6 +148,7 @@ function SignIn() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
             <div className="mt-10">
@@ -134,12 +160,6 @@ function SignIn() {
               </button>
             </div>
           </form>
-          <div className="text-sm text-gray-600 text-center mt-3">
-            Already have an account?{" "}
-            <Link to="/login" className="text-indigo-600 hover:text-indigo-800">
-              Log in here
-            </Link>
-          </div>
         </div>
       </div>
       <Footer />

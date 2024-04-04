@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -34,6 +36,7 @@ function Login() {
     const obj = {
       email: email,
       password: password,
+      isAdmin: false,
     };
 
     let res = await fetch("http://localhost:8000/login", {
@@ -44,13 +47,21 @@ function Login() {
       },
     });
     res = await res.json();
-    console.log(res);
     sessionStorage.setItem("token", res.token);
     if (res.success) {
       navigate("/home");
       window.location.reload();
     } else {
-      alert("User already exists...");
+      toast.error(res.message, {
+        position: "top-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
 
@@ -67,6 +78,19 @@ function Login() {
 
   return (
     <>
+      <ToastContainer
+        position="top-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition:Bounce
+      />
       <Navbar />
       <div className="relative h-screen flex items-center justify-center bg-gray-100 overflow-hidden">
         {/* Random Circles */}
@@ -82,7 +106,7 @@ function Login() {
         <div className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]">
           <div className="text-center mb-8">
             <div className="text-2xl text-indigo-800 tracking-wide font-semibold">
-              Login to your Account
+              Login to your User Account
             </div>
             <p className="text-gray-500 mt-3">Log Into Your user Account.</p>
           </div>

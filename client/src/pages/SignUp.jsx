@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import {
 //   createUserWithEmailAndPassword,
 //   sendEmailVerification,
@@ -14,6 +16,7 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [universityId, setUniversityId] = useState("");
+  const [validResponse, setValidResponse] = useState(true);
   const navigate = useNavigate();
 
   // const handleSignUp = async (e) => {
@@ -68,30 +71,92 @@ function SignUp() {
   //     return () => unsubscribe();
   // }, [auth, navigate]);
 
+  const handleEmailChange = (e) => {
+    const enteredEmail = e.trim();
+    const isValidEmail = enteredEmail.endsWith("@chitkarauniversity.edu.in");
+
+    if (isValidEmail) {
+      setEmail(enteredEmail);
+      return true;
+    } else {
+      setValidResponse(false);
+      return false;
+    }
+  };
+  const handleUidChange = (e) => {
+    const enteredUid = e.trim();
+    const isValidUid = enteredUid.length === 10;
+
+    if (isValidUid) {
+      setUniversityId(enteredUid);
+      return true;
+    } else {
+      setValidResponse(false);
+      return false;
+    }
+  };
   const handleSignUpDb = async (e) => {
     e.preventDefault();
 
-    const obj = {
-      name: name,
-      email: email,
-      password: password,
-      uid: parseInt(universityId),
-    };
+    const isValidEmail = handleEmailChange(email);
+    if (!isValidEmail) {
+      toast.info("Please enter the chitkara email", {
+        position: "top-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    const isValidUid = handleUidChange(universityId);
+    if (!isValidUid) {
+      toast.info("Please enter the valid Id", {
+        position: "top-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
 
-    let res = await fetch("http://localhost:8000/signup", {
-      method: "POST",
-      body: JSON.stringify(obj),
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
-    res = await res.json();
-    sessionStorage.setItem("token", res.token);
-    if (res.success) {
-      navigate("/home");
-      window.location.reload();
-    } else {
-      alert("User already exists...");
+    if (isValidEmail && isValidUid) {
+      const obj = {
+        name: name,
+        email: email,
+        password: password,
+        uid: parseInt(universityId),
+      };
+
+      let res = await fetch("http://localhost:8000/signup", {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      res = await res.json();
+      sessionStorage.setItem("token", res.token);
+      if (res.success) {
+        navigate("/home");
+        window.location.reload();
+      } else {
+        toast.info(res.message, {
+          position: "top-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
     }
   };
 
@@ -108,6 +173,19 @@ function SignUp() {
 
   return (
     <>
+      <ToastContainer
+        position="top-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition:Bounce
+      />
       <Navbar />
       <div className="relative h-screen flex items-center p-8 mt-8 justify-center bg-gray-100 overflow-hidden">
         {/* Render Circles */}
@@ -134,7 +212,7 @@ function SignUp() {
                 htmlFor="name"
                 className="block text-sm font-bold text-gray-700"
               >
-                Name
+                Name*
               </label>
               <input
                 id="name"
@@ -144,6 +222,7 @@ function SignUp() {
                 placeholder="Full Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
               />
             </div>
             <div className="mb-4">
@@ -151,7 +230,7 @@ function SignUp() {
                 htmlFor="email"
                 className="block text-sm font-bold text-gray-700"
               >
-                Email Address
+                Email Address*
               </label>
               <input
                 id="email"
@@ -161,6 +240,7 @@ function SignUp() {
                 placeholder="Use University Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div className="mb-4">
@@ -168,7 +248,7 @@ function SignUp() {
                 htmlFor="password"
                 className="block text-sm font-bold text-gray-700"
               >
-                Password
+                Password*
               </label>
               <input
                 id="password"
@@ -178,6 +258,7 @@ function SignUp() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
             <div className="mb-4">
@@ -185,7 +266,7 @@ function SignUp() {
                 htmlFor="universityId"
                 className="block text-sm font-bold text-gray-700"
               >
-                University ID
+                University ID*
               </label>
               <input
                 id="universityId"
@@ -195,6 +276,7 @@ function SignUp() {
                 placeholder="211*******"
                 value={universityId}
                 onChange={(e) => setUniversityId(e.target.value)}
+                required
               />
             </div>
             <div className="mb-8">

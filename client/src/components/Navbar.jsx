@@ -1,11 +1,23 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [token, setToken] = useState("");
+  let location = useLocation();
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    setToken(sessionStorage.token);
+  }, [token]);
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
+  };
+  const logoutUtils = () => {
+    sessionStorage.removeItem("token");
+    navigate("/");
+    window.location.reload();
   };
 
   return (
@@ -13,7 +25,7 @@ function Navbar() {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Brand */}
         <Link
-          to="/home"
+          to="/"
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
           <img
@@ -28,13 +40,32 @@ function Navbar() {
 
         {/* Buttons for Small Screens */}
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <Link
-            to="/sign-in"
-            type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Admin Login
-          </Link>
+          {location.pathname == "/login" && !token && (
+            <Link
+              to="/signin"
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Admin Login
+            </Link>
+          )}
+          {location.pathname == "/signin" && !token && (
+            <Link
+              to="/login"
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              User Login
+            </Link>
+          )}
+          {token && (
+            <button
+              className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+              onClick={() => logoutUtils()}
+            >
+              Log out
+            </button>
+          )}
           <button
             data-collapse-toggle="navbar-cta"
             type="button"
