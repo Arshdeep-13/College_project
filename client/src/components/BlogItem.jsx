@@ -79,7 +79,7 @@ function BlogItem() {
     );
 
     setSearchedPosts(filteredPosts);
-  };
+  }
 
   return (
     <>
