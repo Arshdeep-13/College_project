@@ -88,6 +88,7 @@ const adminlogin = async (req, res) => {
         message: "Login successfully",
         success: true,
         token: token,
+        isAdmin: true,
       });
     }
   } catch (error) {

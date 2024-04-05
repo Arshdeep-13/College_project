@@ -54,9 +54,24 @@ function SignIn() {
     });
     res = await res.json();
     sessionStorage.setItem("token", res.token);
+    alert(res.isAdmin);
+    sessionStorage.setItem("isAdmin", res.isAdmin);
     if (res.success) {
-      navigate("/home");
-      window.location.reload();
+      toast.success(res.message, {
+        position: "top-left",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      setTimeout(() => {
+        navigate("/admin");
+        window.location.reload();
+      }, 1010);
     } else {
       toast.error("Invalid credentials", {
         position: "top-left",

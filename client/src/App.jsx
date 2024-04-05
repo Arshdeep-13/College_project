@@ -17,36 +17,57 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [isAuth, setIsAuth] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const validate = sessionStorage.getItem("token");
+    const admin = sessionStorage.getItem("isAdmin");
     if (validate) {
       setIsAuth(validate);
     }
-  }, []);
+    if (admin) {
+      setIsAdmin(admin);
+    }
+  }, [isAuth, isAdmin]);
 
   return (
     <Router>
       {/* <Navbar/> */}
       <Routes>
-        <Route path="/" element={isAuth == null ? <LandingPage /> : <Home />} />
-        <Route path="/home" element={isAuth == null ? <Login /> : <Home />} />
-        <Route path="/login" element={isAuth == null ? <Login /> : <Home />} />
+        <Route
+          path="/"
+          element={
+            isAuth == null ? <LandingPage /> : isAdmin ? <Admin /> : <Home />
+          }
+        />
+        <Route
+          path="/home"
+          element={isAuth == null ? <Login /> : isAdmin ? <Admin /> : <Home />}
+        />
+        <Route
+          path="/login"
+          element={isAuth == null ? <Login /> : isAdmin ? <Admin /> : <Home />}
+        />
         <Route
           path="/signin"
-          element={isAuth == null ? <SignIn /> : <Home />}
+          element={isAuth == null ? <SignIn /> : isAdmin ? <Admin /> : <Home />}
         />
         <Route
           path="/signup"
-          element={isAuth == null ? <SignUp /> : <Home />}
+          element={isAuth == null ? <SignUp /> : isAdmin ? <Admin /> : <Home />}
         />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/formSubmitted" element={<Submitted />} />
-        <Route path="/form" element={<Form />} />
+        <Route
+          path="/admin"
+          element={isAuth == null && isAdmin ? <SignIn /> : <Admin />}
+        />
+        <Route
+          path="/formSubmitted"
+          element={isAuth == null ? <Home /> : <Submitted />}
+        />
+        <Route path="/form" element={isAuth == null ? <Home /> : <Form />} />
         <Route path="*" element={<Error404 />} />
         <Route path="/questions" element={<Questions />} />
         <Route path="/post/:id" element={<BlogPost />} />
-        {/* <Route path='/signin' element={<SignIn/>}/> */}
       </Routes>
     </Router>
   );

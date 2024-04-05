@@ -143,8 +143,21 @@ function SignUp() {
       res = await res.json();
       sessionStorage.setItem("token", res.token);
       if (res.success) {
-        navigate("/home");
-        window.location.reload();
+        toast.sucess(res.message, {
+          position: "top-left",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+
+        setTimeout(() => {
+          navigate("/admin");
+          window.location.reload();
+        }, 1010);
       } else {
         toast.info(res.message, {
           position: "top-left",
