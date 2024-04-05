@@ -13,10 +13,10 @@ function AdminNavbar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    setLoading(true);
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("isAdmin");
-    setLoading(false);
+    localStorage.removeItem("token");
+    navigate("/");
     window.location.reload();
   };
 
@@ -42,7 +42,7 @@ function AdminNavbar() {
           {/* Buttons for Small Screens */}
           <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <button
-              onClick={handleLogout}
+              onClick={() => handleLogout()}
               type="button"
               className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
             >
@@ -66,9 +66,9 @@ function AdminNavbar() {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M1 1h15M1 7h15M1 13h15"
                 />
               </svg>

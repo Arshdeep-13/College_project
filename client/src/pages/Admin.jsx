@@ -103,14 +103,14 @@ function Admin() {
                 </tr>
               </thead>
               <tbody>
-                {console.log(posts)}
+                {/* {console.log(posts)} */}
                 {loading ? (
                   <Loader />
                 ) : (
                   posts.map((entry) => (
                     <tr key={entry.id}>
                       <td>
-                        <div className="flex items-center space-x-3">
+                        <span className="flex items-center space-x-3">
                           <div className="avatar">
                             <div className="mask mask-squircle w-12 h-12">
                               <img
@@ -125,7 +125,7 @@ function Admin() {
                               {entry.company}
                             </div>
                           </div>
-                        </div>
+                        </span>
                       </td>
                       <td>
                         <button onClick={() => handleEditClick(entry)}>

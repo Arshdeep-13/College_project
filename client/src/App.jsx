@@ -28,6 +28,8 @@ function App() {
     if (admin) {
       setIsAdmin(admin);
     }
+
+    console.log(isAdmin, isAuth);
   }, [isAuth, isAdmin]);
 
   return (
@@ -58,7 +60,7 @@ function App() {
         />
         <Route
           path="/admin"
-          element={isAuth == null && isAdmin ? <SignIn /> : <Admin />}
+          element={isAuth && isAdmin ? <Admin /> : <SignIn />}
         />
         <Route
           path="/formSubmitted"

@@ -54,7 +54,6 @@ function SignIn() {
     });
     res = await res.json();
     sessionStorage.setItem("token", res.token);
-    alert(res.isAdmin);
     sessionStorage.setItem("isAdmin", res.isAdmin);
     if (res.success) {
       toast.success(res.message, {
