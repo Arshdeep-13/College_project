@@ -12,4 +12,40 @@ const getUsers = async (req, res) => {
   }
 };
 
-module.exports = { getUsers };
+const updateApproved = async (req,res) =>{
+  try {
+    const {id,isApproved} = req.body
+    const user = await expModel.findByIdAndUpdate(id, { isApproved }, { new: true })
+    return res.status(200).send({
+      message:"Done",
+      success:true,
+      data:user,
+      isApproved:user.isApproved
+    })
+  } catch (error) {
+    return res.status(500).send({
+      message:error.message,
+      success:false
+    })
+  }
+}
+
+const updateField = async(req,res) =>{
+  try {
+    const {id,selectedPost} = req.body;
+    console.log(id,selectedPost)
+    const update = await expModel.findByIdAndUpdate(id,selectedPost,{new:true})
+    return res.status(200).send({
+      message:"Done",
+      success:true,
+      data:update
+    })
+  } catch (error) {
+    return res.status(500).send({
+      message:error.message,
+      success:false
+    })
+  }
+}
+
+module.exports = { getUsers,updateApproved,updateField };

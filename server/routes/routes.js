@@ -12,5 +12,7 @@ Route.get("/get-experience", expController.getExp);
 Route.post("/adminlogin", userController.adminlogin);
 Route.get("/get-experience-question", expController.getQues);
 Route.get("/admin-users", adminController.getUsers);
+Route.put("/admin-update-approved", adminController.updateApproved);
+Route.put("/admin-update-allfield", adminController.updateField);
 
 module.exports = Route;
