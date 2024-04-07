@@ -11,6 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 // import { auth } from "../firebase";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Cookies from "universal-cookie";
+
 function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,6 +20,7 @@ function SignUp() {
   const [universityId, setUniversityId] = useState("");
   const [validResponse, setValidResponse] = useState(true);
   const navigate = useNavigate();
+  const cookies = new Cookies();
 
   // const handleSignUp = async (e) => {
   //     e.preventDefault();
@@ -141,6 +144,8 @@ function SignUp() {
         },
       });
       res = await res.json();
+      cookies.set("token", res.token);
+      cookies.set("isAdmin", false);
       sessionStorage.setItem("token", res.token);
       if (res.success) {
         toast.success(res.message, {
@@ -199,7 +204,7 @@ function SignUp() {
         theme="colored"
         transition:Bounce
       />
-      {/* <Navbar /> */}
+      <Navbar />
       <div className="relative h-screen flex items-center p-8 mt-8 justify-center bg-gray-100 overflow-hidden">
         {/* Render Circles */}
         {circleStyles.map((style, index) => (
@@ -210,7 +215,7 @@ function SignUp() {
           ></div>
         ))}
 
-        <div className="max-w-md w-full bg-white p-8 rounded-md shadow-md">
+        <div className="max-w-md w-full bg-white p-8 rounded-md shadow-md mt-1">
           <div className="text-center mb-8">
             <div className="text-2xl text-indigo-800 font-semibold">
               Sign Up for a New Account

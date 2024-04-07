@@ -7,10 +7,13 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import Cookies from "universal-cookie";
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const cookies = new Cookies();
 
   //   const handleLogin = async (e) => {
   //     e.preventDefault();
@@ -45,8 +48,8 @@ function Login() {
       );
       // console.log(response.data.isAdmin);
       if (response.data.isAdmin === true) {
-        sessionStorage.setItem("token", response.data.token);
-        sessionStorage.setItem("isAdmin", response.data.isAdmin);
+        cookies.set("token", response.data.token);
+        cookies.set("isAdmin", response.data.isAdmin);
         if (response.success) {
           toast.success(response.message, {
             position: "top-left",
@@ -64,7 +67,7 @@ function Login() {
           window.location.reload();
         }, 1000);
       } else {
-        sessionStorage.setItem("token", response.data.token);
+        cookies.set("token", response.data.token);
         if (response.success) {
           toast.success(response.message, {
             position: "top-left",
@@ -76,16 +79,27 @@ function Login() {
             progress: undefined,
             theme: "colored",
           });
+          setTimeout(() => {
+            navigate("/home");
+            window.location.reload();
+          }, 1000);
+        } else {
+          toast.error(response.message, {
+            position: "top-left",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         }
-        setTimeout(() => {
-          navigate("/home");
-          window.location.reload();
-        }, 1000);
       }
     } catch (error) {
       toast.error(error, {
         position: "top-left",
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

@@ -6,11 +6,13 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "universal-cookie";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const cookies = new Cookies();
 
   //   const handleLogin = async (e) => {
   //     e.preventDefault();
@@ -53,8 +55,9 @@ function SignIn() {
       },
     });
     res = await res.json();
-    sessionStorage.setItem("token", res.token);
-    sessionStorage.setItem("isAdmin", res.isAdmin);
+
+    cookies.set("token", res.token);
+    cookies.set("isAdmin", res.isAdmin);
     if (res.success) {
       toast.success(res.message, {
         position: "top-left",

@@ -1,53 +1,50 @@
-
-
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Playfair+Display&family=Roboto:wght@300&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Playfair+Display&family=Roboto:wght@300&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-.hover_change{
-    animation: colorchange 10s infinite;
+.hover_change {
+  animation: colorchange 10s infinite;
 }
-
 
 @keyframes colorchange {
   0% {
-      background-color: #FFA500; /* Orange */
+    background-color: #ffa500; /* Orange */
   }
   25% {
-      background-color: #FFEBCC; /* Light Peach */
+    background-color: #ffebcc; /* Light Peach */
   }
   50% {
-      background-color: #FFFFFF; /* White */
+    background-color: #ffffff; /* White */
   }
   75% {
-      background-color: #FFEBCC; /* Light Peach */
+    background-color: #ffebcc; /* Light Peach */
   }
   100% {
-      background-color: #FFA500; /* Orange */
+    background-color: #ffa500; /* Orange */
   }
 }
 
-.Font-heading{
-  font-family: 'Roboto', sans-serif;
+.Font-heading {
+  font-family: "Roboto", sans-serif;
 }
-@keyframes Textchange{
-    0% {
-        color: #495057; 
-      }
-      25% {
-        color: #212529; 
-      }
-      50% {
-        color: #adb5bd; 
-      }
-      75% {
-        color: #343a40; 
-      }
-      100% {
-        color: #495057; 
-      }
+@keyframes Textchange {
+  0% {
+    color: #495057;
+  }
+  25% {
+    color: #212529;
+  }
+  50% {
+    color: #adb5bd;
+  }
+  75% {
+    color: #343a40;
+  }
+  100% {
+    color: #495057;
+  }
 }
-.Text-change{
-    animation: Textchange 15s infinite;
+.Text-change {
+  animation: Textchange 15s infinite;
 }

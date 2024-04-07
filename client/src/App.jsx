@@ -15,20 +15,24 @@ import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import { useEffect, useState } from "react";
 import Contact from "./components/Contact";
+import Cookies from "universal-cookie";
 
 function App() {
   const [isAuth, setIsAuth] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const cookies = new Cookies();
 
   useEffect(() => {
-    const validate = sessionStorage.getItem("token");
-    // console.log("token" + validate);
-    const admin = sessionStorage.getItem("isAdmin");
+    const validate = cookies.get("token");
+    const admin = cookies.get("isAdmin");
+
     if (validate) {
       setIsAuth(validate);
+      document.cookie = `token=${validate}`;
     }
     if (admin) {
       setIsAdmin(admin);
+      document.cookie = `isAdmin=${admin}`;
     }
 
     // console.log(isAdmin, isAuth);
@@ -49,10 +53,6 @@ function App() {
       <Route
         path="/login"
         element={isAuth == null ? <Login /> : isAdmin ? <Admin /> : <Home />}
-      />
-      <Route
-        path="/signin"
-        element={isAuth == null ? <SignIn /> : isAdmin ? <Admin /> : <Home />}
       />
       <Route
         path="/signup"

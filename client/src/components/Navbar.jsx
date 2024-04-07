@@ -1,21 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [token, setToken] = useState("");
   let location = useLocation();
   let navigate = useNavigate();
+  const cookies = new Cookies();
+  const ref = useRef();
 
   useEffect(() => {
-    setToken(sessionStorage.token);
+    const validate = cookies.get("token");
+    setToken(validate);
   }, [token]);
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
   const logoutUtils = () => {
-    sessionStorage.removeItem("token");
+    console.log(cookies.get("token"), cookies.get("isAdmin"));
+    cookies.remove("token");
+    if (cookies.get("isAdmin")) {
+      cookies.remove("isAdmin");
+    }
     navigate("/");
     window.location.reload();
   };
@@ -39,11 +47,16 @@ function Navbar() {
         </Link>
 
         {/* Buttons for Small Screens */}
-        <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+        <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse ">
           <div>
             {!token && (
               <Link
-                className="flex items-center gap-x-2 font-medium text-gray-500 hover:text-blue-600 dark:border-gray-700 dark:text-gray-400 dark:hover:text-blue-500"
+                className={`flex items-center gap-x-2 font-medium text-gray-500 hover:text-blue-600 dark:border-gray-700 dark:text-gray-400 dark:hover:text-blue-500 ${
+                  location.pathname === "/login" ||
+                  location.pathname === "/signup"
+                    ? "hidden"
+                    : ""
+                }`}
                 to="/login"
               >
                 <svg
@@ -61,18 +74,20 @@ function Navbar() {
             )}
             {token && (
               <button
-                className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 none"
+                className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 none hidden md:block lg:block"
                 onClick={() => logoutUtils()}
               >
                 Log out
               </button>
             )}
             <button
+              ref={ref}
               data-collapse-toggle="navbar-cta"
               type="button"
               className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               aria-controls="navbar-cta"
               aria-expanded="false"
+              id="navbar-toggle"
               onClick={handleToggle}
             >
               <span className="sr-only">Open main menu</span>
@@ -145,7 +160,7 @@ function Navbar() {
           }`}
           id="navbar-cta"
         >
-          <ul className="flex flex-col font-medium mt-4 border border-gray-100 rounded-lg bg-gray-50 space-y-2 w-full">
+          <ul className="flex flex-col font-medium mt-4 border border-gray-100 rounded-lg bg-gray-50 space-y-2 w-full ">
             <li>
               <Link
                 to="/"
@@ -177,6 +192,39 @@ function Navbar() {
               >
                 Share your experience
               </Link>
+            </li>
+            <li>
+              {!token && (
+                <Link
+                  className={`flex items-center gap-x-2 font-medium text-gray-500 hover:text-blue-600 dark:border-gray-700 dark:text-gray-400 dark:hover:text-blue-500 ml-3 mb-2 ${
+                    location.pathname === "/login" ||
+                    location.pathname === "/signup"
+                      ? "hidden"
+                      : ""
+                  }`}
+                  to="/login"
+                >
+                  <svg
+                    className="flex-shrink-0 w-4 h-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                  </svg>
+                  Log in
+                </Link>
+              )}
+              {token && (
+                <button
+                  className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 ml-3 mb-2 dark:hover:bg-red-700 dark:focus:ring-red-800 none"
+                  onClick={() => logoutUtils()}
+                >
+                  Log out
+                </button>
+              )}
             </li>
           </ul>
         </div>
