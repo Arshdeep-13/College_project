@@ -34,7 +34,7 @@ const BlogPost = () => {
     console.log(id);
     try {
       const response = await axios.get(
-        `http://localhost:8000/get-experience-question?id=${id}`
+        `${import.meta.env.VITE_SERVER}/get-experience-question?id=${id}`
       );
       console.log(response.data);
       setPost(response.data.data);

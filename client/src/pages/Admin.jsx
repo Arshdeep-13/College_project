@@ -67,7 +67,9 @@ function Admin() {
   const fetchData = async () => {
     // FOR MONGODB DATABASE
     try {
-      const response = await axios.get("http://localhost:8000/admin-users");
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER}/admin-users`
+      );
       setPosts(response.data.users);
       // console.log(response.data.users);
     } catch (error) {
@@ -78,7 +80,7 @@ function Admin() {
   const handleCheckboxChange = async (id, entry) => {
     try {
       const response = await axios.put(
-        "http://localhost:8000/admin-update-approved",
+        `${import.meta.env.VITE_SERVER}/admin-update-approved`,
         { id, isApproved: !entry.isApproved }
       );
       fetchData();
@@ -102,30 +104,22 @@ function Admin() {
     });
   };
 
-  // const handleSaveEdit = async () => {
-  //   alert("hello")
-  //   console.log(selectedPost)
-  //   const docRef = doc(db, "formResponses", selectedPost.id);
-  //   await setDoc(docRef, selectedPost);
-  //   fetchData();
-  //   setEditMode(false);
-  //   document.getElementBy_id("editModal").close();
-  // };
-  const handleSaveEdit = async (id) =>{
-    handleCloseModal()
+  const handleSaveEdit = async (id) => {
+    handleCloseModal();
     try {
       const config = {
-        headers:{
-          "Content-Type":"application/json"
-        }
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await axios.put(
+        `${import.meta.env.VITE_SERVER}/admin-update-allfield`,
+        { id, selectedPost },
+        config
+      );
+      if (response.success) {
+        fetchData();
       }
-      const response = await axios.put("http://localhost:8000/admin-update-allfield",{id,selectedPost},config);
-      if(response.success)
-      {
-        fetchData()
-      }
-      
-      
     } catch (error) {
       console.log("Error from the updated field" + error);
     }

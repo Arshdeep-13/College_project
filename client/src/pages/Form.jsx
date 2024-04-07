@@ -86,7 +86,7 @@ function Form() {
 
     console.log(formData);
     try {
-      const res = await fetch("http://localhost:8000/experience", {
+      const res = await fetch(`${import.meta.env.VITE_SERVER}/experience`, {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
@@ -129,8 +129,6 @@ function Form() {
                 />
               </div>
               <div className="w-80">
-        
-
                 <div className="w-80">
                   <label className="block font-semibold mt-8 mb-5">
                     Batch*
@@ -232,9 +230,7 @@ function Form() {
                 />
               </div>
 
-              <div className="w-80">
-               
-              </div>
+              <div className="w-80"></div>
             </div>
             <button
               onClick={handleNextClick1}

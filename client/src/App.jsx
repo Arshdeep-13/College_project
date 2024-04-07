@@ -16,6 +16,7 @@ import SignIn from "./pages/SignIn";
 import { useEffect, useState } from "react";
 import Contact from "./components/Contact";
 import Cookies from "universal-cookie";
+import About from "./components/About";
 
 function App() {
   const [isAuth, setIsAuth] = useState(null);
@@ -58,7 +59,14 @@ function App() {
         path="/signup"
         element={isAuth == null ? <SignUp /> : isAdmin ? <Admin /> : <Home />}
       />
-      <Route path="/admin" element={isAuth ? <Admin /> : <SignIn />} />
+      <Route
+        path="/admin"
+        element={isAuth && isAdmin ? <Admin /> : <SignIn />}
+      />
+      <Route
+        path="/about"
+        element={isAuth && isAdmin ? <About /> : <SignIn />}
+      />
       <Route
         path="/formSubmitted"
         element={isAuth == null ? <LandingPage /> : <Submitted />}

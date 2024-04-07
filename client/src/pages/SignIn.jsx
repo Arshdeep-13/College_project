@@ -47,7 +47,7 @@ function SignIn() {
       password: password,
     };
 
-    let res = await fetch("http://localhost:8000/adminlogin", {
+    let res = await fetch(`${import.meta.env.VITE_SERVER}/adminlogin`, {
       method: "POST",
       body: JSON.stringify(obj),
       headers: {

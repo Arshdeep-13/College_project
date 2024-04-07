@@ -49,7 +49,9 @@ function BlogItem() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        let response = await fetch("http://localhost:8000/get-experience");
+        let response = await fetch(
+          `${import.meta.env.VITE_SERVER}/get-experience`
+        );
         response = await response.json();
         setSearchedPosts(response.exp);
         // const data = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -78,7 +80,7 @@ function BlogItem() {
     );
 
     setSearchedPosts(filteredPosts);
-  }
+  };
 
   return (
     <div id="list_of_exp">

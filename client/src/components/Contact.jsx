@@ -76,7 +76,7 @@ const Contact = () => {
       };
 
       // console.log(obj);
-      const response = await fetch("http://localhost:8000/contact", {
+      const response = await fetch(`${import.meta.env.VITE_SERVER}/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

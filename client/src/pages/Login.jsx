@@ -15,36 +15,6 @@ function Login() {
   const navigate = useNavigate();
   const cookies = new Cookies();
 
-  const handleEmailChange = (e) => {
-    const enteredEmail = e.trim();
-    const isValidEmail = enteredEmail.endsWith("@chitkarauniversity.edu.in");
-
-    if (isValidEmail) {
-      setEmail(enteredEmail);
-      return true;
-    } else {
-      setValidResponse(false);
-      return false;
-    }
-  };
-  //   const handleLogin = async (e) => {
-  //     e.preventDefault();
-  //     const auth = getAuth();
-
-  //     try {
-  //       // Sign in with email and password
-  //       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
-  //       // Check if the user is an admin
-  //       if (userCredential) {
-  //         navigate('/home');
-  //       } else {
-  //         // Handle login for other user types (students, etc.)
-  //       }
-  //     } catch (error) {
-  //       navigate('/Error');
-  //     }
-  //   };
   const handleSignUpDb = async (e) => {
     e.preventDefault();
     try {
@@ -56,7 +26,7 @@ function Login() {
       const validateEmail = email.endsWith("@chitkarauniversity.edu.in");
       if (validateEmail) {
         const response = await axios.post(
-          "http://localhost:8000/login",
+          `${import.meta.env.VITE_SERVER}/login`,
           { email, password },
           config
         );

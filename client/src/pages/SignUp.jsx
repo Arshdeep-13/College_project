@@ -136,7 +136,7 @@ function SignUp() {
         uid: parseInt(universityId),
       };
 
-      let res = await fetch("http://localhost:8000/signup", {
+      let res = await fetch(`${import.meta.env.VITE_SERVER}/signup`, {
         method: "POST",
         body: JSON.stringify(obj),
         headers: {

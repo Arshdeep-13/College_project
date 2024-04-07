@@ -69,7 +69,7 @@ const InterviewForm = () => {
 
     console.log(formData);
     try {
-      const res = await fetch("http://localhost:8000/experience", {
+      const res = await fetch(`${import.meta.env.VITE_SERVER}/experience`, {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
@@ -103,7 +103,7 @@ const InterviewForm = () => {
               <select
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
-                className="border-2 border-gray-300 focus:outline-none focus:border-orange-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700"
+                className="border-2 border-gray-300 focus:outline-none focus:border-orange-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700"
               >
                 <option value="" disabled>
                   Select a company
@@ -124,7 +124,7 @@ const InterviewForm = () => {
                   required
                   onChange={(e) => setCompany(e.target.value)}
                   value={otherCompany}
-                  className="border-2 border-gray-300 focus:outline-none focus:border-orange-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                  className="border-2 border-gray-300 focus:outline-none focus:border-orange-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
             )}
@@ -139,7 +139,7 @@ const InterviewForm = () => {
               placeholder="Eg. Sde,Analyst etc"
               onChange={(e) => setRole(e.target.value)}
               value={role}
-              className="border-2 border-gray-300 focus:outline-none  focus:border-orange-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+              className="border-2 border-gray-300 focus:outline-none  focus:border-orange-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-80"
             />
           </div>
           <div className="flex flex-col lg:flex-row md:flex-row lg:space-x-64 md:space-x-52">
@@ -183,7 +183,7 @@ const InterviewForm = () => {
                 required
                 onChange={(e) => setLocation(e.target.value)}
                 value={location}
-                className="border-2 border-gray-300 focus:outline-none focus:border-orange-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                className="border-2 border-gray-300 focus:outline-none focus:border-orange-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
               />
             </div>
           </div>
@@ -196,7 +196,7 @@ const InterviewForm = () => {
                 type="number"
                 onChange={(e) => setRounds(e.target.value)}
                 value={rounds}
-                className="border-2 border-gray-300 focus:outline-none  focus:border-orange-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                className="border-2 border-gray-300 focus:outline-none  focus:border-orange-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
               />
             </div>
             <div className="w-80">
@@ -206,7 +206,7 @@ const InterviewForm = () => {
                 onChange={(e) => setBatch(e.target.value)}
                 placeholder="Eg. 2021"
                 value={batch}
-                className="border-2 border-gray-300 focus:outline-none  focus:border-orange-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+                className="border-2 border-gray-300 focus:outline-none  focus:border-orange-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
               />
             </div>
           </div>
@@ -234,7 +234,7 @@ const InterviewForm = () => {
               setRoundDetails([]);
             }}
             value={rounds}
-            className="border-2 border-gray-300 focus:outline-none  focus:border-orange-400 rounded-md py-2 px-4 block w-full appearance-none leading-5 text-gray-700 w-80"
+            className="border-2 border-gray-300 focus:outline-none  focus:border-orange-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
           />
 
           {Array.from({ length: rounds }, (_, index) => (
