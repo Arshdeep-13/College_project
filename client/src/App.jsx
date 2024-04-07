@@ -30,7 +30,7 @@ function App() {
       setIsAdmin(admin);
     }
 
-    console.log(isAdmin, isAuth);
+    // console.log(isAdmin, isAuth);
   }, [isAuth, isAdmin]);
 
   return (
