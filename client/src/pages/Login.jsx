@@ -15,6 +15,18 @@ function Login() {
   const navigate = useNavigate();
   const cookies = new Cookies();
 
+  const handleEmailChange = (e) => {
+    const enteredEmail = e.trim();
+    const isValidEmail = enteredEmail.endsWith("@chitkarauniversity.edu.in");
+
+    if (isValidEmail) {
+      setEmail(enteredEmail);
+      return true;
+    } else {
+      setValidResponse(false);
+      return false;
+    }
+  };
   //   const handleLogin = async (e) => {
   //     e.preventDefault();
   //     const auth = getAuth();
@@ -41,60 +53,73 @@ function Login() {
           "Content-Type": "application/json",
         },
       };
-      const response = await axios.post(
-        "http://localhost:8000/login",
-        { email, password },
-        config
-      );
-      // console.log(response.data.isAdmin);
-      if (response.data.isAdmin === true) {
-        cookies.set("token", response.data.token);
-        cookies.set("isAdmin", response.data.isAdmin);
-        if (response.success) {
-          toast.success(response.message, {
-            position: "top-left",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-        }
-        setTimeout(() => {
-          navigate("/admin");
-          window.location.reload();
-        }, 1000);
-      } else {
-        cookies.set("token", response.data.token);
-        if (response.success) {
-          toast.success(response.message, {
-            position: "top-left",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
+      const validateEmail = email.endsWith("@chitkarauniversity.edu.in");
+      if (validateEmail) {
+        const response = await axios.post(
+          "http://localhost:8000/login",
+          { email, password },
+          config
+        );
+        if (response.data.isAdmin === true) {
+          cookies.set("token", response.data.token);
+          cookies.set("isAdmin", response.data.isAdmin);
+          if (response.data.success) {
+            toast.success(response.data.message, {
+              position: "top-left",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+          }
           setTimeout(() => {
-            navigate("/home");
+            navigate("/admin");
             window.location.reload();
           }, 1000);
         } else {
-          toast.error(response.message, {
-            position: "top-left",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
+          cookies.set("token", response.data.token);
+          if (response.data.success) {
+            toast.success(response.data.message, {
+              position: "top-left",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            setTimeout(() => {
+              navigate("/home");
+              window.location.reload();
+            }, 1000);
+          } else {
+            toast.error(response.data.message, {
+              position: "top-left",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+          }
         }
+      } else {
+        toast.error("Please enter chitkara email id only.", {
+          position: "top-left",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       }
     } catch (error) {
       toast.error(error, {

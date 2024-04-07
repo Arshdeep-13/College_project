@@ -163,18 +163,10 @@ function Navbar() {
           <ul className="flex flex-col font-medium mt-4 border border-gray-100 rounded-lg bg-gray-50 space-y-2 w-full ">
             <li>
               <Link
-                to="/"
+                to="/home"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100"
               >
                 Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/about"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100"
-              >
-                About
               </Link>
             </li>
             <li>
@@ -187,10 +179,18 @@ function Navbar() {
             </li>
             <li>
               <Link
-                to="/contact"
+                to="/form"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100"
               >
-                Share your experience
+                Experience Sharing
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/Contact"
+                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100"
+              >
+                Contact
               </Link>
             </li>
             <li>
