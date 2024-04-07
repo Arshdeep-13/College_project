@@ -63,12 +63,13 @@ function Top(){
             </p>
           </div>
           <div className="flex items-center sm:justify-center">
-            <button
+            <a
+              href="#list_of_exp"
               type="submit"
               className="inline-flex items-center justify-center h-12 px-6 mr-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-purple-900 hover:bg-purple-700 focus:shadow-outline focus:outline-none"
             >
               Get started
-            </button>
+            </a>
             <a
               href="/"
               aria-label=""

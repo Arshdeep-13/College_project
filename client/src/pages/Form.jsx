@@ -129,15 +129,7 @@ function Form() {
                 />
               </div>
               <div className="w-80">
-                <label className="block font-semibold mt-8 mb-5">
-                  No. of Rounds*
-                </label>
-                <input
-                  type="number"
-                  onChange={(e) => setExpyr(e.target.value)}
-                  value={expyr}
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
-                />
+        
 
                 <div className="w-80">
                   <label className="block font-semibold mt-8 mb-5">
@@ -241,14 +233,7 @@ function Form() {
               </div>
 
               <div className="w-80">
-                <label className="block font-semibold mt-8 mb-5">Batch*</label>
-                <input
-                  type="number"
-                  onChange={(e) => setBatch(e.target.value)}
-                  placeholder="Eg. 2021"
-                  value={batch}
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
-                />
+               
               </div>
             </div>
             <button

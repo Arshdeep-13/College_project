@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import axios  from "axios";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,39 +32,55 @@ function Login() {
   //   };
   const handleSignUpDb = async (e) => {
     e.preventDefault();
-
-    const obj = {
-      email: email,
-      password: password,
-      isAdmin: false,
-    };
-
-    let res = await fetch("http://localhost:8000/login", {
-      method: "POST",
-      body: JSON.stringify(obj),
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
-    res = await res.json();
-    sessionStorage.setItem("token", res.token);
-    if (res.success) {
-      toast.success(res.message, {
-        position: "top-left",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+    try {
+      const config = {
+        headers:{
+          "Content-Type":"application/json"
+        }
+      }
+  const response = await axios.post("http://localhost:8000/login",{email,password},config)
+  console.log(response.data.isAdmin)
+      if(response.data.isAdmin === true)
+      {
+        sessionStorage.setItem("token", response.data.token);
+      if (response.success) {
+        toast.success(response.message, {
+          position: "top-left",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+      setTimeout(() => {
+        navigate("/admin");
+        window.location.reload();
+      }, 1000);
+    }
+      else{
+        sessionStorage.setItem("token", response.data.token);
+        if (response.success) {
+          toast.success(response.message, {
+            position: "top-left",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+      }
       setTimeout(() => {
         navigate("/home");
         window.location.reload();
       }, 1000);
-    } else {
-      toast.error(res.message, {
+      }
+    } catch (error) {
+      toast.error(error, {
         position: "top-left",
         autoClose: 2000,
         hideProgressBar: false,
@@ -103,7 +119,7 @@ function Login() {
         theme="colored"
         transition:Bounce
       />
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="relative h-screen flex items-center justify-center bg-gray-100 overflow-hidden">
         {/* Random Circles */}
         {circleStyles.map((style, index) => (
@@ -118,9 +134,9 @@ function Login() {
         <div className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]">
           <div className="text-center mb-8">
             <div className="text-2xl text-indigo-800 tracking-wide font-semibold">
-              Login to your User Account
+              Login to your Account
             </div>
-            <p className="text-gray-500 mt-3">Log Into Your user Account.</p>
+            <p className="text-gray-500 mt-3">Log Into Your Account.</p>
           </div>
           <form onSubmit={handleSignUpDb}>
             <div>

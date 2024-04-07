@@ -85,7 +85,7 @@ function Admin() {
   //   document.getElementBy_id("editModal").close();
   // };
   const handleSaveEdit = async (id) =>{
-    console.log(id)
+    handleCloseModal()
     try {
       const config = {
         headers:{
@@ -93,14 +93,19 @@ function Admin() {
         }
       }
       const response = await axios.put("http://localhost:8000/admin-update-allfield",{id,selectedPost},config);
-      fetchData()
+      if(response.success)
+      {
+        fetchData()
+      }
+      
+      
     } catch (error) {
       console.log("Error from the updated field" + error)
     }
   }
 
   const handleCloseModal = () => {
-    document.getElementBy_id("editModal").close();
+    document.getElementById("editModal").close();
   };
 
   const handleApproveTechQuestion = (index) => {

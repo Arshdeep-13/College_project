@@ -143,7 +143,7 @@ function SignUp() {
       res = await res.json();
       sessionStorage.setItem("token", res.token);
       if (res.success) {
-        toast.sucess(res.message, {
+        toast.success(res.message, {
           position: "top-left",
           autoClose: 1000,
           hideProgressBar: false,
@@ -155,7 +155,7 @@ function SignUp() {
         });
 
         setTimeout(() => {
-          navigate("/admin");
+          navigate("/home");
           window.location.reload();
         }, 1010);
       } else {
@@ -199,7 +199,7 @@ function SignUp() {
         theme="colored"
         transition:Bounce
       />
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="relative h-screen flex items-center p-8 mt-8 justify-center bg-gray-100 overflow-hidden">
         {/* Render Circles */}
         {circleStyles.map((style, index) => (

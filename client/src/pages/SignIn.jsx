@@ -127,7 +127,7 @@ function SignIn() {
         <div className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]">
           <div className="text-center mb-8">
             <div className="text-2xl text-indigo-800 tracking-wide font-semibold">
-              Login to Your Admin Account
+              Login to Your Account
             </div>
             <p className="text-gray-500 mt-3">Sign in to proceed.</p>
           </div>

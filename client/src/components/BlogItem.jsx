@@ -81,7 +81,7 @@ function BlogItem() {
   }
 
   return (
-    <>
+    <div id="list_of_exp">
       <div className="flex items-center mb-4 ml-[8%]">
         <p className="me-4">Sort By Companies : </p>
         <select
@@ -170,7 +170,7 @@ function BlogItem() {
             )
         )
       )}
-    </>
+    </div>
   );
 }
 

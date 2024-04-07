@@ -53,6 +53,7 @@ const login = async (req, res) => {
         message: "Login successfully",
         success: true,
         token: token,
+        isAdmin:userExit.isAdmin
       });
     } else {
       return res.status(401).send({
