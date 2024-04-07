@@ -1,4 +1,4 @@
-const Contact = require("../models/ContactModel.js");
+const Contact = require("../models/contactModel.js");
 
 const storeContact = async (req, res) => {
   try {
@@ -10,4 +10,4 @@ const storeContact = async (req, res) => {
   }
 };
 
-exports.storeContact = storeContact;
+module.exports = {storeContact}
