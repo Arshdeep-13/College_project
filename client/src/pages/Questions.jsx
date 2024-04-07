@@ -1,84 +1,88 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import Question from '../components/Question';
-import FooterPage from './FooterPage';
-import Footer from '../components/Footer';
+import React, { useState, useEffect } from "react";
+import Navbar from "../components/Navbar";
+import Question from "../components/Question";
+import FooterPage from "./FooterPage";
+import Footer from "../components/Footer";
 
 const questionsData = [
   {
     id: 1,
-    title: 'How to implement a self join in SQL?',
-    category: 'Tech',
-    company: 'Microsoft',
+    title: "How to implement a self join in SQL?",
+    category: "Tech",
+    company: "Microsoft",
   },
   {
     id: 2,
-    title: 'What are your favorite books?',
-    category: 'Non-Tech',
-    company: 'Cantilever',
+    title: "What are your favorite books?",
+    category: "Non-Tech",
+    company: "Cantilever",
   },
   {
     id: 3,
-    title: 'Explain the MapReduce paradigm and its usage at Google.',
-    category: 'Tech',
-    company: 'Google',
+    title: "Explain the MapReduce paradigm and its usage at Google.",
+    category: "Tech",
+    company: "Google",
   },
   {
     id: 4,
-    title: 'What is Amazon Web Services (AWS) and how can it benefit businesses?',
-    category: 'Tech',
-    company: 'Amazon',
+    title:
+      "What is Amazon Web Services (AWS) and how can it benefit businesses?",
+    category: "Tech",
+    company: "Amazon",
   },
   {
     id: 5,
-    title: 'How does Adobe Photoshop utilize artificial intelligence for image editing?',
-    category: 'Tech',
-    company: 'Adobe',
+    title:
+      "How does Adobe Photoshop utilize artificial intelligence for image editing?",
+    category: "Tech",
+    company: "Adobe",
   },
   {
     id: 6,
-    title: 'Describe the role of Microsoft Azure in cloud computing.',
-    category: 'Tech',
-    company: 'Microsoft',
+    title: "Describe the role of Microsoft Azure in cloud computing.",
+    category: "Tech",
+    company: "Microsoft",
   },
   {
     id: 7,
-    title: 'What are the key principles of Google\'s design philosophy?',
-    category: 'Non-Tech',
-    company: 'Google',
+    title: "What are the key principles of Google's design philosophy?",
+    category: "Non-Tech",
+    company: "Google",
   },
   {
     id: 8,
-    title: 'Discuss the impact of Amazon\'s business model on traditional retail.',
-    category: 'Non-Tech',
-    company: 'Amazon',
+    title:
+      "Discuss the impact of Amazon's business model on traditional retail.",
+    category: "Non-Tech",
+    company: "Amazon",
   },
   {
     id: 9,
-    title: 'How does Adobe support diversity and inclusion in its workplace?',
-    category: 'Non-Tech',
-    company: 'Adobe',
+    title: "How does Adobe support diversity and inclusion in its workplace?",
+    category: "Non-Tech",
+    company: "Adobe",
   },
   {
     id: 10,
-    title: 'Explain Microsoft\'s approach to corporate social responsibility.',
-    category: 'Non-Tech',
-    company: 'Microsoft',
+    title: "Explain Microsoft's approach to corporate social responsibility.",
+    category: "Non-Tech",
+    company: "Microsoft",
   },
   // Add more questions as needed
 ];
 
 function Questions() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState(''); // Initialize to empty string
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(""); // Initialize to empty string
   const [filteredQuestions, setFilteredQuestions] = useState([]);
 
   const handleSearch = () => {
     const filtered = questionsData.filter((question) => {
       const categoryMatch =
-        selectedCategory === '' || question.category === selectedCategory;
-      const companyMatch =
-        question.company.toLowerCase().includes(searchQuery.toLowerCase());
+        selectedCategory === "" || question.category === selectedCategory;
+      const companyMatch = question.company
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
       return categoryMatch && companyMatch;
     });
 
@@ -136,9 +140,8 @@ function Questions() {
             <p>No questions found for the specified filters.</p>
           )}
         </div>
-        <Footer className="w-full"/>
+        <Footer className="w-full" />
       </div>
-      
     </>
   );
 }

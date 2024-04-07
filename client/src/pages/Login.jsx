@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios  from "axios";
+import axios from "axios";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,33 +34,36 @@ function Login() {
     e.preventDefault();
     try {
       const config = {
-        headers:{
-          "Content-Type":"application/json"
-        }
-      }
-  const response = await axios.post("http://localhost:8000/login",{email,password},config)
-  console.log(response.data.isAdmin)
-      if(response.data.isAdmin === true)
-      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await axios.post(
+        "http://localhost:8000/login",
+        { email, password },
+        config
+      );
+      // console.log(response.data.isAdmin);
+      if (response.data.isAdmin === true) {
         sessionStorage.setItem("token", response.data.token);
-      if (response.success) {
-        toast.success(response.message, {
-          position: "top-left",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      }
-      setTimeout(() => {
-        navigate("/admin");
-        window.location.reload();
-      }, 1000);
-    }
-      else{
+        sessionStorage.setItem("isAdmin", response.data.isAdmin);
+        if (response.success) {
+          toast.success(response.message, {
+            position: "top-left",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
+        setTimeout(() => {
+          navigate("/admin");
+          window.location.reload();
+        }, 1000);
+      } else {
         sessionStorage.setItem("token", response.data.token);
         if (response.success) {
           toast.success(response.message, {
@@ -73,11 +76,11 @@ function Login() {
             progress: undefined,
             theme: "colored",
           });
-      }
-      setTimeout(() => {
-        navigate("/home");
-        window.location.reload();
-      }, 1000);
+        }
+        setTimeout(() => {
+          navigate("/home");
+          window.location.reload();
+        }, 1000);
       }
     } catch (error) {
       toast.error(error, {
@@ -108,7 +111,7 @@ function Login() {
     <>
       <ToastContainer
         position="top-left"
-        autoClose={5000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -119,7 +122,7 @@ function Login() {
         theme="colored"
         transition:Bounce
       />
-      {/* <Navbar /> */}
+      <Navbar />
       <div className="relative h-screen flex items-center justify-center bg-gray-100 overflow-hidden">
         {/* Random Circles */}
         {circleStyles.map((style, index) => (

@@ -3,6 +3,7 @@ const userController = require("../controllers/userController.js");
 const expController = require("../controllers/expController.js");
 const adminController = require("../controllers/adminController.js");
 require("../middleware/authMiddleware.js");
+const contactController = require("../controllers/contactController.js");
 
 Route.get("/", userController.Func);
 Route.post("/signup", userController.signup);
@@ -14,5 +15,6 @@ Route.get("/get-experience-question", expController.getQues);
 Route.get("/admin-users", adminController.getUsers);
 Route.put("/admin-update-approved", adminController.updateApproved);
 Route.put("/admin-update-allfield", adminController.updateField);
+Route.post("/contact", contactController.storeContact);
 
 module.exports = Route;
