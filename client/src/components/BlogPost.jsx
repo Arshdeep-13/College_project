@@ -145,6 +145,7 @@ const BlogPost = () => {
                 <p className="text-lg text-gray-800">
                   I prepared for the interview from the following topics:
                   <ul className="list-disc list-inside">
+                    <li>{post.interviewPrep}</li>
                     <li>Data Structures and Algorithms</li>
                     <li>Programming Language: Java / C++</li>
                     <li>Operating System</li>

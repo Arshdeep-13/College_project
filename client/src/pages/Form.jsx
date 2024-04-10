@@ -26,6 +26,7 @@ function Form() {
   const [hrQuestions, setHRQuestions] = useState([""]);
   const [mistakes, setMistakes] = useState("");
   const [techQuestions, setTechQuestions] = useState([""]);
+  const [interviewPrep,Setinterviewprep] = useState("")
   // const [otherCompany, setOtherCompany] = useState("");
   const [expyr, setExpyr] = useState(0);
   const isApproved = false;
@@ -82,11 +83,12 @@ function Form() {
       techQuestions,
       mistakes,
       isApproved,
+      interviewPrep
     };
 
     console.log(formData);
     try {
-      const res = await fetch(`${import.meta.env.VITE_SERVER}/experience`, {
+      const res = await fetch("http://localhost:8000/experience", {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
@@ -356,6 +358,15 @@ function Form() {
               placeholder="Please Share some preparation tips if there is any."
               className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-[80%] lg:w-[65%] "
               onChange={(e) => setMistakes(e.target.value)}
+            />
+               <label className="block font-semibold mt-8 mb-5">
+             Interview Preparation
+            </label>
+            <textarea
+              value={interviewPrep}
+              placeholder="Please Share some Interview preparation."
+              className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-[80%] lg:w-[65%] "
+              onChange={(e) => Setinterviewprep(e.target.value)}
             />
             <label className="block font-semibold mt-8 mb-5">
               Preparation Tips

@@ -67,6 +67,9 @@ const expSchema = mongoose.Schema({
   techQuestions: {
     type: [],
   },
+  interviewPrep:{
+    type:String
+  },
   othercompany: {
     type: String,
   },
