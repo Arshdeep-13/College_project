@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 // import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Navbar from "../components/Navbar";
@@ -9,12 +9,11 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import RingLoader from "react-spinners/RingLoader";
-import context from "../contextApi/Contextstate"
+import context from "../contextApi/Contextstate";
 function Login() {
-//   const data = useContext(context)
-//   const val = "hellos"
-//  data.addUserDetail(val)
-
+  //   const data = useContext(context)
+  //   const val = "hellos"
+  //  data.addUserDetail(val)
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,12 +33,26 @@ function Login() {
       };
       const validateEmail = email.endsWith("@chitkarauniversity.edu.in");
       if (validateEmail) {
+        // stores the user in session storage
+        const user = await axios.post(`http://localhost:8000/getUserDetails`, {
+          method: "POST",
+          body: { email: email },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (user.data.success) {
+          const userDetail = user.data.data;
+          sessionStorage.setItem("email", userDetail.email);
+          sessionStorage.setItem("name", userDetail.name);
+          sessionStorage.setItem("uid", userDetail.uid);
+        }
+
         const response = await axios.post(
           `http://localhost:8000/login`,
           { email, password },
           config
         );
-        // console.log(response.data.data)
         if (response.data.isAdmin === true) {
           cookies.set("token", response.data.token);
           cookies.set("isAdmin", response.data.isAdmin);
@@ -72,11 +85,11 @@ function Login() {
               progress: undefined,
               theme: "colored",
             });
-            
+
             setTimeout(() => {
               navigate("/home");
               window.location.reload();
-                    // addUserDetail(["goof"]);
+              // addUserDetail(["goof"]);
             }, 1000);
           } else {
             toast.error(response.data.message, {

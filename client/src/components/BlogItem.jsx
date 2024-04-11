@@ -133,25 +133,28 @@ function BlogItem() {
                 <Link to={`/post/${post._id}`}>
                   <div className="max-w-[85%] mx-auto bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow mt-8 p-2 shadow">
                     {/* Title block */}
-                    <div className="p-4 flex items-center ">
-                      <div className="w-14 h-14 rounded overflow-hidden">
-                        <img
-                          className="w-full h-full object-cover "
-                          src={getCompanyLogo(post.company)}
-                          alt="Company Logo"
-                        />
+                    <div className="flex items-center justify-between">
+                      <div className="p-4 flex items-center ">
+                        <div className="w-14 h-14 rounded overflow-hidden">
+                          <img
+                            className="w-full h-full object-cover "
+                            src={getCompanyLogo(post.company)}
+                            alt="Company Logo"
+                          />
+                        </div>
+                        <div className="ml-4">
+                          <p className="text-xl font-semibold">
+                            {post.company} | {post.role} |{" "}
+                            {post.expyr == 0
+                              ? "Fresher"
+                              : `Experience ${post.expyr} year`}
+                          </p>
+                          <p className="text-gray-600 font-bold">
+                            {post.rounds} Rounds | 6 Coding Problems
+                          </p>
+                        </div>
                       </div>
-                      <div className="ml-4">
-                        <p className="text-xl font-semibold">
-                          {post.company} | {post.role} |{" "}
-                          {post.expyr == 0
-                            ? "Fresher"
-                            : `Experience ${post.expyr} year`}
-                        </p>
-                        <p className="text-gray-600 font-bold">
-                          {post.rounds} Rounds | 6 Coding Problems
-                        </p>
-                      </div>
+                      <div className="font-bold mr-2">{post.date}</div>
                     </div>
                     <div className="border-t border-gray-200 my-2"></div>
                     {/* Profile block */}

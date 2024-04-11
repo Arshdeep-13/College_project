@@ -19,11 +19,12 @@ function Navbar() {
     setIsOpen(!isOpen);
   };
   const logoutUtils = () => {
-    console.log(cookies.get("token"), cookies.get("isAdmin"));
     cookies.remove("token");
     if (cookies.get("isAdmin")) {
       cookies.remove("isAdmin");
     }
+    sessionStorage.clear();
+    localStorage.clear();
     navigate("/");
     window.location.reload();
   };

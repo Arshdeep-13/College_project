@@ -5,15 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 // import { db } from "../firebase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import context from "../contextApi/Contextstate"
 
 function Form() {
-  
-  const [userData,setUserData] = useState([])
-  const userData1= useContext(context)
-
-
-
   const navigate = useNavigate();
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
@@ -35,7 +28,18 @@ function Form() {
   const [techQuestions, setTechQuestions] = useState([""]);
   const [interviewPrep, Setinterviewprep] = useState("");
   const [expyr, setExpyr] = useState(0);
-  const isApproved = false;
+  const isApproved = true;
+
+  useEffect(() => {
+    const name = sessionStorage.getItem("name");
+    const email = sessionStorage.getItem("email");
+    const uid = sessionStorage.getItem("uid");
+
+    name == undefined || null ? "" : setName(name);
+    email == undefined || null ? "" : setEmail(email);
+    uid == undefined || null ? "" : setUniversityID(uid);
+    uid == undefined || null ? "" : setBatch(20 + uid.slice(0, 2));
+  }, []);
 
   const addHRQuestion = () => {
     setHRQuestions([...hrQuestions, ""]);
@@ -68,12 +72,9 @@ function Form() {
       toast.error("Please fill in all required fields.");
     }
   };
-  useEffect(()=>{
-    setUserData(userData1.userDetails)
-    // console.log(userData1.userDetails)
-  },[userData1])
 
   const handleSubmit = async () => {
+    const currentDate = new Date().toDateString();
     const formData = {
       company,
       role,
@@ -94,10 +95,9 @@ function Form() {
       mistakes,
       isApproved,
       interviewPrep,
-      date: new Date().toLocaleString(),
+      date: currentDate,
     };
 
-    console.log(formData);
     try {
       const res = await fetch("http://localhost:8000/experience", {
         method: "POST",
@@ -237,7 +237,13 @@ function Form() {
                 </label>
                 <input
                   type="number"
-                  onChange={(e) => setRounds(e.target.value)}
+                  onChange={(e) => {
+                    if (e.target.value < 0) {
+                      setRounds(0);
+                    } else {
+                      setRounds(e.target.value);
+                    }
+                  }}
                   value={rounds}
                   className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
@@ -305,19 +311,6 @@ function Form() {
               </div>
               <div className="w-80">
                 <label className="block font-semibold mt-8 mb-5">
-                  Your Mobile No.
-                </label>
-                <input
-                  type="number"
-                  onChange={(e) => setMobileNo(e.target.value)}
-                  value={mobileNo}
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col lg:flex-row md:flex-row lg:space-x-64 md:space-x-52">
-              <div className="w-80">
-                <label className="block font-semibold mt-8 mb-5">
                   LinkedIn Profile Link
                 </label>
                 <input
@@ -327,13 +320,21 @@ function Form() {
                   className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />
               </div>
+            </div>
+            <div className="flex flex-col lg:flex-row md:flex-row lg:space-x-64 md:space-x-52">
               <div className="w-80">
                 <label className="block font-semibold mt-8 mb-5">
                   Your CGPA
                 </label>
                 <input
                   type="number"
-                  onChange={(e) => setCgpa(e.target.value)}
+                  onChange={(e) => {
+                    if (e.target.value < 0) {
+                      setCgpa(0);
+                    } else {
+                      setCgpa(e.target.value);
+                    }
+                  }}
                   value={cgpa}
                   className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
                 />

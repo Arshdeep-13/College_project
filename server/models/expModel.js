@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
 
 const expSchema = mongoose.Schema({
-  // id:{
-  //   type:String,
-  //   required:true
-  // },
+  date: {
+    type: String,
+  },
   company: {
     type: String,
     required: true,
@@ -27,18 +26,15 @@ const expSchema = mongoose.Schema({
   },
   batch: {
     type: String,
-
   },
   name: {
     type: String,
-
   },
   email: {
     type: String,
-
   },
   universityID: {
-    type: String
+    type: String,
   },
   mobileNo: {
     type: String,
@@ -48,7 +44,7 @@ const expSchema = mongoose.Schema({
   },
   cgpa: {
     type: String,
-    required:true
+    required: true,
   },
   question: {
     type: String,
@@ -65,8 +61,8 @@ const expSchema = mongoose.Schema({
   techQuestions: {
     type: [],
   },
-  interviewPrep:{
-    type:String
+  interviewPrep: {
+    type: String,
   },
   othercompany: {
     type: String,
@@ -80,9 +76,9 @@ const expSchema = mongoose.Schema({
     required: true,
     default: 0,
   },
-  hrQuestions:{
-    type:[]
-  }
+  hrQuestions: {
+    type: [],
+  },
 });
 
 const expModel = new mongoose.model("expModel", expSchema);

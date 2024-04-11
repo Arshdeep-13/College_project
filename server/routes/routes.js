@@ -17,4 +17,5 @@ Route.put("/admin-update-approved", adminController.updateApproved);
 Route.put("/admin-update-allfield", adminController.updateField);
 Route.post("/contact", contactController.storeContact);
 Route.post("/verifyEmail", userController.generateOtpFunc);
+Route.post("/getUserDetails/", userController.getUserDetails);
 module.exports = Route;

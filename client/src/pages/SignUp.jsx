@@ -106,6 +106,10 @@ function SignUp() {
       cookies.set("token", res.token);
       cookies.set("isAdmin", false);
 
+      sessionStorage.setItem("email", email);
+      sessionStorage.setItem("name", name);
+      sessionStorage.setItem("uid", universityId);
+
       if (res.success) {
         toast.success(res.message, {
           position: "top-left",

@@ -80,7 +80,7 @@ const login = async (req, res) => {
       return res.status(200).send({
         message: "Login successfully",
         success: true,
-        data:userExit,
+        data: userExit,
         token: token,
         isAdmin: userExit.isAdmin,
       });
@@ -128,5 +128,33 @@ const adminlogin = async (req, res) => {
     });
   }
 };
+const getUserDetails = async (req, res) => {
+  try {
+    const userExit = await userModel.findOne({ email: req.body.body.email });
+    if (!userExit) {
+      return res.status(200).send({
+        message: "User not exit",
+        success: false,
+      });
+    }
+    return res.status(200).send({
+      message: "User Details",
+      success: true,
+      data: userExit,
+    });
+  } catch (error) {
+    return res.status(501).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
 
-module.exports = { login, signup, Func, adminlogin, generateOtpFunc };
+module.exports = {
+  login,
+  signup,
+  Func,
+  adminlogin,
+  generateOtpFunc,
+  getUserDetails,
+};
