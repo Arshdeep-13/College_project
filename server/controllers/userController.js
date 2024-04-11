@@ -64,7 +64,7 @@ const login = async (req, res) => {
   try {
     const userExit = await userModel.findOne({ email: req.body.email });
     if (!userExit) {
-      return res.status(200).send({
+      return res.status(400).send({
         message: "User not exit",
         success: false,
       });
@@ -85,7 +85,7 @@ const login = async (req, res) => {
         isAdmin: userExit.isAdmin,
       });
     } else {
-      return res.status(200).send({
+      return res.status(400).send({
         message: "Invalid crediantials",
         success: false,
       });

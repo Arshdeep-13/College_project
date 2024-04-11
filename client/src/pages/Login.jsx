@@ -46,53 +46,81 @@ function Login() {
           sessionStorage.setItem("email", userDetail.email);
           sessionStorage.setItem("name", userDetail.name);
           sessionStorage.setItem("uid", userDetail.uid);
-        }
 
-        const response = await axios.post(
-          `http://localhost:8000/login`,
-          { email, password },
-          config
-        );
-        if (response.data.isAdmin === true) {
-          cookies.set("token", response.data.token);
-          cookies.set("isAdmin", response.data.isAdmin);
-          if (response.data.success) {
-            toast.success(response.data.message, {
-              position: "top-left",
-              autoClose: 1000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-            });
-          }
-          setTimeout(() => {
-            navigate("/admin");
-            window.location.reload();
-          }, 1000);
-        } else {
-          cookies.set("token", response.data.token);
-          if (response.data.success) {
-            toast.success(response.data.message, {
-              position: "top-left",
-              autoClose: 1000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-            });
+          let response = await fetch("http://localhost:8000/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
+          response = await response.json();
 
-            setTimeout(() => {
-              navigate("/home");
-              window.location.reload();
-              // addUserDetail(["goof"]);
-            }, 1000);
+          if (response.success) {
+            if (response.data.isAdmin === true) {
+              cookies.set("token", response.data.token);
+              cookies.set("isAdmin", response.data.isAdmin);
+              if (response.data.success) {
+                toast.success(response.data.message, {
+                  position: "top-left",
+                  autoClose: 1000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                });
+                setTimeout(() => {
+                  navigate("/admin");
+                  window.location.reload();
+                }, 1000);
+              } else {
+                toast.error(res.message, {
+                  position: "top-left",
+                  autoClose: 1000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                });
+              }
+            } else {
+              cookies.set("token", response.data.token);
+              if (response.data.success) {
+                toast.success(response.data.message, {
+                  position: "top-left",
+                  autoClose: 1000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                });
+
+                setTimeout(() => {
+                  navigate("/home");
+                  window.location.reload();
+                  // addUserDetail(["goof"]);
+                }, 1000);
+              } else {
+                toast.error(response.data.message, {
+                  position: "top-left",
+                  autoClose: 1000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                });
+              }
+            }
           } else {
-            toast.error(response.data.message, {
+            toast.error(response.message, {
               position: "top-left",
               autoClose: 1000,
               hideProgressBar: false,
@@ -103,6 +131,17 @@ function Login() {
               theme: "colored",
             });
           }
+        } else {
+          toast.error(user.data.message, {
+            position: "top-left",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         }
       } else {
         toast.error("Please enter chitkara email id only.", {
