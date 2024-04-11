@@ -6,12 +6,18 @@ import { RiLoginCircleLine } from "react-icons/ri";
 import { FaCode, FaAccusoft } from "react-icons/fa";
 import { IoMdMailUnread } from "react-icons/io";
 import { Link } from "react-router-dom";
-import Navbar from "./Navbar";
+import video from "../assets/video.mp4";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function LandingPage() {
   const controls = useAnimation();
   const [ref, inView] = useInView();
   const [isOpen, setIsOpen] = useState(false);
+  const [Name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [query, setQuery] = useState("");
+  const [uid, setuid] = useState("");
 
   useEffect(() => {
     if (inView) {
@@ -27,6 +33,43 @@ function LandingPage() {
   };
   const handleToggle = () => {
     setIsOpen(!isOpen);
+  };
+  const handleContactForm = async (e) => {
+    e.preventDefault();
+    try {
+      const obj = {
+        name: Name,
+        email: email,
+        uid: parseInt(uid),
+        message: query,
+      };
+      const response = await fetch(`${import.meta.env.VITE_SERVER}/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(obj),
+      });
+      const data = await response.json();
+      if (data.status === 201) {
+        toast.success(data.message, {
+          position: "top-left",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        setName("");
+        setEmail("");
+        setQuery("");
+        setuid("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -47,6 +90,19 @@ function LandingPage() {
 
   return (
     <div className="scroll-smooth">
+      <ToastContainer
+        position="top-left"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition:Bounce
+      />
       <motion.header
         className="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-3 sm:py-0 dark:bg-gray-800 dark:border-gray-700"
         initial={{ opacity: 0, y: -50 }}
@@ -616,11 +672,9 @@ function LandingPage() {
 
             <div className="lg:grid lg:grid-cols-6 lg:gap-8 lg:items-center">
               <div className="hidden lg:block lg:col-span-2">
-                <img
-                  className="rounded-xl"
-                  src="https://media.licdn.com/dms/image/D5622AQEMW7pNFIlAFQ/feedshare-shrink_800/0/1695360948152?e=1705536000&v=beta&t=pVt2PwWYdQM9IHNYZ127rmOPgqOEgAraIfVevTIoccI"
-                  alt="Image Description"
-                />
+                <video className="rounded-lg" autoPlay muted loop>
+                  <source src={video} type="video/mp4" />
+                </video>
               </div>
 
               <div className="lg:col-span-4">
@@ -685,72 +739,6 @@ function LandingPage() {
           </div>
         </div>
       </motion.section>
-      <section
-        id="stats-section"
-        className="bg-[#ECF0F5] dark:bg-gray-900 mx-auto py-20"
-      >
-        <div className="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
-          <div className="grid items-center grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12">
-            <div className="lg:col-span-4">
-              <div className="lg:pr-6 xl:pr-12">
-                <p className="text-5xl font-bold leading-10 text-blue-600">
-                  <span className="mr-1">95%</span>
-                  <span className="inline-flex items-center gap-x-1 bg-gray-200 font-medium text-gray-800 text-xs leading-4 rounded-full py-0.5 px-2 dark:bg-gray-800 dark:text-gray-300">
-                    <svg
-                      className="flex-shrink-0 w-4 h-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z" />
-                    </svg>
-                    +7% this year
-                  </span>
-                </p>
-                <p className="mt-2 sm:mt-3 text-gray-500">
-                  of Chitkara University students got placed in 2023.
-                </p>
-              </div>
-            </div>
-
-            <div className="lg:col-span-8 relative lg:before:absolute lg:before:top-0 lg:before:-start-12 lg:before:w-px lg:before:h-full lg:before:bg-gray-200 lg:before:dark:bg-gray-700">
-              <div className="grid gap-6 grid-cols-2 md:grid-cols-4 lg:grid-cols-3 sm:gap-8">
-                {/* Individual Stats */}
-                <motion.div
-                  className="text-center"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={controls}
-                >
-                  <p className="text-3xl font-semibold text-blue-600">99.95%</p>
-                  <p className="mt-1 text-gray-500">of students are placed</p>
-                </motion.div>
-
-                <motion.div
-                  className="text-center"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={controls}
-                >
-                  <p className="text-3xl font-semibold text-blue-600">2,000+</p>
-                  <p className="mt-1 text-gray-500">students placed in 2023</p>
-                </motion.div>
-
-                <motion.div
-                  className="text-center"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={controls}
-                >
-                  <p className="text-3xl font-semibold text-blue-600">85%</p>
-                  <p className="mt-1 text-gray-500">
-                    of students in top companies
-                  </p>
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <motion.section
         initial={{ opacity: 0, y: 20 }}
@@ -778,9 +766,9 @@ function LandingPage() {
                   Fill in the form
                 </h2>
 
-                <form>
+                <form onSubmit={handleContactForm} method="post">
                   <div className="grid gap-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
                       <div>
                         <label
                           htmlFor="hs-firstname-contacts-1"
@@ -794,22 +782,8 @@ function LandingPage() {
                           id="hs-firstname-contacts-1"
                           className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                           placeholder="First Name"
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor="hs-lastname-contacts-1"
-                          className="sr-only"
-                        >
-                          Last Name
-                        </label>
-                        <input
-                          type="text"
-                          name="hs-lastname-contacts-1"
-                          id="hs-lastname-contacts-1"
-                          className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-                          placeholder="Last Name"
+                          value={Name}
+                          onChange={(e) => setName(e.target.value)}
                         />
                       </div>
                     </div>
@@ -823,21 +797,25 @@ function LandingPage() {
                         name="hs-email-contacts-1"
                         id="hs-email-contacts-1"
                         autoComplete="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                         placeholder="Email"
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="hs-phone-number-1" className="sr-only">
-                        Phone Number
+                      <label htmlFor="hs-uid-contacts-1" className="sr-only">
+                        University Id
                       </label>
                       <input
                         type="text"
-                        name="hs-phone-number-1"
-                        id="hs-phone-number-1"
+                        name="hs-email-contacts-1"
+                        id="hs-uid-contacts-1"
+                        value={uid}
+                        onChange={(e) => setuid(e.target.value)}
                         className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-                        placeholder="Phone Number"
+                        placeholder="University Id"
                       />
                     </div>
 
@@ -849,6 +827,8 @@ function LandingPage() {
                         id="hs-about-contacts-1"
                         name="hs-about-contacts-1"
                         rows="4"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
                         className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                         placeholder="Details"
                       ></textarea>
@@ -950,37 +930,6 @@ function LandingPage() {
                       Chitkara University , Atal Shikasha Kunj , Kalujhinda ,
                       Baddi - 174103
                     </p>
-                  </div>
-                </div>
-
-                <div className=" flex gap-x-7 py-6">
-                  <svg
-                    className="flex-shrink-0 w-6 h-6 mt-1.5 text-gray-800 dark:text-gray-200"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m7 11 2-2-2-2" />
-                    <path d="M11 13h4" />
-                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                  </svg>
-                  <div className="grow">
-                    <h3 className="font-semibold text-gray-800 dark:text-gray-200">
-                      Phone Number
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-500">Call us at</p>
-                    <a
-                      className="mt-2 inline-flex items-center gap-x-2 text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                      href="#"
-                    >
-                      +91 9876543210
-                    </a>
                   </div>
                 </div>
 

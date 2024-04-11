@@ -1,42 +1,70 @@
 const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { otpGenerate } = require("./changepassController.js");
+let generateOtp = 0;
 
 const Func = (req, res) => {
   res.send("hii");
+};
+const generateOtpFunc = async (req, res) => {
+  const userExist = await userModel.findOne({ email: req.body.email });
+  if (userExist) {
+    return res.status(200).send({
+      message: "User already exist",
+      success: false,
+    });
+  } else {
+    generateOtp = await otpGenerate(req.body.email);
+    return res.status(200).send({
+      success: true,
+    });
+  }
 };
 const signup = async (req, res) => {
   try {
     const userExist = await userModel.findOne({ email: req.body.email });
     if (userExist) {
-      return res.status(401).send({
-        meesage: "User already exist",
+      return res.status(200).send({
+        message: "User already exist",
         success: false,
       });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hassPassword = await bcrypt.hash(req.body.password, salt);
-    req.body.password = hassPassword;
-    const newUser = await new userModel(req.body);
-    const token = jwt.sign({ userId: newUser._id }, process.env.SECRET_KEY, {
-      expiresIn: "30d",
-    });
-    await newUser.save();
-    return res.status(200).send({
-      message: "Register successfully",
-      success: true,
-      token: token,
-    });
+    console.log(req.body.otp);
+    console.log(generateOtp);
+    if (req.body.otp == generateOtp) {
+      const salt = await bcrypt.genSalt(10);
+      const hassPassword = await bcrypt.hash(req.body.password, salt);
+      req.body.password = hassPassword;
+      const newUser = await new userModel(req.body);
+      const token = jwt.sign({ userId: newUser._id }, process.env.SECRET_KEY, {
+        expiresIn: "30d",
+      });
+      await newUser.save();
+      return res.status(200).send({
+        message: "Register successfully",
+        success: true,
+        token: token,
+      });
+    } else {
+      return res.status(200).send({
+        message: "Invalid otp",
+        success: false,
+      });
+    }
   } catch (error) {
-    console.log("Error " + error);
+    return res.status(200).send({
+      message: error.message,
+      success: false,
+    });
   }
 };
 const login = async (req, res) => {
   try {
     const userExit = await userModel.findOne({ email: req.body.email });
     if (!userExit) {
-      return res.status(401).send({
+      return res.status(200).send({
         message: "User not exit",
         success: false,
       });
@@ -56,7 +84,7 @@ const login = async (req, res) => {
         isAdmin: userExit.isAdmin,
       });
     } else {
-      return res.status(401).send({
+      return res.status(200).send({
         message: "Invalid crediantials",
         success: false,
       });
@@ -100,4 +128,4 @@ const adminlogin = async (req, res) => {
   }
 };
 
-module.exports = { login, signup, Func, adminlogin };
+module.exports = { login, signup, Func, adminlogin, generateOtpFunc };

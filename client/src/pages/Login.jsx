@@ -8,15 +8,18 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import RingLoader from "react-spinners/RingLoader";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const cookies = new Cookies();
+  const [loading, setLoading] = useState(false);
 
   const handleSignUpDb = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const config = {
         headers: {
@@ -103,6 +106,7 @@ function Login() {
         theme: "colored",
       });
     }
+    setLoading(false);
   };
 
   const circleStyles = [
@@ -132,6 +136,17 @@ function Login() {
         transition:Bounce
       />
       <Navbar />
+      {loading && (
+        <div className="w-full h-full absolute flex justify-center items-center z-50 bg-opacity-25 bg-slate-700">
+          <RingLoader
+            color={"blue"}
+            loading={loading}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      )}
       <div className="relative h-screen flex items-center justify-center bg-gray-100 overflow-hidden">
         {/* Random Circles */}
         {circleStyles.map((style, index) => (

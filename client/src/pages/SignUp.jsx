@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useFetcher, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import {
@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Cookies from "universal-cookie";
+import RingLoader from "react-spinners/RingLoader";
 
 function SignUp() {
   const [name, setName] = useState("");
@@ -19,60 +20,16 @@ function SignUp() {
   const [password, setPassword] = useState("");
   const [universityId, setUniversityId] = useState("");
   const [validResponse, setValidResponse] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [Userotp, setUserotp] = useState("");
   const navigate = useNavigate();
   const cookies = new Cookies();
+  const signupRef = useRef(null);
+  const otpRef = useRef(null);
 
-  // const handleSignUp = async (e) => {
-  //     e.preventDefault();
-  //     const validEmailDomain = email.endsWith('@chitkarauniversity.edu.in');
-  //     if (!validEmailDomain) {
-  //         alert('Please use a valid Chitkara University email address.');
-  //         return;
-  //     }
-
-  //     try {
-  //         // Create a new user with email and password
-  //         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-  //         // Send email verification
-  //         await sendEmailVerification(userCredential.user);
-
-  //         // Wait for email verification to complete
-  //         const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //             if (user && user.emailVerified) {
-  //                 // Email is verified, navigate to the home page or any other desired route
-  //                 navigate('/home');
-  //             } else if (user && !user.emailVerified) {
-  //                 // Email is not verified, prompt the user to check their email
-  //                 alert('Please verify your email address. Check your inbox for the verification link and refresh after verifing email.');
-  //             }
-  //         });
-
-  //         // Cleanup the subscription
-  //         unsubscribe();
-  //     } catch (error) {
-  //         console.error('Error during signup:', error);
-  //         // Handle signup failure, e.g., display an error message or redirect to an error page
-  //         navigate('/Error');
-  //     }
-  // };
-  // Add this useEffect to check email verification status
-  // useEffect(() => {
-  //     const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //         if (user) {
-  //             if (user.emailVerified) {
-  //                 // Email is verified, navigate to the home page or any other desired route
-  //                 navigate('/home');
-  //             } else {
-  //                 // Email is not verified, prompt the user to check their email
-  //                 alert('Please verify your email address. Check your inbox for the verification link.');
-  //             }
-  //         }
-  //     });
-
-  //     // Cleanup the subscription
-  //     return () => unsubscribe();
-  // }, [auth, navigate]);
+  useEffect(() => {
+    otpRef.current.style.display = "none";
+  }, []);
 
   const handleEmailChange = (e) => {
     const enteredEmail = e.trim();
@@ -100,10 +57,11 @@ function SignUp() {
   };
   const handleSignUpDb = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const isValidEmail = handleEmailChange(email);
     if (!isValidEmail) {
-      toast.info("Please enter the chitkara email", {
+      toast.error("Please enter the chitkara email", {
         position: "top-left",
         autoClose: 2000,
         hideProgressBar: false,
@@ -116,7 +74,7 @@ function SignUp() {
     }
     const isValidUid = handleUidChange(universityId);
     if (!isValidUid) {
-      toast.info("Please enter the valid Id", {
+      toast.error("Please enter the valid Id", {
         position: "top-left",
         autoClose: 2000,
         hideProgressBar: false,
@@ -134,6 +92,7 @@ function SignUp() {
         email: email,
         password: password,
         uid: parseInt(universityId),
+        otp: Userotp,
       };
 
       let res = await fetch(`${import.meta.env.VITE_SERVER}/signup`, {
@@ -146,7 +105,7 @@ function SignUp() {
       res = await res.json();
       cookies.set("token", res.token);
       cookies.set("isAdmin", false);
-      sessionStorage.setItem("token", res.token);
+
       if (res.success) {
         toast.success(res.message, {
           position: "top-left",
@@ -164,7 +123,7 @@ function SignUp() {
           window.location.reload();
         }, 1010);
       } else {
-        toast.info(res.message, {
+        toast.error(res.message, {
           position: "top-left",
           autoClose: 2000,
           hideProgressBar: false,
@@ -176,6 +135,38 @@ function SignUp() {
         });
       }
     }
+    setLoading(false);
+    otpRef.current.style.display = "block";
+    signupRef.current.style.display = "none";
+  };
+  const changeDisplay = async () => {
+    setLoading(true);
+    let res = await fetch(`${import.meta.env.VITE_SERVER}/verifyEmail`, {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+      }),
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    res = await res.json();
+    if (res.success) {
+      otpRef.current.style.display = "block";
+      signupRef.current.style.display = "none";
+    } else {
+      toast.error(res.message, {
+        position: "top-left",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    setLoading(false);
   };
 
   const circleStyles = [
@@ -205,6 +196,17 @@ function SignUp() {
         transition:Bounce
       />
       <Navbar />
+      {loading && (
+        <div className="w-full h-full absolute flex justify-center items-center z-50 bg-opacity-25 bg-slate-700">
+          <RingLoader
+            color={"blue"}
+            loading={loading}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      )}
       <div className="relative h-screen flex items-center p-8 mt-8 justify-center bg-gray-100 overflow-hidden">
         {/* Render Circles */}
         {circleStyles.map((style, index) => (
@@ -225,85 +227,116 @@ function SignUp() {
             </p>
           </div>
           <form onSubmit={handleSignUpDb} method="POST">
-            <div className="mb-4">
-              <label
-                htmlFor="name"
-                className="block text-sm font-bold text-gray-700"
-              >
-                Name*
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                placeholder="Full Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
+            <div ref={signupRef}>
+              <div className="mb-4">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-bold text-gray-700"
+                >
+                  Name*
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-bold text-gray-700"
+                >
+                  Email Address*
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                  placeholder="Use University Email Address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-bold text-gray-700"
+                >
+                  Password*
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="universityId"
+                  className="block text-sm font-bold text-gray-700"
+                >
+                  University ID*
+                </label>
+                <input
+                  id="universityId"
+                  name="universityId"
+                  type="text"
+                  className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                  placeholder="211*******"
+                  value={universityId}
+                  onChange={(e) => setUniversityId(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-8">
+                <button
+                  className="bg-indigo-500 text-gray-100 p-3 w-full rounded-md tracking-wide font-semibold focus:outline-none focus:shadow-outline hover:bg-indigo-600"
+                  type="button"
+                  onClick={changeDisplay}
+                >
+                  Sign Up
+                </button>
+              </div>
             </div>
-            <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="block text-sm font-bold text-gray-700"
-              >
-                Email Address*
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                placeholder="Use University Email Address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="password"
-                className="block text-sm font-bold text-gray-700"
-              >
-                Password*
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="universityId"
-                className="block text-sm font-bold text-gray-700"
-              >
-                University ID*
-              </label>
-              <input
-                id="universityId"
-                name="universityId"
-                type="text"
-                className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                placeholder="211*******"
-                value={universityId}
-                onChange={(e) => setUniversityId(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-8">
-              <button
-                className="bg-indigo-500 text-gray-100 p-3 w-full rounded-md tracking-wide font-semibold focus:outline-none focus:shadow-outline hover:bg-indigo-600"
-                type="submit"
-              >
-                Sign Up
-              </button>
+            <div ref={otpRef}>
+              <div className="mb-4">
+                <label
+                  htmlFor="otp"
+                  className="block text-sm font-bold text-gray-700"
+                >
+                  OTP*
+                </label>
+                <input
+                  id="otp"
+                  name="otp"
+                  type="text"
+                  className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                  placeholder="Enter OTP"
+                  value={Userotp}
+                  onChange={(e) => setUserotp(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-8">
+                <button
+                  className="bg-indigo-500 text-gray-100 p-3 w-full rounded-md tracking-wide font-semibold focus:outline-none focus:shadow-outline hover:bg-indigo-600"
+                  type="submit"
+                >
+                  Verify
+                </button>
+              </div>
             </div>
           </form>
           <div className="text-sm text-gray-600 text-center">
