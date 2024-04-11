@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import Contact from "./components/Contact";
 import Cookies from "universal-cookie";
 import About from "./components/About";
+import Contextvalue from "./contextApi/Contextvalue";
 
 function App() {
   const [isAuth, setIsAuth] = useState(null);
@@ -40,6 +41,8 @@ function App() {
   }, [isAuth, isAdmin]);
 
   return (
+    <>
+    <Contextvalue>
     <Routes>
       <Route
         path="/"
@@ -86,6 +89,8 @@ function App() {
       />
       <Route path="/Contact" element={<Contact />} />
     </Routes>
+    </Contextvalue>
+    </>
   );
 }
 

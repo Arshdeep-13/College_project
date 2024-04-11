@@ -80,6 +80,7 @@ const login = async (req, res) => {
       return res.status(200).send({
         message: "Login successfully",
         success: true,
+        data:userExit,
         token: token,
         isAdmin: userExit.isAdmin,
       });

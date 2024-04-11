@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 // import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Navbar from "../components/Navbar";
@@ -9,13 +9,19 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import RingLoader from "react-spinners/RingLoader";
-
+import context from "../contextApi/Contextstate"
 function Login() {
+  const data = useContext(context)
+  const val = "hellos"
+ data.addUserDetail(val)
+
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const cookies = new Cookies();
   const [loading, setLoading] = useState(false);
+  // const [userDetails,setUserDetails] = useState([])
 
   const handleSignUpDb = async (e) => {
     e.preventDefault();
@@ -29,10 +35,11 @@ function Login() {
       const validateEmail = email.endsWith("@chitkarauniversity.edu.in");
       if (validateEmail) {
         const response = await axios.post(
-          `${import.meta.env.VITE_SERVER}/login`,
+          `http://localhost:8000/login`,
           { email, password },
           config
         );
+        // console.log(response.data.data)
         if (response.data.isAdmin === true) {
           cookies.set("token", response.data.token);
           cookies.set("isAdmin", response.data.isAdmin);
@@ -65,9 +72,11 @@ function Login() {
               progress: undefined,
               theme: "colored",
             });
+            
             setTimeout(() => {
               navigate("/home");
               window.location.reload();
+                    // addUserDetail(["goof"]);
             }, 1000);
           } else {
             toast.error(response.data.message, {

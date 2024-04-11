@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 // import { addDoc, collection } from "firebase/firestore";
 // import { db } from "../firebase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import context from "../contextApi/Contextstate"
 
 function Form() {
+  
+  const [userData,setUserData] = useState([])
+  const userData1= useContext(context)
+
+
+
   const navigate = useNavigate();
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
@@ -61,6 +68,10 @@ function Form() {
       toast.error("Please fill in all required fields.");
     }
   };
+  useEffect(()=>{
+    setUserData(userData1.userDetails)
+    // console.log(userData1.userDetails)
+  },[userData1])
 
   const handleSubmit = async () => {
     const formData = {
