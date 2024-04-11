@@ -8,6 +8,7 @@ const Func = (req, res) => {
   res.send("hii");
 };
 const generateOtpFunc = async (req, res) => {
+  console.log(req.body.email);
   const userExist = await userModel.findOne({ email: req.body.email });
   if (userExist) {
     return res.status(200).send({
@@ -16,6 +17,7 @@ const generateOtpFunc = async (req, res) => {
     });
   } else {
     generateOtp = await otpGenerate(req.body.email);
+    console.log(generateOtp);
     return res.status(200).send({
       success: true,
     });
@@ -31,8 +33,6 @@ const signup = async (req, res) => {
       });
     }
 
-    console.log(req.body.otp);
-    console.log(generateOtp);
     if (req.body.otp == generateOtp) {
       const salt = await bcrypt.genSalt(10);
       const hassPassword = await bcrypt.hash(req.body.password, salt);
@@ -129,6 +129,7 @@ const adminlogin = async (req, res) => {
   }
 };
 const getUserDetails = async (req, res) => {
+  console.log(req.body);
   try {
     const userExit = await userModel.findOne({ email: req.body.body.email });
     if (!userExit) {
@@ -149,6 +150,65 @@ const getUserDetails = async (req, res) => {
     });
   }
 };
+const checkUserExists = async (req, res) => {
+  try {
+    const userExist = await userModel.findOne({
+      email: req.body.email,
+    });
+    if (userExist) {
+      generateOtp = await otpGenerate(req.body.email);
+      return res.status(200).send({
+        message: "User found",
+        success: true,
+      });
+    }
+  } catch (error) {
+    return res.status(400).send({
+      message: "User not found",
+      success: false,
+    });
+  }
+};
+const compareotp = async (req, res) => {
+  console.log(req.body.otp);
+  console.log(generateOtp);
+  try {
+    if (req.body.otp == generateOtp) {
+      return res.status(200).send({
+        message: "Otp matched",
+        success: true,
+      });
+    } else {
+      return res.status(200).send({
+        message: "Otp not matched",
+        success: false,
+      });
+    }
+  } catch (error) {
+    return res.status(400).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
+const addadmin = async (req, res) => {
+  try {
+    console.log(req.body);
+    const userExist = await userModel.findOneAndUpdate(
+      { email: req.body.email },
+      { isAdmin: true }
+    );
+    return res.status(200).send({
+      message: "Updated succesfully",
+      success: true,
+    });
+  } catch (error) {
+    return res.status(200).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
 
 module.exports = {
   login,
@@ -157,4 +217,7 @@ module.exports = {
   adminlogin,
   generateOtpFunc,
   getUserDetails,
+  checkUserExists,
+  compareotp,
+  addadmin,
 };

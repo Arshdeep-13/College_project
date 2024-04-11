@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Navbar from "../components/Navbar";
@@ -10,6 +10,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import RingLoader from "react-spinners/RingLoader";
 import context from "../contextApi/Contextstate";
+
 function Login() {
   //   const data = useContext(context)
   //   const val = "hellos"
@@ -20,7 +21,20 @@ function Login() {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const [loading, setLoading] = useState(false);
-  // const [userDetails,setUserDetails] = useState([])
+  const [Userotp, setUserotp] = useState("");
+  const [generateOtp, setGenerateOtp] = useState("");
+  const [newPass, setNewPass] = useState("");
+  const mainRef = useRef(null);
+  const emailRef = useRef(null);
+  const otpRef = useRef(null);
+  const passRef = useRef(null);
+
+  useEffect(() => {
+    mainRef.current.style.display = "block";
+    emailRef.current.style.display = "none";
+    otpRef.current.style.display = "none";
+    passRef.current.style.display = "none";
+  }, []);
 
   const handleSignUpDb = async (e) => {
     e.preventDefault();
@@ -34,20 +48,23 @@ function Login() {
       const validateEmail = email.endsWith("@chitkarauniversity.edu.in");
       if (validateEmail) {
         // stores the user in session storage
-        const user = await axios.post(`http://localhost:8000/getUserDetails`, {
-          method: "POST",
-          body: { email: email },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const user = await axios.post(
+          `${import.meta.env.VITE_SERVER}/getUserDetails`,
+          {
+            method: "POST",
+            body: { email: email },
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (user.data.success) {
           const userDetail = user.data.data;
           sessionStorage.setItem("email", userDetail.email);
           sessionStorage.setItem("name", userDetail.name);
           sessionStorage.setItem("uid", userDetail.uid);
 
-          let response = await fetch("http://localhost:8000/login", {
+          let response = await fetch(`${import.meta.env.VITE_SERVER}/login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -87,6 +104,10 @@ function Login() {
                   theme: "colored",
                 });
               }
+              setTimeout(() => {
+                navigate("/home");
+                window.location.reload();
+              }, 1000);
             } else {
               cookies.set("token", response.data.token);
               if (response.data.success) {
@@ -104,7 +125,6 @@ function Login() {
                 setTimeout(() => {
                   navigate("/home");
                   window.location.reload();
-                  // addUserDetail(["goof"]);
                 }, 1000);
               } else {
                 toast.error(response.data.message, {
@@ -118,6 +138,10 @@ function Login() {
                   theme: "colored",
                 });
               }
+              setTimeout(() => {
+                navigate("/home");
+                window.location.reload();
+              }, 1000);
             }
           } else {
             toast.error(response.message, {
@@ -131,11 +155,6 @@ function Login() {
               theme: "colored",
             });
           }
-          setTimeout(() => {
-            navigate("/home");
-            window.location.reload();
-            // addUserDetail(["goof"]);
-          }, 1000);
         } else {
           toast.error(user.data.message, {
             position: "top-left",
@@ -173,6 +192,10 @@ function Login() {
       });
     }
     setLoading(false);
+    mainRef.current.style.display = "none";
+    emailRef.current.style.display = "block";
+    otpRef.current.style.display = "none";
+    passRef.current.style.display = "none";
   };
 
   const circleStyles = [
@@ -185,6 +208,154 @@ function Login() {
       transform: "translate(-50%, -100%)",
     },
   ];
+
+  const handleForgetPass = async (e) => {
+    setLoading(true);
+    mainRef.current.style.display = "none";
+    emailRef.current.style.display = "block";
+    otpRef.current.style.display = "none";
+    passRef.current.style.display = "none";
+    setLoading(false);
+  };
+
+  const handleVerifyOtp = async (e) => {
+    setLoading(true);
+    let res = await fetch(`${import.meta.env.VITE_SERVER}/compareotp`, {
+      method: "POST",
+      body: JSON.stringify({
+        otp: Userotp,
+      }),
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    res = await res.json();
+    if (res.success) {
+      toast.success("OTP Verified", {
+        position: "top-left",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      mainRef.current.style.display = "none";
+      emailRef.current.style.display = "none";
+      otpRef.current.style.display = "none";
+      passRef.current.style.display = "block";
+      setLoading(false);
+    } else {
+      toast.error("Invalid OTP", {
+        position: "top-left",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      mainRef.current.style.display = "none";
+      emailRef.current.style.display = "none";
+      otpRef.current.style.display = "block";
+      passRef.current.style.display = "none";
+      setLoading(false);
+    }
+  };
+
+  const handleNewPass = async (e) => {
+    setLoading(true);
+    let res = await fetch(`${import.meta.env.VITE_SERVER}/changePassword`, {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+        password: newPass,
+      }),
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    res = await res.json();
+    if (res.success) {
+      toast.success(res.message, {
+        position: "top-left",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      navigate("/home");
+      window.location.reload();
+    } else {
+      toast.error(res.message, {
+        position: "top-left",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    setLoading(false);
+  };
+
+  const checkUserExist = async () => {
+    setLoading(true);
+    let res = await fetch(`${import.meta.env.VITE_SERVER}/checkUserExists`, {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+      }),
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    res = await res.json();
+    if (res.success) {
+      await fetch(`${import.meta.env.VITE_SERVER}/verifyEmail`, {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+        }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      toast.success(res.message, {
+        position: "top-left",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      mainRef.current.style.display = "none";
+      emailRef.current.style.display = "none";
+      otpRef.current.style.display = "block";
+      passRef.current.style.display = "none";
+    } else {
+      toast.error(res.message, {
+        position: "top-left",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    setLoading(false);
+  };
 
   return (
     <>
@@ -224,7 +395,10 @@ function Login() {
         ))}
 
         {/* Form Card */}
-        <div className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]">
+        <div
+          className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]"
+          ref={mainRef}
+        >
           <div className="text-center mb-8">
             <div className="text-2xl text-indigo-800 tracking-wide font-semibold">
               Login to your Account
@@ -251,9 +425,13 @@ function Login() {
                   Password
                 </div>
                 <div>
-                  <a className="text-xs font-display font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">
+                  <button
+                    onClick={() => handleForgetPass()}
+                    className="text-xs font-display font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
+                    type="button"
+                  >
                     Forgot Password?
-                  </a>
+                  </button>
                 </div>
               </div>
               <input
@@ -282,6 +460,102 @@ function Login() {
             >
               Sign up here
             </Link>
+          </div>
+        </div>
+        <div
+          ref={emailRef}
+          className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]"
+        >
+          <div className="mb-4">
+            <label
+              htmlFor="otp"
+              className="block text-sm font-bold text-gray-700"
+            >
+              Email Address*
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="text"
+              className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+              placeholder="Enter email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-8">
+            <button
+              className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600 shadow-lg"
+              type="button"
+              onClick={() => checkUserExist()}
+            >
+              Send OTP
+            </button>
+          </div>
+        </div>
+        <div
+          ref={otpRef}
+          className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]"
+        >
+          <div className="mb-4">
+            <label
+              htmlFor="otp"
+              className="block text-sm font-bold text-gray-700"
+            >
+              OTP*
+            </label>
+            <input
+              id="otp"
+              name="otp"
+              type="text"
+              className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+              placeholder="Enter OTP"
+              value={Userotp}
+              onChange={(e) => setUserotp(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-8">
+            <button
+              className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600 shadow-lg"
+              type="button"
+              onClick={() => handleVerifyOtp()}
+            >
+              Verify
+            </button>
+          </div>
+        </div>
+        <div
+          ref={passRef}
+          className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]"
+        >
+          <div className="mb-4">
+            <label
+              htmlFor="newPass"
+              className="block text-sm font-bold text-gray-700"
+            >
+              New Password*
+            </label>
+            <input
+              id="newPass"
+              name="newPass"
+              type="text"
+              className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+              placeholder="Enter OTP"
+              value={newPass}
+              onChange={(e) => setNewPass(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-8">
+            <button
+              className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600 shadow-lg"
+              type="button"
+              onClick={() => handleNewPass()}
+            >
+              Change Password
+            </button>
           </div>
         </div>
       </div>

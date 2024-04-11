@@ -104,7 +104,7 @@ function Form() {
 
     try {
       console.log(formData);
-      let res = await fetch("http://localhost:8000/experience", {
+      let res = await fetch(`${import.meta.env.VITE_SERVER}/experience`, {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {

@@ -27,32 +27,32 @@ const otpGenerate = async (userEmail) => {
     return error.message;
   }
 };
-// const changePass = async (req, res) => {
-//   try {
-//     const email = req.body.email;
-//     const findEmail = await userModel.findOne({ email: email });
-//     if (!findEmail) {
-//       return res.status(200).send({
-//         message: "User dont exist",
-//         success: false,
-//       });
-//     }
-//     const salt = await bcrypt.genSalt(10);
-//     const hassPassword = await bcrypt.hash(req.body.password, salt);
-//     req.body.password = hassPassword;
-//     await userModel.findOneAndUpdate(
-//       { email: email },
-//       { password: req.body.password }
-//     );
-//     return res.status(200).send({
-//       message: "Change password succesfully",
-//       success: true,
-//     });
-//   } catch (error) {
-//     return res.status(500).send({
-//       message: error.message,
-//       success: false,
-//     });
-//   }
-// };
-module.exports = { otpGenerate };
+const changePass = async (req, res) => {
+  try {
+    const email = req.body.email;
+    const findEmail = await userModel.findOne({ email: email });
+    if (!findEmail) {
+      return res.status(200).send({
+        message: "User dont exist",
+        success: false,
+      });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hassPassword = await bcrypt.hash(req.body.password, salt);
+    req.body.password = hassPassword;
+    await userModel.findOneAndUpdate(
+      { email: email },
+      { password: req.body.password }
+    );
+    return res.status(200).send({
+      message: "Change password succesfully",
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
+module.exports = { otpGenerate, changePass };
