@@ -72,8 +72,14 @@ function BlogItem() {
           `${import.meta.env.VITE_SERVER}/get-experience`
         );
         response = await response.json();
-        setSearchedPosts(response.exp);
-        // console.log(response);
+        // Sort the fetched posts by date in descending order
+        const sortedPosts = response.exp.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          return dateB - dateA;
+        });
+
+        setSearchedPosts(sortedPosts);
       } catch (error) {
         console.error(error);
       }
