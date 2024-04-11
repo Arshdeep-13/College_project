@@ -131,6 +131,11 @@ function Login() {
               theme: "colored",
             });
           }
+          setTimeout(() => {
+            navigate("/home");
+            window.location.reload();
+            // addUserDetail(["goof"]);
+          }, 1000);
         } else {
           toast.error(user.data.message, {
             position: "top-left",
