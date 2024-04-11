@@ -31,12 +31,12 @@ const BlogPost = () => {
   //   setLoading(false);
   // };
   const fetchData = async () => {
-    console.log(id);
+    // console.log(id);
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_SERVER}/get-experience-question?id=${id}`
       );
-      console.log(response.data);
+      // console.log(response.data);
       setPost(response.data.data);
       setHrques(response.data.hrques);
       setTechques(response.data.techques);
@@ -138,26 +138,22 @@ const BlogPost = () => {
                 </p>
               </section>
 
-              <section className="mt-6">
-                <h3 className="text-xl font-semibold text-gray-900">
-                  Interview Preparation
-                </h3>
-                <p className="text-lg text-gray-800">
-                  I prepared for the interview from the following topics:
-                  <ul className="list-disc list-inside">
-                  {
-                      post.interviewPrep && <li>{post.interviewPrep }</li>
-                    }
-                    <li>Data Structures and Algorithms</li>
-                    <li>Programming Language: Java / C++</li>
-                    <li>Operating System</li>
-                    <li>Database Management System</li>
-                    <li>Object Oriented Programming</li>
-                    <li>Software Engineering</li>
-                    <li>Computer Networks</li>
-                  </ul>
-                </p>
-              </section>
+              {post.ipSubjects && post.ipSubjects.length > 0 && (
+                <section className="mt-6">
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Interview Preparation
+                  </h3>
+                  <p className="text-lg text-gray-800">
+                    I prepared for the interview from the following topics:
+                    <ul className="list-disc list-inside">
+                      {post.ipSubjects &&
+                        post.ipSubjects.map((subject, index) => (
+                          <li key={index}>{subject}</li>
+                        ))}
+                    </ul>
+                  </p>
+                </section>
+              )}
 
               <section className="mt-6">
                 <h3 className="text-xl font-semibold text-gray-900">
@@ -167,56 +163,52 @@ const BlogPost = () => {
                   I would like to share some tips with you all. I hope it will
                   help you in your preparation.
                   <ul className="list-disc list-inside">
-                    {
-                      post.preparationTips && <li>{post.preparationTips}</li>
-                    }
-                    
-                    <li>Start your preparation early.</li>
-                    <li>Practice coding questions on a regular basis.</li>
-                    <li>Practice previous year interview questions.</li>
-                    <li>
-                      Focus on your resume. Mention your projects, achievements,
-                      and skills in your resume.
-                    </li>
+                    {post.preparationTips && <li>{post.preparationTips}</li>}
                   </ul>
                 </p>
               </section>
 
-              <section className="mt-6">
-                <h3 className="text-xl font-semibold text-gray-900">
-                  HR Interview Round Questions
-                </h3>
-                <p className="text-lg text-gray-800">
-                  I would like to share some questions with you all. I hope it
-                  will help you in your preparation.
-                  <ul className="list-disc list-inside">
-                    {hrques.map((question, index) => (
-                      <li key={index}>{question}</li>
-                    ))}
-                  </ul>
-                  Prepare answers for these questions. This will help you in
-                  your preparation.
-                </p>
-              </section>
+              {hrques.length > 0 && (
+                <section className="mt-6">
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    HR Interview Round Questions
+                  </h3>
+                  <p className="text-lg text-gray-800">
+                    I would like to share some questions with you all. I hope it
+                    will help you in your preparation.
+                    <ul className="list-disc list-inside">
+                      {hrques.map(
+                        (question, index) =>
+                          question && <li key={index}>{question}</li>
+                      )}
+                    </ul>
+                    Prepare answers for these questions. This will help you in
+                    your preparation.
+                  </p>
+                </section>
+              )}
 
-              <section className="mt-6">
-                <h3 className="text-xl font-semibold text-gray-900">
-                  Technical Interview Round Questions
-                </h3>
-                <p className="text-lg text-gray-800">
-                  I would like to share some technical questions which were
-                  asked in my interview. I hope it will help you in your
-                  preparation.
-                  <ul className="list-disc list-inside">
-                    {techques.map((question, index) => (
-                      <li key={index}>{question}</li>
-                    ))}
-                  </ul>
-                  Understand the constraints of the problem before writing the
-                  code. Try to code from brute force approach to optimized
-                  approach. This will help you in your preparation.
-                </p>
-              </section>
+              {techques.length > 0 && (
+                <section className="mt-6">
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Technical Interview Round Questions
+                  </h3>
+                  <p className="text-lg text-gray-800">
+                    I would like to share some technical questions which were
+                    asked in my interview. I hope it will help you in your
+                    preparation.
+                    <ul className="list-disc list-inside">
+                      {techques.map(
+                        (question, index) =>
+                          question && <li key={index}>{question}</li>
+                      )}
+                    </ul>
+                    Understand the constraints of the problem before writing the
+                    code. Try to code from brute force approach to optimized
+                    approach. This will help you in your preparation.
+                  </p>
+                </section>
+              )}
 
               <section className="mt-6">
                 <h3 className="text-xl font-semibold text-gray-900">
@@ -273,21 +265,21 @@ const BlogPost = () => {
 
             {/* Contact Info */}
 
-            {post.linkedin &&
-            <p className="text-base text-gray-800 mt-4">
-              Hey everyone, I am {post.name}. I am an undergraduate student at
-              Chitkara University. I am currently in my {post.batch} batch.
-              <br />
-              If you have any queries regarding the interview process, you can
-              contact me on my email id {post.email}. You can also connect with
-              me on LinkedIn.
-              <br />
-              <FaLinkedin
-                className="inline-block text-2xl text-blue-500 hover:text-blue-700 cursor-pointer my-4"
-                onClick={() => window.open(post.linkedin, "_blank")}
-              />
-            </p>
-}
+            {post.linkedin && (
+              <p className="text-base text-gray-800 mt-4">
+                Hey everyone, I am {post.name}. I am an undergraduate student at
+                Chitkara University. I am currently in my {post.batch} batch.
+                <br />
+                If you have any queries regarding the interview process, you can
+                contact me on my email id {post.email}. You can also connect
+                with me on LinkedIn.
+                <br />
+                <FaLinkedin
+                  className="inline-block text-2xl text-blue-500 hover:text-blue-700 cursor-pointer my-4"
+                  onClick={() => window.open(post.linkedin, "_blank")}
+                />
+              </p>
+            )}
           </motion.div>
         </div>
       )}

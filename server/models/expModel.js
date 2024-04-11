@@ -79,6 +79,9 @@ const expSchema = mongoose.Schema({
   hrQuestions: {
     type: [],
   },
+  ipSubjects: {
+    type: [],
+  },
 });
 
 const expModel = new mongoose.model("expModel", expSchema);
