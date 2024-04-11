@@ -18,6 +18,7 @@ import Contact from "./components/Contact";
 import Cookies from "universal-cookie";
 import About from "./components/About";
 import Contextvalue from "./contextApi/Contextvalue";
+import Addadmin from "./pages/Addadmin";
 
 function App() {
   const [isAuth, setIsAuth] = useState(null);
@@ -73,6 +74,10 @@ function App() {
       <Route
         path="/formSubmitted"
         element={isAuth == null ? <LandingPage /> : <Submitted />}
+      />
+       <Route
+        path="/add-admin"
+        element={isAuth && isAdmin ? <Addadmin /> : <SignIn />}
       />
       <Route
         path="/form"

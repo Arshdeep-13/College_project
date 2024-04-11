@@ -149,6 +149,22 @@ const getUserDetails = async (req, res) => {
     });
   }
 };
+const addadmin = async(req,res) =>{
+  try {
+    console.log(req.body)
+    const userExist = await userModel.findOneAndUpdate({email:req.body.email},{isAdmin:true});
+      return res.status(200).send({
+        message: "Updated succesfully",
+        success: true,
+      })
+
+  } catch (error) {
+    return res.status(200).send({
+      message: error.message,
+      success: false,
+    });
+  }
+}
 
 module.exports = {
   login,
@@ -157,4 +173,5 @@ module.exports = {
   adminlogin,
   generateOtpFunc,
   getUserDetails,
+  addadmin
 };

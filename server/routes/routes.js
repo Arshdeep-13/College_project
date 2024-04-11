@@ -18,4 +18,5 @@ Route.put("/admin-update-allfield", adminController.updateField);
 Route.post("/contact", contactController.storeContact);
 Route.post("/verifyEmail", userController.generateOtpFunc);
 Route.post("/getUserDetails/", userController.getUserDetails);
+Route.put("/add-admin", userController.addadmin);
 module.exports = Route;
