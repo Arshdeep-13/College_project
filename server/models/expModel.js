@@ -42,15 +42,13 @@ const expSchema = mongoose.Schema({
   },
   mobileNo: {
     type: String,
-    required: true,
   },
   linkedin: {
     type: String,
-    required: true,
   },
   cgpa: {
     type: String,
-    required: true,
+    required:true
   },
   question: {
     type: String,

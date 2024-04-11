@@ -145,7 +145,9 @@ const BlogPost = () => {
                 <p className="text-lg text-gray-800">
                   I prepared for the interview from the following topics:
                   <ul className="list-disc list-inside">
-                    <li>{post.interviewPrep}</li>
+                  {
+                      post.interviewPrep && <li>{post.interviewPrep }</li>
+                    }
                     <li>Data Structures and Algorithms</li>
                     <li>Programming Language: Java / C++</li>
                     <li>Operating System</li>
@@ -165,7 +167,10 @@ const BlogPost = () => {
                   I would like to share some tips with you all. I hope it will
                   help you in your preparation.
                   <ul className="list-disc list-inside">
-                    <li>{post.preparationTips}</li>
+                    {
+                      post.preparationTips && <li>{post.preparationTips}</li>
+                    }
+                    
                     <li>Start your preparation early.</li>
                     <li>Practice coding questions on a regular basis.</li>
                     <li>Practice previous year interview questions.</li>
@@ -267,6 +272,8 @@ const BlogPost = () => {
             </div>
 
             {/* Contact Info */}
+
+            {post.linkedin &&
             <p className="text-base text-gray-800 mt-4">
               Hey everyone, I am {post.name}. I am an undergraduate student at
               Chitkara University. I am currently in my {post.batch} batch.
@@ -280,6 +287,7 @@ const BlogPost = () => {
                 onClick={() => window.open(post.linkedin, "_blank")}
               />
             </p>
+}
           </motion.div>
         </div>
       )}

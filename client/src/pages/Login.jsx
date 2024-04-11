@@ -11,9 +11,9 @@ import Cookies from "universal-cookie";
 import RingLoader from "react-spinners/RingLoader";
 import context from "../contextApi/Contextstate"
 function Login() {
-  const data = useContext(context)
-  const val = "hellos"
- data.addUserDetail(val)
+//   const data = useContext(context)
+//   const val = "hellos"
+//  data.addUserDetail(val)
 
 
   const [email, setEmail] = useState("");
