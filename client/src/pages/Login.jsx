@@ -28,6 +28,7 @@ function Login() {
   const emailRef = useRef(null);
   const otpRef = useRef(null);
   const passRef = useRef(null);
+  const [container, setContainer] = useState(false);
 
   useEffect(() => {
     mainRef.current.style.display = "block";
@@ -192,10 +193,6 @@ function Login() {
       });
     }
     setLoading(false);
-    mainRef.current.style.display = "none";
-    emailRef.current.style.display = "block";
-    otpRef.current.style.display = "none";
-    passRef.current.style.display = "none";
   };
 
   const circleStyles = [
