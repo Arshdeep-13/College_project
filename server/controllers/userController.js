@@ -193,17 +193,24 @@ const compareotp = async (req, res) => {
 };
 const addadmin = async (req, res) => {
   try {
-    console.log(req.body);
+    console.log(req.body.email);
     const userExist = await userModel.findOneAndUpdate(
       { email: req.body.email },
       { isAdmin: true }
     );
-    return res.status(200).send({
-      message: "Updated succesfully",
-      success: true,
-    });
+    if (userExist) {
+      return res.status(200).send({
+        message: "Updated succesfully",
+        success: true,
+      });
+    } else {
+      return res.status(200).send({
+        message: "User not found",
+        success: false,
+      });
+    }
   } catch (error) {
-    return res.status(200).send({
+    return res.status(501).send({
       message: error.message,
       success: false,
     });

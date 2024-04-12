@@ -52,14 +52,21 @@ function Addadmin() {
         "Content-Type": "application/json",
       },
     };
-    const response = await axios.put(
-      `${import.meta.env.VITE_SERVER}/add-admin`,
-      { email },
-      config
-    );
-
-    if (response.data.success) {
-      toast.success(response.data.message, {
+    // const response = await axios.put(
+    //   `${import.meta.env.VITE_SERVER}/add-admin`,
+    //   { email },
+    //   config
+    // );
+    let response = await fetch(`${import.meta.env.VITE_SERVER}/add-admin`, {
+      method: "PUT",
+      body: JSON.stringify({ email }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    response = await response.json();
+    if (response.success) {
+      toast.success(response.message, {
         position: "top-left",
         autoClose: 1000,
         hideProgressBar: false,
@@ -70,12 +77,12 @@ function Addadmin() {
         theme: "colored",
       });
 
-      //   setTimeout(() => {
-      //     navigate("/admin");
-      //     window.location.reload();
-      //   }, 1010);
+      setTimeout(() => {
+        navigate("/admin");
+        // window.location.reload();
+      }, 1010);
     } else {
-      toast.error("Invalid credentials", {
+      toast.error(response.message, {
         position: "top-left",
         autoClose: 2000,
         hideProgressBar: false,
