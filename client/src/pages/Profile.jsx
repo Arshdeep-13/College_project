@@ -163,25 +163,50 @@ const Profile = () => {
     <div>
         <ToastContainer/>
     <Navbar />
-    <div style={{display:'flex',justifyContent:'center',alignItems:'center',padding:'5rem'}}>
-    <div style={styles.container}  ref={mainRef}>
-      <div style={styles.profileContainer}>
-        <img
-          src={logo}
-          alt="Profile"
-          style={styles.profilePicture}
-        />
-        <div style={styles.buttonsContainer}>
-            <h4>Usename : {name}</h4>
-          <button style={styles.button} onClick={() => handleEditClick()} >Edit Name</button>
-          <button style={styles.button} onClick={() => handleForgetPass()}
-                    className="text-xs font-display font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
-                    type="button">Change Password</button>
-          <button style={styles.button} onClick={editProfile}>Edit Profile Picture</button>
+
+
+
+  
+    <div className="container mx-auto my-60" ref={mainRef}>
+            <div>
+                <div className="bg-white relative shadow rounded-lg w-5/6 md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto">
+                    <div className="flex justify-center">
+                        <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="" className="rounded-full mx-auto absolute -top-20 w-32 h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110" />
+                    </div>
+                    <div className="mt-16">
+                        <h1 className="font-bold text-center text-3xl text-gray-900">Username : {name}</h1>
+                        <p>
+                            <span>
+
+                            </span>
+                        </p>
+                        <div className="my-5 px-6">
+                            <a href="#" className="text-gray-200 block rounded-lg text-center font-medium leading-6 px-6 py-3 bg-gray-900 hover:bg-black hover:text-white">Connect Us with <span className="font-bold">Next Carrer Step</span></a>
+                        </div>
+                        <div className="w-full">
+                            <h3 className="font-medium text-gray-900 text-left px-6">Features</h3>
+                            <div className="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
+                                <a className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150" onClick={() => handleEditClick()}>
+                                    <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt="" className="rounded-full h-6 shadow-md inline-block mr-2" />
+                                        Edit name
+                                        
+                                </a>
+                                <a href="#" className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150" onClick={() => handleForgetPass()}>
+                                    <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt="" className="rounded-full h-6 shadow-md inline-block mr-2" />
+                                       Reset Password
+                                        
+                                </a>
+                                <a href="#" className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150"  onClick={editProfile}>
+                                    <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt="" className="rounded-full h-6 shadow-md inline-block mr-2" />
+                                        Edit Profile Picture
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    </div>
+
 
 
     <div

@@ -73,14 +73,38 @@ function Navbar() {
                 Log in
               </Link>
             )}
-            {token && (
+            {/* {token && (
               <button
                 className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 none hidden md:block lg:block"
                 onClick={() => logoutUtils()}
               >
                 Log out
               </button>
-            )}
+            )} */}
+
+  <div className="flex-none">  
+    <div className="dropdown dropdown-end">
+      <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+        <div className="w-10 rounded-full">
+          <img alt="Tailwind CSS Navbar component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+        </div>
+      </div>
+      <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+        <li>
+          {token &&
+          <a className="justify-between" to="/profile">
+          <Link
+                to="/profile"
+              >
+               Profile
+              </Link>
+          </a>
+}
+        </li>
+        {token && (<li><a onClick={() => logoutUtils()}>Logout</a></li>)}
+      </ul>
+    </div>
+  </div>
             <button
               ref={ref}
               data-collapse-toggle="navbar-cta"
@@ -149,14 +173,6 @@ function Navbar() {
                 className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Contact
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/profile"
-                className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-               Profile
               </Link>
             </li>
           </ul>

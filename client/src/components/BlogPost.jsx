@@ -265,7 +265,6 @@ const BlogPost = () => {
 
             {/* Contact Info */}
 
-            {post.linkedin && (
               <p className="text-base text-gray-800 mt-4">
                 Hey everyone, I am {post.name}. I am an undergraduate student at
                 Chitkara University. I am currently in my {post.batch} batch.
@@ -274,12 +273,14 @@ const BlogPost = () => {
                 contact me on my email id {post.email}. You can also connect
                 with me on LinkedIn.
                 <br />
+                {post.linkedin &&
                 <FaLinkedin
                   className="inline-block text-2xl text-blue-500 hover:text-blue-700 cursor-pointer my-4"
                   onClick={() => window.open(post.linkedin, "_blank")}
                 />
+}
               </p>
-            )}
+          
           </motion.div>
         </div>
       )}
