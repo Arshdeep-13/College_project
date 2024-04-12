@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 // import { addDoc, collection } from "firebase/firestore";
@@ -8,7 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Form() {
   const navigate = useNavigate();
-  const [company, setCompany] = useState("");
+  const [company, setCompany] = useState("Amazon");
+  const [otherCompany, setOtherCompany] = useState("");
   const [role, setRole] = useState("");
   const [gotOffer, setGotOffer] = useState("");
   const [location, setLocation] = useState("");
@@ -28,7 +29,10 @@ function Form() {
   const [techQuestions, setTechQuestions] = useState([""]);
   const [interviewPrep, Setinterviewprep] = useState("");
   const [IPSubjects, setIPSubjects] = useState([""]);
-  const isApproved = true;
+  const isApproved = false;
+  let hrFieldRef = useRef();
+  let techFieldRef = useRef();
+  let ipFieldRef = useRef();
 
   useEffect(() => {
     const name = sessionStorage.getItem("name");
@@ -40,6 +44,21 @@ function Form() {
     uid == undefined || null ? "" : setUniversityID(uid);
     uid == undefined || null ? "" : setBatch(20 + uid.slice(0, 2));
   }, []);
+  useEffect(() => {
+    if (hrQuestions.length > 1) {
+      hrFieldRef.current.focus();
+    }
+  }, [hrQuestions]);
+  useEffect(() => {
+    if (techQuestions.length > 1) {
+      techFieldRef.current.focus();
+    }
+  }, [techQuestions]);
+  useEffect(() => {
+    if (IPSubjects.length > 1) {
+      ipFieldRef.current.focus();
+    }
+  }, [IPSubjects]);
 
   const addHRQuestion = () => {
     setHRQuestions([...hrQuestions, ""]);
@@ -47,7 +66,6 @@ function Form() {
   const addIPSubjects = () => {
     setIPSubjects([...IPSubjects, ""]);
   };
-
   const addTechQuestion = () => {
     setTechQuestions([...techQuestions, ""]);
   };
@@ -59,15 +77,12 @@ function Form() {
       toast.error("Please fill in all required fields.");
     }
   };
-
   const handlePrevClick1 = () => {
     setQuestions(0);
   };
-
   const handlePrevClick2 = () => {
     setQuestions(1);
   };
-
   const handleNextClick2 = () => {
     if (name.trim() !== "" && email.trim() !== "") {
       setQuestions(2);
@@ -76,10 +91,27 @@ function Form() {
     }
   };
 
+  const deleteHRQuestion = (index) => {
+    const updatedHRQuestions = [...hrQuestions];
+    updatedHRQuestions.splice(index, 1);
+    setHRQuestions(updatedHRQuestions);
+  };
+  const deleteTechnicalQuestion = (index) => {
+    const updatedTechnicalQuestions = [...techQuestions];
+    updatedTechnicalQuestions.splice(index, 1);
+    setTechQuestions(updatedTechnicalQuestions);
+  };
+  const deleteInterviewSubject = (index) => {
+    const updatedInterviewSubjects = [...IPSubjects];
+    updatedInterviewSubjects.splice(index, 1);
+    setIPSubjects(updatedInterviewSubjects);
+  };
+
   const handleSubmit = async () => {
     const currentDate = new Date().toDateString();
+    const currentTime = new Date().toLocaleTimeString();
     const formData = {
-      company,
+      company: company == "Others" ? otherCompany : company,
       role,
       gotOffer,
       location,
@@ -98,12 +130,11 @@ function Form() {
       mistakes,
       isApproved,
       interviewPrep,
-      date: currentDate,
+      date: [currentDate, currentTime],
       ipSubjects: IPSubjects,
     };
 
     try {
-      console.log(formData);
       let res = await fetch(`${import.meta.env.VITE_SERVER}/experience`, {
         method: "POST",
         body: JSON.stringify(formData),
@@ -139,14 +170,42 @@ function Form() {
                 <label className="block font-semibold mt-8 mb-5">
                   Company you Applied to?*
                 </label>
-                <input
-                  type="text"
-                  required
-                  onChange={(e) => setCompany(e.target.value)}
+                <select
+                  name="company"
+                  id="company"
                   value={company}
-                  placeholder="Eg. Amazon,Google etc."
+                  onChange={(e) => setCompany(e.target.value)}
                   className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-80"
-                />
+                >
+                  <option value="Amazon">Amazon</option>
+                  <option value="Google">Google</option>
+                  <option value="Microsoft">Microsoft</option>
+                  <option value="Facebook">Facebook</option>
+                  <option value="Apple">Apple</option>
+                  <option value="Netflix">Netflix</option>
+                  <option value="Uber">Uber</option>
+                  <option value="LinkedIn">LinkedIn</option>
+                  <option value="Twitter">Twitter</option>
+                  <option value="Salesforce">Salesforce</option>
+                  <option value="Oracle">Oracle</option>
+                  <option value="Adobe">Adobe</option>
+                  <option value="Paypal">Paypal</option>
+                  <option value="Cisco">Cisco</option>
+                  <option value="IBM">IBM</option>
+                  <option value="Intel">Intel</option>
+                  <option value="Infosys">Infosys</option>
+                  <option value="Others">Others</option>
+                </select>
+                {company == "Others" && (
+                  <input
+                    type="text"
+                    required
+                    onChange={(e) => setOtherCompany(e.target.value)}
+                    value={otherCompany}
+                    placeholder="Enter Company Name"
+                    className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-80 mt-2"
+                  />
+                )}
               </div>
               <div className="w-80">
                 <div className="w-80">
@@ -406,6 +465,7 @@ function Form() {
                     HR Question {index + 1}
                   </label>
                   <textarea
+                    ref={hrFieldRef}
                     value={question}
                     placeholder={`Enter HR Question ${index + 1}`}
                     onChange={(e) => {
@@ -415,6 +475,13 @@ function Form() {
                     }}
                     className="border-2 border-gray-300 focus:outline-none  focus:border-orange-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-[80%] lg:w-[65%]"
                   />
+                  <button
+                    onClick={() => deleteHRQuestion(index)}
+                    type="button"
+                    className="bg-red-600 hover:bg-red-400 text-white font-bold py-2 px-4 transition duration-300 transform hover:scale-105 my-2"
+                  >
+                    Delete
+                  </button>
                 </div>
               ))}
               <button
@@ -427,35 +494,6 @@ function Form() {
             </div>
             <div>
               <p className="font-semibold text-xl mt-10 font-sans">
-                Interview Preparation Subjects
-              </p>
-              {IPSubjects.map((question, index) => (
-                <div key={index}>
-                  <label className="block font-semibold mt-8 mb-5">
-                    IP Subject {index + 1}
-                  </label>
-                  <textarea
-                    value={question}
-                    placeholder={`Enter IP Subjects ${index + 1}`}
-                    onChange={(e) => {
-                      const updatedIPSubjects = [...IPSubjects];
-                      updatedIPSubjects[index] = e.target.value;
-                      setIPSubjects(updatedIPSubjects);
-                    }}
-                    className="border-2 border-gray-300 focus:outline-none  focus:border-orange-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-[80%] lg:w-[65%]"
-                  />
-                </div>
-              ))}
-              <button
-                onClick={addIPSubjects}
-                type="button"
-                className="bg-blue-600  hover:bg-blue-400 text-white font-bold py-2 px-4 transition duration-300 transform hover:scale-105 my-12"
-              >
-                ADD IP SUBJECTS
-              </button>
-            </div>
-            <div>
-              <p className="font-semibold text-xl mt-10 font-sans">
                 Technical Questions
               </p>
               {techQuestions.map((question, index) => (
@@ -464,6 +502,7 @@ function Form() {
                     Technical Question {index + 1}
                   </label>
                   <textarea
+                    ref={techFieldRef}
                     value={question}
                     placeholder={`Enter Technical Question ${index + 1}`}
                     onChange={(e) => {
@@ -473,6 +512,13 @@ function Form() {
                     }}
                     className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-[80%] lg:w-[65%]"
                   />
+                  <button
+                    onClick={() => deleteTechnicalQuestion(index)}
+                    type="button"
+                    className="bg-red-600 hover:bg-red-400 text-white font-bold py-2 px-4 transition duration-300 transform hover:scale-105 my-2"
+                  >
+                    Delete
+                  </button>
                 </div>
               ))}
               <button
@@ -481,6 +527,45 @@ function Form() {
                 className="bg-blue-600 hover:bg-blue-400 text-white font-bold py-2 px-4 transition duration-300 transform hover:scale-105 my-12"
               >
                 ADD TECH QUESTIONS
+              </button>
+            </div>
+            <div>
+              <p className="font-semibold text-xl mt-10 font-sans">
+                Interview Preparation Subjects
+              </p>
+              {IPSubjects.map((question, index) => (
+                <div key={index}>
+                  <label className="block font-semibold mt-8 mb-5">
+                    Interview Preparation Subject {index + 1}
+                  </label>
+                  <textarea
+                    ref={ipFieldRef}
+                    value={question}
+                    placeholder={`Enter Interview Preparation Subject ${
+                      index + 1
+                    }`}
+                    onChange={(e) => {
+                      const updatedIPSubjects = [...IPSubjects];
+                      updatedIPSubjects[index] = e.target.value;
+                      setIPSubjects(updatedIPSubjects);
+                    }}
+                    className="border-2 border-gray-300 focus:outline-none  focus:border-orange-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-[80%] lg:w-[65%]"
+                  />
+                  <button
+                    onClick={() => deleteInterviewSubject(index)}
+                    type="button"
+                    className="bg-red-600 hover:bg-red-400 text-white font-bold py-2 px-4 transition duration-300 transform hover:scale-105 my-2"
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={addIPSubjects}
+                type="button"
+                className="bg-blue-600  hover:bg-blue-400 text-white font-bold py-2 px-4 transition duration-300 transform hover:scale-105 my-12"
+              >
+                ADD IP SUBJECTS
               </button>
             </div>
             <button

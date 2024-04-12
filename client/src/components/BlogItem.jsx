@@ -45,10 +45,9 @@ const popularCompanies = [
 ];
 
 function BlogItem() {
-  // const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
   const [searchedPosts, setSearchedPosts] = useState([]);
+  const [allCompany, setAllCompany] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState("");
 
   // const fetchData = async () => {
@@ -74,12 +73,18 @@ function BlogItem() {
         response = await response.json();
         // Sort the fetched posts by date in descending order
         const sortedPosts = response.exp.sort((a, b) => {
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
-          return dateB - dateA;
+          const timeA = new Date(`${a.date[0]} ${a.date[1]}`);
+          const timeB = new Date(`${b.date[0]} ${b.date[1]}`);
+
+          if (isNaN(timeA.getTime()) || isNaN(timeB.getTime())) {
+            return 0;
+          }
+
+          return timeB - timeA;
         });
 
         setSearchedPosts(sortedPosts);
+        setAllCompany(sortedPosts);
       } catch (error) {
         console.error(error);
       }
@@ -90,17 +95,15 @@ function BlogItem() {
   }, []);
 
   const handleSearch = () => {
-    let filteredPosts = posts;
+    let filteredPosts = searchedPosts;
 
-    if (selectedCompany) {
+    if (selectedCompany != "All Companies") {
       filteredPosts = filteredPosts.filter(
         (post) => post.company === selectedCompany
       );
+    } else {
+      filteredPosts = allCompany;
     }
-
-    filteredPosts = filteredPosts.filter((post) =>
-      post.company.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
     setSearchedPosts(filteredPosts);
   };
@@ -114,7 +117,7 @@ function BlogItem() {
           onChange={(e) => setSelectedCompany(e.target.value)}
           className="p-2 border border-gray-300 rounded-md mr-2"
         >
-          <option value="">All Companies</option>
+          <option value="All Companies">All Companies</option>
           {popularCompanies.map((company) => (
             <option key={company} value={company}>
               {company}
@@ -122,7 +125,7 @@ function BlogItem() {
           ))}
         </select>
         <button
-          onClick={handleSearch}
+          onClick={() => handleSearch()}
           className="bg-blue-700 text-white p-2 rounded-full ml-2 px-4 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 transition-all"
         >
           Search
@@ -131,7 +134,7 @@ function BlogItem() {
 
       {loading ? (
         <Loader />
-      ) : (
+      ) : searchedPosts.length > 0 ? (
         searchedPosts.map(
           (post) =>
             post.isApproved && (
@@ -160,7 +163,7 @@ function BlogItem() {
                           </p>
                         </div>
                       </div>
-                      <div className="font-bold mr-2">{post.date}</div>
+                      <div className="font-bold mr-2">{post.date[0]}</div>
                     </div>
                     <div className="border-t border-gray-200 my-2"></div>
                     {/* Profile block */}
@@ -197,6 +200,10 @@ function BlogItem() {
               </div>
             )
         )
+      ) : (
+        <div className="text-center text-2xl md:text-xl mt-8 mb-8 font-bold">
+          No posts found
+        </div>
       )}
     </div>
   );
