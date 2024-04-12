@@ -21,5 +21,9 @@ Route.post("/getUserDetails", userController.getUserDetails);
 Route.post("/changePassword", changepassController.changePass);
 Route.post("/checkUserExists", userController.checkUserExists);
 Route.post("/compareotp", userController.compareotp);
+Route.post("/changePassword-afterlogin", changepassController.passChangeAfterLogin);
 Route.put("/add-admin", userController.addadmin);
+Route.post("/check-email", userController.checkEmail);
+Route.put("/edit-name", userController.changeName);
+
 module.exports = Route;
