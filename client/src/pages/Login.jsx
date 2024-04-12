@@ -353,6 +353,18 @@ function Login() {
     }
     setLoading(false);
   };
+  const emailRefBack = async () => {
+    mainRef.current.style.display = "block";
+    emailRef.current.style.display = "none";
+    otpRef.current.style.display = "none";
+    passRef.current.style.display = "none";
+  };
+  const otpRefBack = async () => {
+    mainRef.current.style.display = "none";
+    emailRef.current.style.display = "block";
+    otpRef.current.style.display = "none";
+    passRef.current.style.display = "none";
+  };
 
   return (
     <>
@@ -463,6 +475,14 @@ function Login() {
           ref={emailRef}
           className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]"
         >
+          <div className="font-bold flex mb-7">
+            <button
+              className="bg-indigo-500 text-gray-100 p-2 rounded tracking-wide font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600 shadow-lg"
+              onClick={() => emailRefBack()}
+            >
+              Back
+            </button>
+          </div>
           <div className="mb-4">
             <label
               htmlFor="otp"
@@ -495,6 +515,14 @@ function Login() {
           ref={otpRef}
           className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]"
         >
+          <div className="font-bold flex mb-7">
+            <button
+              className="bg-indigo-500 text-gray-100 p-2 rounded tracking-wide font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600 shadow-lg"
+              onClick={() => otpRefBack()}
+            >
+              Back
+            </button>
+          </div>
           <div className="mb-4">
             <label
               htmlFor="otp"
@@ -527,6 +555,11 @@ function Login() {
           ref={passRef}
           className="relative z-10 bg-white p-8 rounded-lg  shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px]"
         >
+          {/* <div className="font-bold flex mb-7">
+            <button className="bg-indigo-500 text-gray-100 p-2 rounded tracking-wide font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600 shadow-lg">
+              Back
+            </button>
+          </div> */}
           <div className="mb-4">
             <label
               htmlFor="newPass"
@@ -539,7 +572,7 @@ function Login() {
               name="newPass"
               type="text"
               className="mt-1 p-2 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-              placeholder="Enter OTP"
+              placeholder="Enter New Password"
               value={newPass}
               onChange={(e) => setNewPass(e.target.value)}
               required
