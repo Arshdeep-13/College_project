@@ -217,6 +217,47 @@ const addadmin = async (req, res) => {
   }
 };
 
+
+const checkEmail = async (req, res) => {
+  try {
+    const userExist = await userModel.findOne({
+      email: req.body.email,
+    });
+    if (userExist) {
+      return res.status(200).send({
+        message: "User found",
+        success: true,
+      });
+    }
+  } catch (error) {
+    return res.status(400).send({
+      message: "User not found",
+      success: false,
+    });
+  }
+};
+
+const changeName = async(req,res) =>{
+  try {
+    console.log(req.body)
+    const data = await userModel.findOne({email:req.body.sessionEmail});
+    if(data)
+    {
+      await userModel.findOneAndUpdate( { email: req.body.sessionEmail },
+        { name: req.body.editname });
+      return res.status(200).send({
+        message: "Updated succesfully",
+        success: true,
+      });
+    }
+  } catch (error) {
+    return res.status(501).send({
+      message: error.message,
+      success: false,
+    });
+  }
+}
+
 module.exports = {
   login,
   signup,
@@ -227,4 +268,6 @@ module.exports = {
   checkUserExists,
   compareotp,
   addadmin,
+  checkEmail,
+  changeName
 };

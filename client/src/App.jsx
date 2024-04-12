@@ -19,6 +19,7 @@ import Cookies from "universal-cookie";
 import About from "./components/About";
 import Contextvalue from "./contextApi/Contextvalue";
 import Addadmin from "./pages/Addadmin";
+import Profile from "./pages/Profile";
 
 function App() {
   const [isAuth, setIsAuth] = useState(null);
@@ -97,6 +98,10 @@ function App() {
           <Route
             path="/post/:id"
             element={isAuth ? <BlogPost /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/profile"
+            element={isAuth ? <Profile /> : <Navigate to="/login" />}
           />
           <Route path="/Contact" element={<Contact />} />
         </Routes>
