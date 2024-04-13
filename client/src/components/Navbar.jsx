@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import defaultImage from "../assets/image.png";
 import axios from "axios";
+import "../styles/animateText.css";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +14,7 @@ function Navbar() {
   const ref = useRef();
   const imageRef = useRef();
   const [ProfileImage, setProfileImage] = useState("");
+  const userName = sessionStorage.getItem("name");
 
   useEffect(() => {
     const validate = cookies.get("token");
@@ -152,6 +154,9 @@ function Navbar() {
                     )}
                   </ul>
                 </div>
+                <span className="font-bold bg-gradient-to-r from-red-700 via-blue-700 to-green-900 text-transparent bg-clip-text animate-gradient">
+                  Welcome {userName}
+                </span>
               </div>
             )}
             <button
