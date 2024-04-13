@@ -62,6 +62,7 @@ function AdminNavbar() {
     navigate("/");
     window.location.reload();
   };
+  const userName = sessionStorage.getItem("name");
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900 shadow fixed w-full top-0 z-50">
@@ -116,7 +117,7 @@ function AdminNavbar() {
               </button>
             )} */}
             {token && (
-              <div className="flex-none">
+              <div className="hidden justify-center items-center flex-wrap  md:hidden lg:flex">
                 <div className="dropdown dropdown-end">
                   <div
                     tabIndex={0}
@@ -149,6 +150,11 @@ function AdminNavbar() {
                     )}
                   </ul>
                 </div>
+                <span className="font-bold bg-gradient-to-r from-red-700 via-blue-700 to-green-900 text-transparent bg-clip-text animate-gradient flex justify-center items-center text-center">
+                  {userName && userName.length > 20
+                    ? userName.slice(0, 20) + "..."
+                    : userName}
+                </span>
               </div>
             )}
             <button
@@ -289,7 +295,7 @@ function AdminNavbar() {
                 </button>
               )} */}
               {token && (
-                <div className="flex-none">
+                <div className="flex flex-wrap">
                   <div className="dropdown dropdown-end">
                     <div
                       tabIndex={0}
@@ -306,7 +312,7 @@ function AdminNavbar() {
                     </div>
                     <ul
                       tabIndex={0}
-                      className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                      className="menu menu-sm left-1 dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
                     >
                       <li>
                         {token && (
@@ -322,6 +328,11 @@ function AdminNavbar() {
                       )}
                     </ul>
                   </div>
+                  <span className="font-bold bg-gradient-to-r from-red-700 via-blue-700 to-green-900 text-transparent bg-clip-text animate-gradient flex justify-center items-center text-center">
+                    {userName && userName.length > 20
+                      ? userName.slice(0, 20) + "..."
+                      : userName}
+                  </span>
                 </div>
               )}
             </li>

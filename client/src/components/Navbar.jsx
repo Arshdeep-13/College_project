@@ -121,7 +121,7 @@ function Navbar() {
             )} */}
 
             {token && (
-              <div className="flex-none">
+              <div className="hidden justify-center items-center flex-wrap  md:hidden lg:flex">
                 <div className="dropdown dropdown-end">
                   <div
                     tabIndex={0}
@@ -154,8 +154,10 @@ function Navbar() {
                     )}
                   </ul>
                 </div>
-                <span className="font-bold bg-gradient-to-r from-red-700 via-blue-700 to-green-900 text-transparent bg-clip-text animate-gradient">
-                  Welcome {userName}
+                <span className="font-bold bg-gradient-to-r from-red-700 via-blue-700 to-green-900 text-transparent bg-clip-text animate-gradient flex justify-center items-center text-center">
+                  {userName && userName.length > 20
+                    ? userName.slice(0, 20) + "..."
+                    : userName}
                 </span>
               </div>
             )}
@@ -297,12 +299,45 @@ function Navbar() {
                 </Link>
               )}
               {token && (
-                <button
-                  className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 ml-3 mb-2 dark:hover:bg-red-700 dark:focus:ring-red-800 none"
-                  onClick={() => logoutUtils()}
-                >
-                  Log out
-                </button>
+                <div className="flex flex-wrap">
+                  <div className="dropdown dropdown-end">
+                    <div
+                      tabIndex={0}
+                      role="button"
+                      className="btn btn-ghost btn-circle avatar"
+                    >
+                      <div className="w-10 rounded-full">
+                        <img
+                          alt="Profile image"
+                          src={ProfileImage == "" ? defaultImage : ProfileImage}
+                          ref={imageRef}
+                        />
+                      </div>
+                    </div>
+                    <ul
+                      tabIndex={0}
+                      className="menu menu-sm left-1 dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                    >
+                      <li>
+                        {token && (
+                          <Link className="justify-between" to="/profile">
+                            Profile
+                          </Link>
+                        )}
+                      </li>
+                      {token && (
+                        <li>
+                          <button onClick={() => logoutUtils()}>Logout</button>
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                  <span className="font-bold bg-gradient-to-r from-red-700 via-blue-700 to-green-900 text-transparent bg-clip-text animate-gradient flex justify-center items-center text-center">
+                    {userName && userName.length > 20
+                      ? userName.slice(0, 20) + "..."
+                      : userName}
+                  </span>
+                </div>
               )}
             </li>
           </ul>

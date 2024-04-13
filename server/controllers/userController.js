@@ -9,7 +9,6 @@ const Func = (req, res) => {
   res.send("hii");
 };
 const generateOtpFunc = async (req, res) => {
-  console.log(req.body.email);
   const userExist = await userModel.findOne({ email: req.body.email });
   if (userExist) {
     return res.status(200).send({
@@ -18,7 +17,6 @@ const generateOtpFunc = async (req, res) => {
     });
   } else {
     generateOtp = await otpGenerate(req.body.email);
-    console.log(generateOtp);
     return res.status(200).send({
       success: true,
     });
@@ -130,7 +128,6 @@ const adminlogin = async (req, res) => {
   }
 };
 const getUserDetails = async (req, res) => {
-  console.log(req.body);
   try {
     const userExit = await userModel.findOne({ email: req.body.body.email });
     if (!userExit) {
@@ -171,8 +168,6 @@ const checkUserExists = async (req, res) => {
   }
 };
 const compareotp = async (req, res) => {
-  console.log(req.body.otp);
-  console.log(generateOtp);
   try {
     if (req.body.otp == generateOtp) {
       return res.status(200).send({
@@ -194,7 +189,6 @@ const compareotp = async (req, res) => {
 };
 const addadmin = async (req, res) => {
   try {
-    console.log(req.body.email);
     const userExist = await userModel.findOneAndUpdate(
       { email: req.body.email },
       { isAdmin: true }
@@ -237,7 +231,6 @@ const checkEmail = async (req, res) => {
 };
 const changeName = async (req, res) => {
   try {
-    console.log(req.body);
     const data = await userModel.findOne({ email: req.body.sessionEmail });
     if (data) {
       await userModel.findOneAndUpdate(

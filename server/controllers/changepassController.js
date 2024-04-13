@@ -56,9 +56,9 @@ const changePass = async (req, res) => {
   }
 };
 
-const passChangeAfterLogin = async(req,res) =>{
+const passChangeAfterLogin = async (req, res) => {
   try {
-    console.log(req.body)
+    // console.log(req.body)
     const email = req.body.email;
     const findEmail = await userModel.findOne({ email: email });
     if (!findEmail) {
@@ -84,5 +84,5 @@ const passChangeAfterLogin = async(req,res) =>{
       success: false,
     });
   }
-}
+};
 module.exports = { otpGenerate, changePass, passChangeAfterLogin };
