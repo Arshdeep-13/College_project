@@ -152,9 +152,9 @@ function BlogItem() {
                     {/* Title block */}
                     <div className="flex items-center justify-between">
                       <div className="p-4 flex items-center ">
-                        <div className="w-14 h-14 rounded overflow-hidden">
+                        <div className="w-10 h-10 rounded overflow-hidden flex items-center justify-centern">
                           <img
-                            className="w-full h-full object-cover "
+                            className="max-w-full max-h-full object-cover"
                             src={getCompanyLogo(post.company)}
                             alt="Company Logo"
                           />

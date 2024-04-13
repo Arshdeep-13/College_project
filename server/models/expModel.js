@@ -44,7 +44,6 @@ const expSchema = mongoose.Schema({
   },
   cgpa: {
     type: String,
-    required: true,
   },
   question: {
     type: String,

@@ -92,7 +92,7 @@ function Questions() {
   // Trigger the initial load of all questions
   useEffect(() => {
     handleSearch();
-  }, []); // Empty dependency array ensures it only runs once on mount
+  }, [selectedCategory,searchQuery]); // Empty dependency array ensures it only runs once on mount
 
   return (
     <>

@@ -288,7 +288,7 @@ const sendProfileImage = async (req, res) => {
       `./profileUploads/${req.params.imgName}`,
       "base64"
     );
-    console.log(imageFile);
+    // console.log(imageFile);
 
     if (!imageFile) {
       return res.status(200).send({
