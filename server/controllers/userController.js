@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { otpGenerate } = require("./changepassController.js");
 let generateOtp = 0;
+const fs = require("fs");
 
 const Func = (req, res) => {
   res.send("hii");
@@ -216,8 +217,6 @@ const addadmin = async (req, res) => {
     });
   }
 };
-
-
 const checkEmail = async (req, res) => {
   try {
     const userExist = await userModel.findOne({
@@ -236,15 +235,15 @@ const checkEmail = async (req, res) => {
     });
   }
 };
-
-const changeName = async(req,res) =>{
+const changeName = async (req, res) => {
   try {
-    console.log(req.body)
-    const data = await userModel.findOne({email:req.body.sessionEmail});
-    if(data)
-    {
-      await userModel.findOneAndUpdate( { email: req.body.sessionEmail },
-        { name: req.body.editname });
+    console.log(req.body);
+    const data = await userModel.findOne({ email: req.body.sessionEmail });
+    if (data) {
+      await userModel.findOneAndUpdate(
+        { email: req.body.sessionEmail },
+        { name: req.body.editname }
+      );
       return res.status(200).send({
         message: "Updated succesfully",
         success: true,
@@ -256,7 +255,60 @@ const changeName = async(req,res) =>{
       success: false,
     });
   }
-}
+};
+const profileImage = async (req, res) => {
+  // optimise this function
+  try {
+    const user = await userModel.findOneAndUpdate({
+      email: req.body.email,
+      image: req.files[0].path,
+    });
+    if (!user) {
+      return res.status(200).send({
+        message: "User not found",
+        success: false,
+      });
+    } else {
+      return res.status(200).send({
+        message: "Image uploaded successfully",
+        imagePath: req.files[0].path,
+        success: true,
+      });
+    }
+  } catch (error) {
+    return res.status(501).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
+const sendProfileImage = async (req, res) => {
+  try {
+    const imageFile = fs.readFileSync(
+      `./profileUploads/${req.params.imgName}`,
+      "base64"
+    );
+    console.log(imageFile);
+
+    if (!imageFile) {
+      return res.status(200).send({
+        message: "User not found",
+        success: false,
+      });
+    } else {
+      return res.status(200).send({
+        message: "Image Found",
+        imagePath: imageFile,
+        success: true,
+      });
+    }
+  } catch (error) {
+    return res.status(501).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
 
 module.exports = {
   login,
@@ -269,5 +321,7 @@ module.exports = {
   compareotp,
   addadmin,
   checkEmail,
-  changeName
+  changeName,
+  profileImage,
+  sendProfileImage,
 };

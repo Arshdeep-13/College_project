@@ -1,11 +1,12 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import AdminNavbar from "./AdminNavbar";
 
-const About = () => {
+const About = ({ isAuth, isAdmin }) => {
   return (
     <>
-      <Navbar />
+      {isAuth && isAdmin ? <AdminNavbar /> : <Navbar />}
       <Footer />
     </>
   );

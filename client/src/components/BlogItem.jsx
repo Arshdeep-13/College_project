@@ -32,16 +32,24 @@ const getCompanyLogo = (company) => {
 };
 
 const popularCompanies = [
-  "Microsoft",
-  "Google",
-  "Adobe",
-  "Atlassian",
   "Amazon",
-  "Apple",
+  "Google",
+  "Microsoft",
   "Facebook",
-  "TCS",
-  "Infosys",
+  "Apple",
   "Netflix",
+  "Uber",
+  "LinkedIn",
+  "Twitter",
+  "Salesforce",
+  "Oracle",
+  "Adobe",
+  "Paypal",
+  "Cisco",
+  "IBM",
+  "Intel",
+  "Infosys",
+  "Others",
 ];
 
 function BlogItem() {
@@ -95,12 +103,12 @@ function BlogItem() {
   }, []);
 
   const handleSearch = () => {
-    let filteredPosts = searchedPosts;
+    let filteredPosts = allCompany;
 
     if (selectedCompany != "All Companies") {
-      filteredPosts = filteredPosts.filter(
-        (post) => post.company === selectedCompany
-      );
+      filteredPosts = filteredPosts.filter((post) => {
+        return post.company.toLowerCase() == selectedCompany.toLowerCase();
+      });
     } else {
       filteredPosts = allCompany;
     }

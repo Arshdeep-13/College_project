@@ -76,7 +76,6 @@ function Admin() {
       console.log("Error form the admin page get data " + error);
     }
   };
-
   const handleCheckboxChange = async (id, entry) => {
     try {
       const response = await axios.put(
@@ -88,13 +87,11 @@ function Admin() {
       console.log("Error from the approves " + error);
     }
   };
-
   const handleEditClick = (entry) => {
     setSelectedPost(entry);
     setEditMode(true);
     document.getElementById("editModal").showModal();
   };
-
   const handleDeleteQuestion = (questionIndex, questionType) => {
     const updatedQuestions = [...selectedPost[`${questionType}Questions`]];
     updatedQuestions.splice(questionIndex, 1);
@@ -103,7 +100,6 @@ function Admin() {
       [`${questionType}Questions`]: updatedQuestions,
     });
   };
-
   const handleSaveEdit = async (id) => {
     handleCloseModal();
     try {
@@ -124,17 +120,14 @@ function Admin() {
       console.log("Error from the updated field" + error);
     }
   };
-
   const handleCloseModal = () => {
     document.getElementById("editModal").close();
   };
-
   const handleApproveTechQuestion = (index) => {
     const updatedQuestions = [...approvedTechQuestions];
     updatedQuestions[index] = !updatedQuestions[index];
     setApprovedTechQuestions(updatedQuestions);
   };
-
   const handleApproveHRQuestion = (index) => {
     const updatedQuestions = [...approvedHRQuestions];
     updatedQuestions[index] = !updatedQuestions[index];
@@ -144,6 +137,9 @@ function Admin() {
   useEffect(() => {
     document.title = "Admin Panel";
     fetchData();
+    setInterval(() => {
+      fetchData();
+    }, 60000);
   }, []);
 
   return (

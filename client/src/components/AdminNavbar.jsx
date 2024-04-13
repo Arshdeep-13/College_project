@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
+import defaultImage from "../assets/image.png";
+import axios from "axios";
 
 function AdminNavbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +11,40 @@ function AdminNavbar() {
   let navigate = useNavigate();
   const cookies = new Cookies();
   const ref = useRef();
+  const imageRef = useRef();
+  const [ProfileImage, setProfileImage] = useState("");
 
+  useEffect(() => {
+    const email = sessionStorage.getItem("email");
+    const setImage = async () => {
+      let user = await axios.post(
+        `${import.meta.env.VITE_SERVER}/getUserDetails`,
+        {
+          method: "POST",
+          body: { email: email },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (user.data.success) {
+        const imagePath = user.data.data.image;
+        if (imagePath) {
+          let imageUrl = await fetch(
+            `${import.meta.env.VITE_SERVER}/send-profile-image/${imagePath}`
+          );
+          imageUrl = await imageUrl.json();
+
+          if (imageRef.current && imageRef.current.src !== undefined) {
+            imageRef.current.src =
+              "data:image/jpg;base64," + imageUrl.imagePath;
+            setProfileImage("data:image/jpg;base64," + imageUrl.imagePath);
+          }
+        }
+      }
+    };
+    setImage();
+  }, []);
   useEffect(() => {
     const validate = cookies.get("token");
     setToken(validate);
@@ -72,13 +107,49 @@ function AdminNavbar() {
                 Log in
               </Link>
             )}
-            {token && (
+            {/* {token && (
               <button
                 className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 none hidden md:block lg:block"
                 onClick={() => logoutUtils()}
               >
                 Log out
               </button>
+            )} */}
+            {token && (
+              <div className="flex-none">
+                <div className="dropdown dropdown-end">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-ghost btn-circle avatar"
+                  >
+                    <div className="w-10 rounded-full">
+                      <img
+                        alt="Profile image"
+                        src={ProfileImage == "" ? defaultImage : ProfileImage}
+                        ref={imageRef}
+                      />
+                    </div>
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                  >
+                    <li>
+                      {token && (
+                        <Link className="justify-between" to="/profile">
+                          Profile
+                        </Link>
+                      )}
+                    </li>
+                    {token && (
+                      <li>
+                        <button onClick={() => logoutUtils()}>Logout</button>
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              </div>
             )}
             <button
               ref={ref}
@@ -217,13 +288,49 @@ function AdminNavbar() {
                   Log in
                 </Link>
               )}
-              {token && (
+              {/* {token && (
                 <button
                   className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 ml-3 mb-2 dark:hover:bg-red-700 dark:focus:ring-red-800 none"
                   onClick={() => logoutUtils()}
                 >
                   Log out
                 </button>
+              )} */}
+              {token && (
+                <div className="flex-none">
+                  <div className="dropdown dropdown-end">
+                    <div
+                      tabIndex={0}
+                      role="button"
+                      className="btn btn-ghost btn-circle avatar"
+                    >
+                      <div className="w-10 rounded-full">
+                        <img
+                          alt="Profile image"
+                          src={ProfileImage == "" ? defaultImage : ProfileImage}
+                          ref={imageRef}
+                        />
+                      </div>
+                    </div>
+                    <ul
+                      tabIndex={0}
+                      className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                    >
+                      <li>
+                        {token && (
+                          <Link className="justify-between" to="/profile">
+                            Profile
+                          </Link>
+                        )}
+                      </li>
+                      {token && (
+                        <li>
+                          <button onClick={() => logoutUtils()}>Logout</button>
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                </div>
               )}
             </li>
           </ul>

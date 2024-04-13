@@ -143,7 +143,6 @@ function Form() {
         },
       });
       res = await res.json();
-      console.log(res);
       if (res.success) {
         toast.success("Form Submitted Successfully");
         navigate("/formSubmitted");

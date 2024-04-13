@@ -4,8 +4,9 @@ import Footer from "./Footer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import AdminNavbar from "./AdminNavbar";
 
-const Contact = () => {
+const Contact = ({ isAuth, isAdmin }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -136,7 +137,7 @@ const Contact = () => {
         theme="colored"
         transition:Bounce
       />
-      <Navbar />
+      {isAuth && isAdmin ? <AdminNavbar /> : <Navbar />}
 
       <div className="mt-4 ml-5 mr-5">
         <section className="text-gray-600 body-font relative">
