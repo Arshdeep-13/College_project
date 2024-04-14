@@ -5,10 +5,16 @@ const Route = require("./routes/routes");
 const db = require("./config/dbconfig.js");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
-dotenv.config()
-const PORT = process.env.PORT || 8000
+dotenv.config();
+const PORT = process.env.PORT || 8000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://uprep.vercel.app",
+    methods: ["POST", "GET", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(Route);
