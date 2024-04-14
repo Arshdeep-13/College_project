@@ -73,6 +73,7 @@ function Login() {
             body: JSON.stringify({ email, password }),
           });
           response = await response.json();
+          console.log(response);
 
           if (response.success) {
             if (response.data.isAdmin === true) {
