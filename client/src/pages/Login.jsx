@@ -73,14 +73,13 @@ function Login() {
             body: JSON.stringify({ email, password }),
           });
           response = await response.json();
-          console.log(response);
 
           if (response.success) {
-            if (response.data.isAdmin === true) {
-              cookies.set("token", response.data.token);
-              cookies.set("isAdmin", response.data.isAdmin);
+            if (response.isAdmin === true) {
+              cookies.set("token", response.token);
+              cookies.set("isAdmin", response.isAdmin);
               if (response.data.success) {
-                toast.success(response.data.message, {
+                toast.success(response.message, {
                   position: "top-left",
                   autoClose: 1000,
                   hideProgressBar: false,
@@ -111,8 +110,8 @@ function Login() {
                 window.location.reload();
               }, 1000);
             } else {
-              cookies.set("token", response.data.token);
-              if (response.data.success) {
+              cookies.set("token", response.token);
+              if (response.success) {
                 toast.success(response.data.message, {
                   position: "top-left",
                   autoClose: 1000,
@@ -129,7 +128,7 @@ function Login() {
                   window.location.reload();
                 }, 1000);
               } else {
-                toast.error(response.data.message, {
+                toast.error(response.message, {
                   position: "top-left",
                   autoClose: 1000,
                   hideProgressBar: false,
