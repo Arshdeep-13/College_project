@@ -106,7 +106,7 @@ function Login() {
                 });
               }
               setTimeout(() => {
-                navigate("/home");
+                navigate("/");
                 window.location.reload();
               }, 1000);
             } else {
@@ -124,7 +124,7 @@ function Login() {
                 });
 
                 setTimeout(() => {
-                  navigate("/home");
+                  navigate("/");
                   window.location.reload();
                 }, 1000);
               } else {
@@ -140,7 +140,7 @@ function Login() {
                 });
               }
               setTimeout(() => {
-                navigate("/home");
+                navigate("/");
                 window.location.reload();
               }, 1000);
             }
