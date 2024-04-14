@@ -51,24 +51,26 @@ const popularCompanies = [
   "Infosys",
   "Others",
 ];
+const d = new Date().getFullYear();
 const popularYear = [
-"2016",
-"2017",
-"2018",
-"2019",
-"2020",
-"2021",
-"2022",
-"2023",
-"2024",
+  "2016",
+  "2017",
+  "2018",
+  "2019",
+  "2020",
+  "2021",
+  "2022",
+  "2023",
+  d,
 ];
 
 function BlogItem() {
   const [loading, setLoading] = useState(true);
   const [searchedPosts, setSearchedPosts] = useState([]);
   const [allCompany, setAllCompany] = useState([]);
-  const [selectedCompany, setSelectedCompany] = useState("");
-  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState("All Companies");
+  const [fromSearch, setFromSearch] = useState("2016");
+  const [toSearch, setToSearch] = useState("all years");
   // const fetchData = async () => {
   //   setLoading(true);
   //   try {
@@ -115,56 +117,81 @@ function BlogItem() {
 
   const handleSearch = () => {
     let filteredPosts = allCompany;
+    const fromYear = parseInt(fromSearch);
+    const toYear = parseInt(toSearch);
+    let selectedCompanyPosts = [];
 
-    if (selectedCompany != "All Companies") {
-      filteredPosts = filteredPosts.filter((post) => {
-        return post.company.toLowerCase() == selectedCompany.toLowerCase();
-      });
-    }   else {
-      filteredPosts = allCompany;
+    if (selectedCompany == "All Companies") {
+      for (let obj of filteredPosts) {
+        let d = new Date(obj.date[0]);
+        let year = d.getFullYear();
+
+        if (year >= fromYear && year <= toYear) {
+          selectedCompanyPosts.push(obj);
+        }
+      }
+      setSearchedPosts(selectedCompanyPosts);
+    } else {
+      for (let obj of filteredPosts) {
+        let d = new Date(obj.date[0]);
+        let year = d.getFullYear();
+
+        if (
+          year >= fromYear &&
+          year <= toYear &&
+          obj.company == selectedCompany
+        ) {
+          selectedCompanyPosts.push(obj);
+        }
+      }
+      setSearchedPosts(selectedCompanyPosts);
     }
-    if (selectedYear !== "All years") {
-      filteredPosts = filteredPosts.filter((post) => {
-        const postDate = new Date(post.date[0]);
-        const postYear = postDate.getFullYear().toString();
-        console.log(postYear,selectedYear)
-        return postYear === selectedYear;
-      });
-    }  else {
-      filteredPosts = allCompany;
-    }
-      setSearchedPosts(filteredPosts);
-  }
+  };
 
   return (
     <div id="list_of_exp">
-      <div className="flex items-center mb-4 ml-[8%]">
-        <p className="me-4">Sort By Companies : </p>
-        <select
-          value={selectedCompany}
-          onChange={(e) => setSelectedCompany(e.target.value)}
-          className="p-2 border border-gray-300 rounded-md mr-2"
-        >
-          <option value="All Companies">All Companies</option>
-          {popularCompanies.map((company) => (
-            <option key={company} value={company}>
-              {company}
-            </option>
-          ))}
-        </select>
-        <p className="me-4">Sort By Year : </p>
-        <select
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
-          className="p-2 border border-gray-300 rounded-md mr-2"
-        >
-          <option value="All years">All year</option>
-          {popularYear.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
+      <div className="flex flex-col items-center mb-4 ml-[8%] gap-5 md:gap-2 md:flex-row">
+        <div className="flex flex-col justify-center items-center gap-3 md:gap-2 md:flex-row">
+          <p className="me-4 font-bold">Sort By Companies : </p>
+          <select
+            value={selectedCompany}
+            onChange={(e) => setSelectedCompany(e.target.value)}
+            className="p-2 border border-gray-300 rounded-md mr-2"
+          >
+            <option value="All Companies">All Companies</option>
+            {popularCompanies.map((company) => (
+              <option key={company} value={company}>
+                {company}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col justify-center items-center gap-3 md:gap-2 md:flex-row">
+          <p className="me-4 font-bold">Sort By Year : </p>
+          <select
+            value={fromSearch}
+            onChange={(e) => setFromSearch(e.target.value)}
+            className="p-2 border border-gray-300 rounded-md mr-2"
+          >
+            {popularYear.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+          <span>To</span>
+          <select
+            value={toSearch}
+            onChange={(e) => setToSearch(e.target.value)}
+            className="p-2 border border-gray-300 rounded-md mr-2"
+          >
+            {popularYear.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
         <button
           onClick={() => handleSearch()}
           className="bg-blue-700 text-white p-2 rounded-full ml-2 px-4 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 transition-all"
@@ -172,8 +199,6 @@ function BlogItem() {
           Search
         </button>
       </div>
-
-      
 
       {loading ? (
         <Loader />
@@ -251,4 +276,4 @@ function BlogItem() {
     </div>
   );
 }
-export default BlogItem
+export default BlogItem;

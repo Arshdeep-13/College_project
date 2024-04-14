@@ -21,10 +21,26 @@ function LandingPage() {
   const [uid, setuid] = useState("");
 
   useEffect(() => {
+    const scrollHandler = () => {
+      const offsetTop =
+        document.getElementById("stats-section")?.offsetTop || 0;
+      const scrollPosition = window.scrollY + window.innerHeight;
+
+      if (scrollPosition > offsetTop) {
+        startAnimation();
+      }
+    };
+
+    window.addEventListener("scroll", scrollHandler);
+
+    return () => window.removeEventListener("scroll", scrollHandler);
+  }, []);
+  useEffect(() => {
     if (inView) {
       controls.start({ opacity: 1, y: 0 });
     }
   }, [controls, inView]);
+
   const startAnimation = () => {
     controls.start({
       opacity: 1,
@@ -33,6 +49,7 @@ function LandingPage() {
     });
   };
   const handleToggle = () => {
+    console.log("hi");
     setIsOpen(!isOpen);
   };
   const handleContactForm = async (e) => {
@@ -73,22 +90,6 @@ function LandingPage() {
     }
   };
 
-  useEffect(() => {
-    const scrollHandler = () => {
-      const offsetTop =
-        document.getElementById("stats-section")?.offsetTop || 0;
-      const scrollPosition = window.scrollY + window.innerHeight;
-
-      if (scrollPosition > offsetTop) {
-        startAnimation();
-      }
-    };
-
-    window.addEventListener("scroll", scrollHandler);
-
-    return () => window.removeEventListener("scroll", scrollHandler);
-  }, []);
-
   return (
     <div className="scroll-smooth">
       <ToastContainer
@@ -104,6 +105,7 @@ function LandingPage() {
         theme="colored"
         transition:Bounce
       />
+
       <motion.header
         className="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-3 sm:py-0 dark:bg-gray-800 dark:border-gray-700"
         initial={{ opacity: 0, y: -50 }}
@@ -111,82 +113,185 @@ function LandingPage() {
         exit={{ opacity: 0, y: -50 }}
         transition={{ duration: 0.5 }}
       >
-        <nav
-          className="relative max-w-7xl w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
-          aria-label="Global"
-        >
-          <div className="flex items-center justify-between">
-            <a
-              className="inline-flex items-center gap-x-2 text-xl font-semibold dark:text-white"
-              href="/"
+        <nav className="bg-white border-gray-200 dark:bg-gray-900 shadow fixed w-full top-0 z-50">
+          <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            {/* Brand */}
+            <Link
+              to="/"
+              className="flex items-center space-x-3 rtl:space-x-reverse"
             >
               <img
-                className="w-10 h-auto"
-                src="https://flowbite.s3.amazonaws.com/brand/logo-dark/mark/flowbite-logo.png"
-                alt="Logo"
+                src="https://flowbite.com/docs/images/logo.svg"
+                className="h-8"
+                alt="Flowbite Logo"
               />
-              PrepHelp
-            </a>
-            <div className="sm:hidden">
-              <button
-                type="button"
-                onClick={() => handleToggle()}
-                className="hs-collapse-toggle w-12 h-10 flex justify-center items-center text-sm font-semibold rounded-lg border border-gray-200 text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                data-hs-collapse="#navbar-collapse-with-animation"
-                aria-controls="navbar-collapse-with-animation"
-                aria-label="Toggle navigation"
-              >
-                <GiHamburgerMenu />
-              </button>
-            </div>
-          </div>
-          <div
-            id="navbar-collapse-with-animation"
-            className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:block"
-          >
-            <div className="flex flex-col gap-y-4 gap-x-0 mt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-y-0 sm:gap-x-7 sm:mt-0 sm:ps-7">
-              <a
-                className="font-medium  text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500 ml-2"
-                href="#"
-                aria-current="page"
-              >
-                Home
-              </a>
-              <a
-                className="font-medium  text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500 ml-2"
-                href="#feature"
-              >
-                Features
-              </a>
-              <a
-                className="font-medium  text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500 ml-2"
-                href="#about"
-              >
-                About Us
-              </a>
-              <a
-                className="font-medium text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500 ml-2"
-                href="#contact"
-              >
-                Contact Us
-              </a>
+              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                PrepHelp
+              </span>
+            </Link>
 
-              <Link
-                className="flex items-center gap-x-2 font-medium text-gray-500 hover:text-blue-600 sm:border-s sm:border-gray-300 sm:my-6 sm:ps-6 dark:border-gray-700 dark:text-gray-400 dark:hover:text-blue-500 ml-2"
-                to="/login"
-              >
-                <svg
-                  className="flex-shrink-0 w-4 h-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
+            {/* Buttons for Small Screens */}
+            <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse ">
+              <div>
+                <Link
+                  className={`flex items-center gap-x-2 font-medium text-gray-500 hover:text-blue-600 dark:border-gray-700 dark:text-gray-400 dark:hover:text-blue-500 ${
+                    location.pathname === "/login" ||
+                    location.pathname === "/signup"
+                      ? "hidden"
+                      : ""
+                  }`}
+                  to="/login"
                 >
-                  <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-                </svg>
-                Log in
-              </Link>
+                  <svg
+                    className="flex-shrink-0 w-4 h-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                  </svg>
+                  Log in
+                </Link>
+
+                <button
+                  ref={ref}
+                  data-collapse-toggle="navbar-cta"
+                  type="button"
+                  className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                  aria-controls="navbar-cta"
+                  aria-expanded="false"
+                  id="navbar-toggle"
+                  onClick={handleToggle}
+                >
+                  <span className="sr-only">Open main menu</span>
+                  <svg
+                    className="w-5 h-5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 17 14"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 1h15M1 7h15M1 13h15"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            {/* Navigation Links for Large Screens */}
+            <div
+              className={`items-center justify-between hidden w-full md:flex md:w-auto md:order-1 ${
+                isOpen ? "hidden" : "flex"
+              }`}
+              id="navbar-cta"
+            >
+              <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <li>
+                  <a
+                    href="#home"
+                    className="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:dark:text-blue-500"
+                    aria-current="page"
+                  >
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#about"
+                    className="block py-2 px-3 md:p-0 text-gray-900 rounded  hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 d:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  >
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#features"
+                    className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  >
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#contact"
+                    className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  >
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Navigation Links for Small Screens */}
+            <div
+              className={`items-center justify-between w-full md:hidden ${
+                isOpen ? "flex" : "hidden"
+              }`}
+              id="navbar-cta"
+            >
+              <ul className="flex flex-col font-medium mt-4 border border-gray-100 rounded-lg bg-gray-50 space-y-2 w-full ">
+                <li>
+                  <a
+                    href="#home"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100"
+                  >
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#about"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100"
+                  >
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#features"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100"
+                  >
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#contact"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100"
+                  >
+                    Contact
+                  </a>
+                </li>
+                <li>
+                  <Link
+                    className={`flex items-center gap-x-2 font-medium text-gray-500 hover:text-blue-600 dark:border-gray-700 dark:text-gray-400 dark:hover:text-blue-500 ml-3 mb-2 ${
+                      location.pathname === "/login" ||
+                      location.pathname === "/signup"
+                        ? "hidden"
+                        : ""
+                    }`}
+                    to="/login"
+                  >
+                    <svg
+                      className="flex-shrink-0 w-4 h-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                    </svg>
+                    Log in
+                  </Link>
+                </li>
+              </ul>
             </div>
           </div>
         </nav>
@@ -198,13 +303,14 @@ function LandingPage() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
+        id="home"
       >
         <div className="relative overflow-hidden before:absolute before:top-0 before:start-1/2 bg-[url('https://preline.co/assets/svg/component/squared-bg-element.svg')] before:bg-no-repeat before:bg-top before:w-full before:h-full before:-z-[1] before:transform before:-translate-x-1/2 dark:before:bg-[url('https://preline.co/assets/svg/component/squared-bg-element-dark.svg')]">
           <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-10">
             <div className="flex justify-center">
               <motion.a
                 className="inline-flex items-center gap-x-2 bg-white border border-gray-200 text-xs text-gray-600 p-2 px-3 rounded-full transition hover:border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600 dark:text-gray-400"
-                href="#"
+                href="#features"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -263,7 +369,7 @@ function LandingPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={controls}
         transition={{ duration: 0.8 }}
-        id="feature"
+        id="features"
         className="bg-white dark:bg-gray-900 mx-auto xl:my-3 items-center justify-center flex"
       >
         <div className="flex flex-wrap">
@@ -321,10 +427,7 @@ function LandingPage() {
         </div>
       </motion.section>
 
-      <section
-        className="bg-white dark:bg-gray-900 mx-auto xl:my-3 items-center justify-center flex"
-        id="about"
-      >
+      <section className="bg-white dark:bg-gray-900 mx-auto xl:my-3 items-center justify-center flex">
         <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
           <div className="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32">
             <div>
@@ -645,6 +748,7 @@ function LandingPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="bg-[#ECF0F5] dark:bg-gray-900 mx-auto items-center justify-center flex"
+        id="about"
       >
         <div className="relative overflow-hidden">
           <div className="max-w-[85rem] px-4 py-12 sm:px-6 lg:px-8 lg:py-16 mx-auto">
@@ -695,24 +799,6 @@ function LandingPage() {
                           alt="Image Description"
                         />
                       </div>
-                      <div className="ms-4 lg:ms-0">
-                        <motion.p
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.8 }}
-                          className="font-medium text-gray-800 dark:text-gray-200"
-                        >
-                          Yuvraj Verma
-                        </motion.p>
-                        <motion.p
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.8 }}
-                          className="text-sm text-gray-600 dark:text-gray-400"
-                        >
-                          SDE at Prophecy.io
-                        </motion.p>
-                      </div>
                     </div>
                   </footer>
                 </blockquote>
@@ -727,11 +813,9 @@ function LandingPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="bg-white dark:bg-gray-900 mx-auto  items-center justify-center flex"
+        id="contact"
       >
-        <div
-          id="contact"
-          className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto"
-        >
+        <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
           <div className="max-w-2xl lg:max-w-5xl mx-auto">
             <div className="text-center">
               <h1 className="text-3xl font-bold text-gray-800 sm:text-4xl dark:text-white">
