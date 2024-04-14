@@ -16,7 +16,11 @@ const otpGenerate = async (userEmail) => {
       },
     });
     const mailOptions = {
-      from: "arshdeeprooprai@gmail.com",
+      from: 
+      {
+        name:"uprep-team",
+        address:"arshdeeprooprai@gmail.com"
+      },
       to: userEmail,
       subject: "Verification Email OTP",
       text: `Your OTP for email verification is: ${otp}`,

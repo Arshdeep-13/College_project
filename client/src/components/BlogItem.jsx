@@ -51,13 +51,24 @@ const popularCompanies = [
   "Infosys",
   "Others",
 ];
+const popularYear = [
+"2016",
+"2017",
+"2018",
+"2019",
+"2020",
+"2021",
+"2022",
+"2023",
+"2024",
+];
 
 function BlogItem() {
   const [loading, setLoading] = useState(true);
   const [searchedPosts, setSearchedPosts] = useState([]);
   const [allCompany, setAllCompany] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState("");
-
+  const [selectedYear, setSelectedYear] = useState("");
   // const fetchData = async () => {
   //   setLoading(true);
   //   try {
@@ -109,12 +120,21 @@ function BlogItem() {
       filteredPosts = filteredPosts.filter((post) => {
         return post.company.toLowerCase() == selectedCompany.toLowerCase();
       });
-    } else {
+    }   else {
       filteredPosts = allCompany;
     }
-
-    setSearchedPosts(filteredPosts);
-  };
+    if (selectedYear !== "All years") {
+      filteredPosts = filteredPosts.filter((post) => {
+        const postDate = new Date(post.date[0]);
+        const postYear = postDate.getFullYear().toString();
+        console.log(postYear,selectedYear)
+        return postYear === selectedYear;
+      });
+    }  else {
+      filteredPosts = allCompany;
+    }
+      setSearchedPosts(filteredPosts);
+  }
 
   return (
     <div id="list_of_exp">
@@ -132,6 +152,19 @@ function BlogItem() {
             </option>
           ))}
         </select>
+        <p className="me-4">Sort By Year : </p>
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          className="p-2 border border-gray-300 rounded-md mr-2"
+        >
+          <option value="All years">All year</option>
+          {popularYear.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
         <button
           onClick={() => handleSearch()}
           className="bg-blue-700 text-white p-2 rounded-full ml-2 px-4 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 transition-all"
@@ -139,6 +172,8 @@ function BlogItem() {
           Search
         </button>
       </div>
+
+      
 
       {loading ? (
         <Loader />
@@ -216,5 +251,4 @@ function BlogItem() {
     </div>
   );
 }
-
-export default BlogItem;
+export default BlogItem
