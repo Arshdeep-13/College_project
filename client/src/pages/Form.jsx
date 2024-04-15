@@ -164,7 +164,7 @@ function Form() {
             <p className="font-bold text-3xl">Interview Experience</p>
             <p className="font-semibold text-xl mt-10 font-sans">ROLE INFO.</p>
 
-            <div className="flex lg:flex-row md:flex-row lg:space-x-64 md:space-x-52">
+            <div className="flex flex-col md:flex-row lg:flex-row lg:space-x-64 md:space-x-52">
               <div className="w-80">
                 <label className="block font-semibold mt-8 mb-5">
                   Company you Applied to?*
