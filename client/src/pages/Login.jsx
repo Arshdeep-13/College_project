@@ -9,13 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import RingLoader from "react-spinners/RingLoader";
-import context from "../contextApi/Contextstate";
 
 function Login() {
-  //   const data = useContext(context)
-  //   const val = "hellos"
-  //  data.addUserDetail(val)
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -112,7 +107,7 @@ function Login() {
             } else {
               cookies.set("token", response.token);
               if (response.success) {
-                toast.success(response.data.message, {
+                toast.success(response.message, {
                   position: "top-left",
                   autoClose: 1000,
                   hideProgressBar: false,
@@ -124,8 +119,8 @@ function Login() {
                 });
 
                 setTimeout(() => {
-                  navigate("/");
-                  window.location.reload();
+                  navigate("/home");
+                  // window.location.reload();
                 }, 1000);
               } else {
                 toast.error(response.message, {
