@@ -7,12 +7,15 @@ import "react-toastify/dist/ReactToastify.css";
 import AdminNavbar from "../components/AdminNavbar";
 import image from "../assets/image.png";
 import { CiEdit } from "react-icons/ci";
+import { Link } from "react-router-dom";
+
 
 const Profile = ({ isAuth, isAdmin }) => {
   const [name, setName] = useState("");
   const mainRef = useRef(null);
   const emailRef = useRef(null);
   const passRef = useRef(null);
+  const expref = useState(null)
   const [editMode, setEditMode] = useState(false);
   const [email, setEmail] = useState("");
   const [newPass, setNewPass] = useState("");
@@ -21,7 +24,22 @@ const Profile = ({ isAuth, isAdmin }) => {
   const editImageRef = useRef();
   const imageRef = useRef();
   const [ProfileImage, setProfileImage] = useState("");
-
+  const [exp,setExp] = useState([])
+const fetchExp = async() =>{
+  const email = sessionStorage.getItem("email");
+  try {
+    const config = {
+      headers:{
+        "Content-Type":"application/json"
+      }
+    }
+    const res = await axios.post("http://localhost:8000/get-exp",{email},config);
+    console.log(res.data.data)
+    setExp(res.data.data)
+  } catch (error) {
+    console.log("Error from " + error)
+  }
+}
   useEffect(() => {
     const name = sessionStorage.getItem("name");
     const email = sessionStorage.getItem("email");
@@ -29,10 +47,12 @@ const Profile = ({ isAuth, isAdmin }) => {
     email == undefined || null ? "" : setSessionEmail(name), setEmail(email);
     setName(name);
     setSessionEmail(email);
+    fetchExp()
     mainRef.current.style.display = "block";
     emailRef.current.style.display = "none";
     passRef.current.style.display = "none";
     editImageRef.current.style.display = "none";
+    expref.current.style.display = "none"
 
     const setImage = async () => {
       let user = await axios.post(
@@ -193,11 +213,13 @@ const Profile = ({ isAuth, isAdmin }) => {
         theme: "colored",
       });
     }
+    expref.current.style.display = "none"
     mainRef.current.style.display = "block";
     emailRef.current.style.display = "none";
     passRef.current.style.display = "none";
   };
   const handleForgetPass = async () => {
+    expref.current.style.display = "none"
     mainRef.current.style.display = "none";
     emailRef.current.style.display = "block";
     passRef.current.style.display = "none";
@@ -207,6 +229,7 @@ const Profile = ({ isAuth, isAdmin }) => {
     }
   };
   const emailRefBack = async () => {
+    expref.current.style.display = "none"
     mainRef.current.style.display = "block";
     emailRef.current.style.display = "none";
     passRef.current.style.display = "none";
@@ -233,6 +256,7 @@ const Profile = ({ isAuth, isAdmin }) => {
         progress: undefined,
         theme: "colored",
       });
+      expref.current.style.display = "none"
       mainRef.current.style.display = "none";
       emailRef.current.style.display = "none";
       passRef.current.style.display = "block";
@@ -249,6 +273,10 @@ const Profile = ({ isAuth, isAdmin }) => {
       });
     }
   };
+
+  const showExp = () =>{
+    expref.current.style.display = "block"
+  }
 
   return (
     <div>
@@ -348,12 +376,113 @@ const Profile = ({ isAuth, isAdmin }) => {
                     />
                     Edit Profile Picture
                   </button>
+                  <button
+                    href="#"
+                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-100 transition duration-150 text-lg md:text-base text-start"
+                    onClick={showExp}
+                  >
+                    <img
+                      src="https://avatars0.githubusercontent.com/u/35900628?v=4"
+                      alt=""
+                      className="rounded-full h-6 shadow-md inline-block mr-2"
+                    />
+                    Show All Experience
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div
+        ref={expref}
+        className="relative z-10 bg-white p-8 rounded-lg shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px] mx-auto mt-20"
+      >
+        <div className="font-bold flex mb-7">
+         
+        {exp.length > 0 ? (
+        exp.map(
+          (post) =>
+              <div className="py-3 " key={post._id}>
+               Status: {post.isApproved ? "Approved" : "Not Approved"}
+                <Link to={`/post/${post._id}`}>
+                  <div className="max-w-[85%] mx-auto bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow mt-8 p-2 shadow">
+                    {/* Title block */}
+                    <div className="flex items-center justify-between">
+                      <div className="p-4 flex items-center ">
+                        <div className="w-10 h-10 rounded overflow-hidden flex items-center justify-centern">
+                          <img
+                            className="max-w-full max-h-full object-cover"
+                            // src={getCompanyLogo(post.company)}
+                            alt="Company Logo"
+                          />
+                        </div>
+                        <div className="ml-4">
+                          <p className="text-xl font-semibold">
+                            {post.company} | {post.role} |{" "}
+                            {post.expyr == 0
+                              ? "Fresher"
+                              : `Experience ${post.expyr} year`}
+                          </p>
+                          <p className="text-gray-600 font-bold">
+                            {post.rounds} Rounds | 6 Coding Problems
+                          </p>
+                        </div>
+                      </div>
+                      <div className="font-bold mr-2">{post.date[0]}</div>
+                    </div>
+                    <div className="border-t border-gray-200 my-2"></div>
+                    {/* Profile block */}
+                    <div className="px-4 py-2 flex items-center">
+                      <div className="bg-gray-300 w-12 mx-2 h-12 rounded-full overflow-hidden">
+                        <img
+                          className="w-full  h-full object-cover"
+                          src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                          alt="Profile"
+                        />
+                      </div>
+                      <div className="ml-4 px-1">
+                        <p className="text-">{post.name}</p>
+                        <p className="text-gray-600 text-sm">
+                          {post.batch} Batch | Chitkara University
+                        </p>
+                      </div>
+                      <div className="ml-auto flex">
+                        <p
+                          className={`font-bold ${
+                            post.gotOffer === "yes"
+                              ? "text-green-500"
+                              : "text-red-900"
+                          }`}
+                        >
+                          {post.gotOffer === "yes"
+                            ? "Selected"
+                            : "Not-Selected"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            
+        )
+      ) : (
+        <div className="text-center text-2xl md:text-xl mt-8 mb-8 font-bold">
+          No posts found
+        </div>
+      )}
+        </div>
+
+      </div>
+       
+        <div className="mb-8">
+       
+        </div>
+
+
+
+
 
       <div
         ref={emailRef}

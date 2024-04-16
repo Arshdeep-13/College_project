@@ -5,6 +5,8 @@ const { otpGenerate } = require("./changepassController.js");
 let generateOtp = 0;
 const fs = require("fs");
 
+const expModel = require("../models/expModel.js");
+
 const Func = (req, res) => {
   res.send("hii");
 };
@@ -303,6 +305,25 @@ const sendProfileImage = async (req, res) => {
   }
 };
 
+const getExp = async (req, res) => {
+  try {
+    console.log(req.body)
+    const data = await expModel.find({ email: req.body.email });
+    if (data) {
+      return res.status(201).send({
+        message: "Data fetch succesfully",
+        success: true,
+        data:data,
+      });
+    }
+  } catch (error) {
+    return res.status(501).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
+
 module.exports = {
   login,
   signup,
@@ -317,4 +338,5 @@ module.exports = {
   changeName,
   profileImage,
   sendProfileImage,
+  getExp
 };

@@ -53,5 +53,6 @@ Route.get(
   "/send-profile-image/profileUploads/:imgName",
   userController.sendProfileImage
 );
+Route.post("/get-exp",userController.getExp);
 
 module.exports = Route;
