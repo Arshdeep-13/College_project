@@ -53,7 +53,7 @@ Route.get(
   "/send-profile-image/profileUploads/:imgName",
   userController.sendProfileImage
 );
-Route.post("/get-exp",userController.getExp);
-Route.put("/update-user-exp",userController.editExpUser);
+Route.post("/get-exp", userController.getExp);
+Route.put("/update-user-exp", userController.editExpUser);
 
 module.exports = Route;

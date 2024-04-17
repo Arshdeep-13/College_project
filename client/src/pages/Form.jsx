@@ -20,9 +20,9 @@ function Form() {
   const [universityID, setUniversityID] = useState("");
   const [mobileNo, setMobileNo] = useState("");
   const [linkedin, setLinkedin] = useState("");
-  const [cgpa, setCgpa] = useState("");
+  const [cgpa, setCgpa] = useState("Above 9");
+  const [eligibility, setEligibility] = useState("Above 9");
   const [questions, setQuestions] = useState(0);
-  const [eligibility, setEligibility] = useState("");
   const [preparationTips, setPreparationTips] = useState("");
   const [hrQuestions, setHRQuestions] = useState([""]);
   const [mistakes, setMistakes] = useState("");
@@ -133,8 +133,8 @@ function Form() {
       universityID,
       mobileNo,
       linkedin,
-      cgpa,
-      eligibility,
+      cgpa: cgpa == "Others" ? OtherCgpa : cgpa,
+      eligibility: eligibility == "Others" ? OthereligibilityCgpa : eligibility,
       preparationTips,
       hrQuestions,
       techQuestions,

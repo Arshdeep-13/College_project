@@ -160,6 +160,7 @@ function BlogItem() {
     );
     res = await res.json();
 
+    console.log(res);
     if (res.success) {
       postImageRef.current.src = "data:image/jpg;base64," + res.imagePath;
     } else {
@@ -294,7 +295,11 @@ function BlogItem() {
                         <img
                           className="w-full  h-full object-cover"
                           ref={postImageRef}
-                          src={postImageSrc(post.image)}
+                          src={
+                            post.img
+                              ? postImageSrc(post.image)
+                              : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                          }
                           alt="Profile"
                         />
                       </div>
