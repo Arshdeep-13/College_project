@@ -74,7 +74,7 @@ function BlogItem() {
   const [isSelected, setIsSelected] = useState("yes");
   const companyRef = useRef();
   const postImageRef = useRef();
-  let approvedPost = 0;
+  let [approvedPost, setApprovedPost] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,6 +95,11 @@ function BlogItem() {
 
           return timeB - timeA;
         });
+        for (let post of sortedPosts) {
+          if (post.isApproved) {
+            setApprovedPost(approvedPost++);
+          }
+        }
 
         setSearchedPosts(sortedPosts);
         setAllCompany(sortedPosts);
@@ -145,6 +150,7 @@ function BlogItem() {
           selectedCompanyPosts.push(obj);
         }
       }
+
       setSearchedPosts(selectedCompanyPosts);
     }
   };
@@ -165,7 +171,7 @@ function BlogItem() {
   return (
     <div id="list_of_exp">
       <div className="flex items-center justify-center ml-5 mr-5 md:ml-16 md:mr-16">
-        <div className="flex flex-col items-start gap-5 md:gap-2 lg:flex-row">
+        <div className="flex flex-col items-center justify-center gap-5 md:gap-2 lg:flex-row flex-wrap">
           <div className="flex flex-col justify-center items-center gap-3 md:gap-2 md:flex-row">
             <p className="me-4 font-bold">Sort By Companies : </p>
             <select
@@ -250,12 +256,11 @@ function BlogItem() {
 
       {loading ? (
         <Loader />
-      ) : searchedPosts.length > 0 ? (
+      ) : searchedPosts.length > 0 && approvedPost > 0 ? (
         searchedPosts.map(
           (post) =>
             post.isApproved && (
               <div className="py-3 " key={post._id}>
-                {(approvedPost = approvedPost + 1)}
                 <Link to={`/post/${post._id}`}>
                   <div className="max-w-[85%] mx-auto bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow mt-8 p-2 shadow">
                     {/* Title block */}
@@ -319,11 +324,6 @@ function BlogItem() {
             )
         )
       ) : (
-        <div className="text-center text-2xl md:text-xl mt-8 mb-8 font-bold">
-          No posts found
-        </div>
-      )}
-      {approvedPost == 0 && (
         <div className="text-center text-2xl md:text-xl mt-8 mb-8 font-bold">
           No posts found
         </div>
