@@ -39,7 +39,7 @@ const Profile = ({ isAuth, isAdmin }) => {
       [`${questionType}Questions`]: updatedQuestions,
     });
   };
-  const editField = (post) => {
+  const editFromUser = (post) => {
     setSelectedPost(post);
     setEditMode(true);
     document.getElementById("editModal").showModal();
@@ -496,7 +496,7 @@ const Profile = ({ isAuth, isAdmin }) => {
           {exp.length > 0 ? (
             exp.map((post) => (
               <div className={`py-0`} key={post._id}>
-                <Link to={`/post/${post._id}`}>
+                
                   <div className="max-w-[85%] mx-auto bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow mt-8 p-2 shadow">
                     <span
                       className={`position-absolute top-0 translate-middle badge rounded-pill text-md flex border-none justify-end items-end w-full ${
@@ -560,14 +560,13 @@ const Profile = ({ isAuth, isAdmin }) => {
                         </p>
                         <button
                           className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                          onClick={() => editField(post)}
+                          onClick={() =>editFromUser(post)}
                         >
                           Edit
                         </button>
                       </div>
                     </div>
                   </div>
-                </Link>
                 <div className="border-t border-gray-200 my-2"></div>
               </div>
             ))
