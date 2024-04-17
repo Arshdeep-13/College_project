@@ -490,22 +490,21 @@ const Profile = ({ isAuth, isAdmin }) => {
 
       <div
         ref={expref}
-        className="relative z-10 bg-gray-100 p-8 rounded-lg shadow-md w-5/6 md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto mt-20 scroll-smooth mb-10"
+        className="relative z-10 bg-gray-100 rounded-lg shadow-md w-5/6 md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto mt-20 scroll-smooth mb-10"
       >
         <div className="flex flex-col font-bold">
           {exp.length > 0 ? (
             exp.map((post) => (
-              <div className={`py-3`} key={post._id}>
-                Status:
-                <span
-                  className={`${
-                    post.isApproved ? "text-green-500" : "text-red-500"
-                  } ml-2`}
-                >
-                  {post.isApproved ? "Approved" : "Pending"}
-                </span>
+              <div className={`py-0`} key={post._id}>
                 <Link to={`/post/${post._id}`}>
                   <div className="max-w-[85%] mx-auto bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow mt-8 p-2 shadow">
+                    <span
+                      className={`position-absolute top-0 translate-middle badge rounded-pill text-md flex border-none justify-end items-end w-full ${
+                        post.isApproved ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {post.isApproved ? "Approved" : "Pending"}
+                    </span>
                     {/* Title block */}
                     <div className="flex items-center justify-between">
                       <div className="p-4 flex items-center ">
@@ -547,7 +546,7 @@ const Profile = ({ isAuth, isAdmin }) => {
                           {post.batch} Batch | Chitkara University
                         </p>
                       </div>
-                      <div className="ml-auto flex">
+                      <div className="ml-auto flex justify-center items-center">
                         <p
                           className={`font-bold ${
                             post.gotOffer === "yes"
@@ -569,7 +568,6 @@ const Profile = ({ isAuth, isAdmin }) => {
                     </div>
                   </div>
                 </Link>
-                <div className="font-bold mr-2">{post.date[0]}</div>
                 <div className="border-t border-gray-200 my-2"></div>
               </div>
             ))
