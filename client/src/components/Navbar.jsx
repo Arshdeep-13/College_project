@@ -38,28 +38,30 @@ function Navbar() {
   useEffect(() => {
     const email = sessionStorage.getItem("email");
     const setImage = async () => {
-      let user = await axios.post(
-        `${import.meta.env.VITE_SERVER}/getUserDetails`,
-        {
-          method: "POST",
-          body: { email: email },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (user.data.success) {
-        const imagePath = user.data.data.image;
-        if (imagePath) {
-          let imageUrl = await fetch(
-            `${import.meta.env.VITE_SERVER}/send-profile-image/${imagePath}`
-          );
-          imageUrl = await imageUrl.json();
+      if (email) {
+        let user = await axios.post(
+          `${import.meta.env.VITE_SERVER}/getUserDetails`,
+          {
+            method: "POST",
+            body: { email: email },
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (user.data.success) {
+          const imagePath = user.data.data.image;
+          if (imagePath) {
+            let imageUrl = await fetch(
+              `${import.meta.env.VITE_SERVER}/send-profile-image/${imagePath}`
+            );
+            imageUrl = await imageUrl.json();
 
-          if (imageRef.current && imageRef.current.src !== undefined) {
-            imageRef.current.src =
-              "data:image/jpg;base64," + imageUrl.imagePath;
-            setProfileImage("data:image/jpg;base64," + imageUrl.imagePath);
+            if (imageRef.current && imageRef.current.src !== undefined) {
+              imageRef.current.src =
+                "data:image/jpg;base64," + imageUrl.imagePath;
+              setProfileImage("data:image/jpg;base64," + imageUrl.imagePath);
+            }
           }
         }
       }

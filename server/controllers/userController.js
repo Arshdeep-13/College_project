@@ -86,7 +86,7 @@ const login = async (req, res) => {
         isAdmin: userExit.isAdmin,
       });
     } else {
-      return res.status(400).send({
+      return res.status(200).send({
         message: "Invalid crediantials",
         success: false,
       });
@@ -307,13 +307,13 @@ const sendProfileImage = async (req, res) => {
 
 const getExp = async (req, res) => {
   try {
-    console.log(req.body)
+    // console.log(req.body);
     const data = await expModel.find({ email: req.body.email });
     if (data) {
       return res.status(201).send({
         message: "Data fetch succesfully",
         success: true,
-        data:data,
+        data: data,
       });
     }
   } catch (error) {
@@ -338,5 +338,5 @@ module.exports = {
   changeName,
   profileImage,
   sendProfileImage,
-  getExp
+  getExp,
 };

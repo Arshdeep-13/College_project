@@ -1,14 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useFetcher, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import {
-//   createUserWithEmailAndPassword,
-//   sendEmailVerification,
-//   onAuthStateChanged,
-// } from "firebase/auth";
-
-// import { auth } from "../firebase";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Cookies from "universal-cookie";
@@ -122,6 +115,8 @@ function SignUp() {
           theme: "colored",
         });
 
+        otpRef.current.style.display = "block";
+        signupRef.current.style.display = "none";
         setTimeout(() => {
           navigate("/home");
           window.location.reload();
@@ -140,28 +135,14 @@ function SignUp() {
       }
     }
     setLoading(false);
-    otpRef.current.style.display = "block";
-    signupRef.current.style.display = "none";
   };
   const changeDisplay = async () => {
     setLoading(true);
-    let res = await fetch(`${import.meta.env.VITE_SERVER}/verifyEmail`, {
-      method: "POST",
-      body: JSON.stringify({
-        email: email,
-      }),
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
-    res = await res.json();
-    if (res.success) {
-      otpRef.current.style.display = "block";
-      signupRef.current.style.display = "none";
-    } else {
-      toast.error(res.message, {
+    const isValidEmail = handleEmailChange(email);
+    if (!isValidEmail) {
+      toast.error("Please enter the chitkara email", {
         position: "top-left",
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -169,6 +150,47 @@ function SignUp() {
         progress: undefined,
         theme: "colored",
       });
+    }
+    const isValidUid = handleUidChange(universityId);
+    if (!isValidUid) {
+      toast.error("Please enter the valid Id", {
+        position: "top-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+
+    if (isValidEmail && isValidUid) {
+      let res = await fetch(`${import.meta.env.VITE_SERVER}/verifyEmail`, {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+        }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      res = await res.json();
+      if (res.success) {
+        otpRef.current.style.display = "block";
+        signupRef.current.style.display = "none";
+      } else {
+        toast.error(res.message, {
+          position: "top-left",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
     }
     setLoading(false);
   };

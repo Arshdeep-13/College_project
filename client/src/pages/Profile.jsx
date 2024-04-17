@@ -9,13 +9,12 @@ import image from "../assets/image.png";
 import { CiEdit } from "react-icons/ci";
 import { Link } from "react-router-dom";
 
-
 const Profile = ({ isAuth, isAdmin }) => {
   const [name, setName] = useState("");
   const mainRef = useRef(null);
   const emailRef = useRef(null);
   const passRef = useRef(null);
-  const expref = useState(null)
+  const expref = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [email, setEmail] = useState("");
   const [newPass, setNewPass] = useState("");
@@ -24,22 +23,27 @@ const Profile = ({ isAuth, isAdmin }) => {
   const editImageRef = useRef();
   const imageRef = useRef();
   const [ProfileImage, setProfileImage] = useState("");
-  const [exp,setExp] = useState([])
-const fetchExp = async() =>{
-  const email = sessionStorage.getItem("email");
-  try {
-    const config = {
-      headers:{
-        "Content-Type":"application/json"
-      }
+  const [exp, setExp] = useState([]);
+
+  const fetchExp = async () => {
+    const email = sessionStorage.getItem("email");
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const res = await axios.post(
+        "http://localhost:8000/get-exp",
+        { email },
+        config
+      );
+      console.log(res.data.data);
+      setExp(res.data.data);
+    } catch (error) {
+      console.log("Error from " + error);
     }
-    const res = await axios.post("http://localhost:8000/get-exp",{email},config);
-    console.log(res.data.data)
-    setExp(res.data.data)
-  } catch (error) {
-    console.log("Error from " + error)
-  }
-}
+  };
   useEffect(() => {
     const name = sessionStorage.getItem("name");
     const email = sessionStorage.getItem("email");
@@ -47,12 +51,12 @@ const fetchExp = async() =>{
     email == undefined || null ? "" : setSessionEmail(name), setEmail(email);
     setName(name);
     setSessionEmail(email);
-    fetchExp()
+    fetchExp();
     mainRef.current.style.display = "block";
     emailRef.current.style.display = "none";
     passRef.current.style.display = "none";
     editImageRef.current.style.display = "none";
-    expref.current.style.display = "none"
+    expref.current.style.display = "none";
 
     const setImage = async () => {
       let user = await axios.post(
@@ -213,13 +217,13 @@ const fetchExp = async() =>{
         theme: "colored",
       });
     }
-    expref.current.style.display = "none"
+    expref.current.style.display = "none";
     mainRef.current.style.display = "block";
     emailRef.current.style.display = "none";
     passRef.current.style.display = "none";
   };
   const handleForgetPass = async () => {
-    expref.current.style.display = "none"
+    expref.current.style.display = "none";
     mainRef.current.style.display = "none";
     emailRef.current.style.display = "block";
     passRef.current.style.display = "none";
@@ -229,7 +233,7 @@ const fetchExp = async() =>{
     }
   };
   const emailRefBack = async () => {
-    expref.current.style.display = "none"
+    expref.current.style.display = "none";
     mainRef.current.style.display = "block";
     emailRef.current.style.display = "none";
     passRef.current.style.display = "none";
@@ -256,7 +260,7 @@ const fetchExp = async() =>{
         progress: undefined,
         theme: "colored",
       });
-      expref.current.style.display = "none"
+      expref.current.style.display = "none";
       mainRef.current.style.display = "none";
       emailRef.current.style.display = "none";
       passRef.current.style.display = "block";
@@ -274,9 +278,9 @@ const fetchExp = async() =>{
     }
   };
 
-  const showExp = () =>{
-    expref.current.style.display = "block"
-  }
+  const showExp = () => {
+    expref.current.style.display = "block";
+  };
 
   return (
     <div>
@@ -400,12 +404,10 @@ const fetchExp = async() =>{
         className="relative z-10 bg-white p-8 rounded-lg shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px] mx-auto mt-20"
       >
         <div className="font-bold flex mb-7">
-         
-        {exp.length > 0 ? (
-        exp.map(
-          (post) =>
+          {exp.length > 0 ? (
+            exp.map((post) => (
               <div className="py-3 " key={post._id}>
-               Status: {post.isApproved ? "Approved" : "Not Approved"}
+                Status: {post.isApproved ? "Approved" : "Not Approved"}
                 <Link to={`/post/${post._id}`}>
                   <div className="max-w-[85%] mx-auto bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow mt-8 p-2 shadow">
                     {/* Title block */}
@@ -465,24 +467,16 @@ const fetchExp = async() =>{
                   </div>
                 </Link>
               </div>
-            
-        )
-      ) : (
-        <div className="text-center text-2xl md:text-xl mt-8 mb-8 font-bold">
-          No posts found
+            ))
+          ) : (
+            <div className="text-center text-2xl md:text-xl mt-8 mb-8 font-bold">
+              No posts found
+            </div>
+          )}
         </div>
-      )}
-        </div>
-
       </div>
-       
-        <div className="mb-8">
-       
-        </div>
 
-
-
-
+      <div className="mb-8"></div>
 
       <div
         ref={emailRef}

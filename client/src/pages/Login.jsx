@@ -73,7 +73,7 @@ function Login() {
             if (response.isAdmin === true) {
               cookies.set("token", response.token);
               cookies.set("isAdmin", response.isAdmin);
-              if (response.data.success) {
+              if (response.success) {
                 toast.success(response.message, {
                   position: "top-left",
                   autoClose: 1000,

@@ -1,9 +1,9 @@
 import { GoDiscussionClosed } from "react-icons/go";
 import { IoSpeedometerOutline } from "react-icons/io5";
 import { GiSmart, GiSpeedBoat, GiSpeedometer } from "react-icons/gi";
-import { TypeAnimation } from 'react-type-animation';
+import { TypeAnimation } from "react-type-animation";
 
-function Top(){
+function Top() {
   return (
     <div className="mb-16 mt-4">
       <div className="bg-gray-100">
@@ -15,7 +15,7 @@ function Top(){
               </p>
             </div>
             <p className="max-w-xl mb-6 font-sans text-4xl capitalize font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
-                {/* <svg
+              {/* <svg
                   viewBox="0 0 52 24"
                   fill="currentColor"
                   className="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-gray-400 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block"
@@ -37,29 +37,30 @@ function Top(){
                     height="24"
                   />
                 </svg> */}
-                <TypeAnimation
-      sequence={[
-        // Same substring at the start will only be typed out once, initially
-        'Ace your next interview with PrepHelp',
-        2000, // wait 1s before replacing "Mice" with "Hamsters"
-        'Prepare for your next interview with PrepHelp',
-        2000,
-        'Crack your next interview with PrepHelp',
-        2000,
-        'Get ready for your next interview with PrepHelp',
-        2000
-      ]}
-      wrapper="span"
-      speed={40}
-      style={{ display: 'inline-block' }}
-      repeat={Infinity}
-      cursor = {false}
-      className="text-transparent bg-clip-text bg-gradient-to-r text-4xl from-green-400 via-pink-500 to-purple-500"
-    />
-             
+              <TypeAnimation
+                sequence={[
+                  // Same substring at the start will only be typed out once, initially
+                  "Ace your next interview with PrepHelp",
+                  2000, // wait 1s before replacing "Mice" with "Hamsters"
+                  "Prepare for your next interview with PrepHelp",
+                  2000,
+                  "Crack your next interview with PrepHelp",
+                  2000,
+                  "Get ready for your next interview with PrepHelp",
+                  2000,
+                ]}
+                wrapper="span"
+                speed={40}
+                style={{ display: "inline-block" }}
+                repeat={Infinity}
+                cursor={false}
+                className="text-transparent bg-clip-text bg-gradient-to-r text-4xl from-green-400 via-pink-500 to-purple-500"
+              />
             </p>
             <p className="text-base text-gray-700 md:text-lg">
-              PrepHelp is a community of students who share their placement interview experiences and help each other to excel in their career journey.
+              PrepHelp is a community of students who share their placement
+              interview experiences and help each other to excel in their career
+              journey.
             </p>
           </div>
           <div className="flex items-center sm:justify-center">
@@ -69,13 +70,6 @@ function Top(){
               className="inline-flex items-center justify-center h-12 px-6 mr-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-purple-900 hover:bg-purple-700 focus:shadow-outline focus:outline-none"
             >
               Get started
-            </a>
-            <a
-              href="/"
-              aria-label=""
-              className="inline-flex items-center font-semibold text-gray-800 transition-colors duration-200 hover:text-purple-700"
-            >
-              Learn more
             </a>
           </div>
         </div>
@@ -88,7 +82,7 @@ function Top(){
               <GoDiscussionClosed size={20} />
             </div>
             <p className="font-bold tracking-wide text-gray-800">
-            Ace interviews 
+              Ace interviews
             </p>
           </div>
           <div className="inline-block p-8 text-center">
@@ -96,21 +90,21 @@ function Top(){
               <GiSpeedometer size={20} />
             </div>
             <p className="font-bold tracking-wide text-gray-800">
-            Speed up career growth
+              Speed up career growth
             </p>
           </div>
           <div className="inline-block p-8 text-center">
             <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-indigo-50">
-              <GiSmart size={20}/>
+              <GiSmart size={20} />
             </div>
             <p className="font-bold tracking-wide text-gray-800">
-            Work smarter 
+              Work smarter
             </p>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default Top;
