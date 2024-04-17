@@ -54,5 +54,6 @@ Route.get(
   userController.sendProfileImage
 );
 Route.post("/get-exp",userController.getExp);
+Route.put("/update-user-exp",userController.editExpUser);
 
 module.exports = Route;
