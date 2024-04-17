@@ -30,7 +30,6 @@ const getCompanyLogo = (company) => {
       return "https://files.codingninjas.in/company-25223.svg";
   }
 };
-
 const popularCompanies = [
   "Amazon",
   "Google",
@@ -74,6 +73,8 @@ function BlogItem() {
   const [otherCompany, setOtherCompany] = useState("");
   const [isSelected, setIsSelected] = useState("yes");
   const companyRef = useRef();
+  const postImageRef = useRef();
+  let approvedPost = 0;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -147,10 +148,23 @@ function BlogItem() {
       setSearchedPosts(selectedCompanyPosts);
     }
   };
+  const postImageSrc = async (imgUrl) => {
+    let res = await fetch(
+      `${import.meta.env.VITE_SERVER}/send-profile-image/${imgUrl}`
+    );
+    res = await res.json();
+
+    if (res.success) {
+      postImageRef.current.src = "data:image/jpg;base64," + res.imagePath;
+    } else {
+      postImageRef.current.src =
+        "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg";
+    }
+  };
 
   return (
     <div id="list_of_exp">
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center ml-5 mr-5 md:ml-16 md:mr-16">
         <div className="flex flex-col items-start gap-5 md:gap-2 lg:flex-row">
           <div className="flex flex-col justify-center items-center gap-3 md:gap-2 md:flex-row">
             <p className="me-4 font-bold">Sort By Companies : </p>
@@ -241,6 +255,7 @@ function BlogItem() {
           (post) =>
             post.isApproved && (
               <div className="py-3 " key={post._id}>
+                {(approvedPost = approvedPost + 1)}
                 <Link to={`/post/${post._id}`}>
                   <div className="max-w-[85%] mx-auto bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow mt-8 p-2 shadow">
                     {/* Title block */}
@@ -273,7 +288,8 @@ function BlogItem() {
                       <div className="bg-gray-300 w-12 mx-2 h-12 rounded-full overflow-hidden">
                         <img
                           className="w-full  h-full object-cover"
-                          src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                          ref={postImageRef}
+                          src={postImageSrc(post.image)}
                           alt="Profile"
                         />
                       </div>
@@ -303,6 +319,11 @@ function BlogItem() {
             )
         )
       ) : (
+        <div className="text-center text-2xl md:text-xl mt-8 mb-8 font-bold">
+          No posts found
+        </div>
+      )}
+      {approvedPost == 0 && (
         <div className="text-center text-2xl md:text-xl mt-8 mb-8 font-bold">
           No posts found
         </div>

@@ -6,6 +6,9 @@
 .hover_change {
   animation: colorchange 10s infinite;
 }
+body {
+  scroll-behavior: smooth;
+}
 
 @keyframes colorchange {
   0% {

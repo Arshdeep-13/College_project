@@ -109,7 +109,13 @@ function App() {
         />
         <Route
           path="/Contact"
-          element={<Contact isAdmin={isAdmin} isAuth={isAuth} />}
+          element={
+            isAuth ? (
+              <Contact isAdmin={isAdmin} isAuth={isAuth} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
       </Routes>
     </>

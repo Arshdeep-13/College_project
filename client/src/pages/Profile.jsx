@@ -14,7 +14,7 @@ const Profile = ({ isAuth, isAdmin }) => {
   const mainRef = useRef(null);
   const emailRef = useRef(null);
   const passRef = useRef(null);
-  const expref = useState(null);
+  const expref = useRef(null);
   const [editMode, setEditMode] = useState(false);
   const [email, setEmail] = useState("");
   const [newPass, setNewPass] = useState("");
@@ -38,7 +38,7 @@ const Profile = ({ isAuth, isAdmin }) => {
         { email },
         config
       );
-      console.log(res.data.data);
+      // console.log(res.data.data);
       setExp(res.data.data);
     } catch (error) {
       console.log("Error from " + error);
@@ -277,9 +277,47 @@ const Profile = ({ isAuth, isAdmin }) => {
       });
     }
   };
-
   const showExp = () => {
-    expref.current.style.display = "block";
+    if (expref.current.style.display === "none") {
+      expref.current.style.display = "block";
+      // window.scrollBy(0, 500);
+      window.scrollTo({ top: 500, behavior: "smooth" });
+      mainRef.current.classList.remove("mb-32");
+      mainRef.current.classList.add("mb-20");
+    } else {
+      expref.current.style.display = "none";
+      window.scrollTo({ top: -500, behavior: "smooth" });
+      // window.scrollBy(0, -500);
+      mainRef.current.focus();
+      mainRef.current.classList.add("mb-32");
+      mainRef.current.classList.remove("mb-20");
+    }
+  };
+  const getCompanyLogo = (company) => {
+    switch (company) {
+      case "Microsoft":
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png";
+      case "Google":
+        return "https://imgs.search.brave.com/RhIO_Tc-OGhbwwdc61rqGCfFacsUlQPNcaIZxOl_CZk/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9ibG9n/LmxvZ29teXdheS5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MjEvMDEvZ29vZ2xl/LXN5bWJvbC5qcGc";
+      case "Adobe":
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Adobe_Acrobat_DC_logo_2020.svg/1200px-Adobe_Acrobat_DC_logo_2020.svg.png";
+      case "Apple":
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/1200px-Apple_logo_black.svg.png";
+      case "Amazon":
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1200px-Amazon_logo.svg.png";
+      case "Atlassian":
+        return "https://logos-world.net/wp-content/uploads/2023/03/Atlassian-Logo.png";
+      case "Facebook":
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png";
+      case "TCS":
+        return "https://companieslogo.com/img/orig/TCS.NS-7401f1bd.png?t=1631949260";
+      case "Infosys":
+        return "https://w7.pngwing.com/pngs/687/655/png-transparent-infosys-logo.png";
+      case "Netflix":
+        return "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg";
+      default:
+        return "https://files.codingninjas.in/company-25223.svg";
+    }
   };
 
   return (
@@ -299,9 +337,9 @@ const Profile = ({ isAuth, isAdmin }) => {
       />
       {isAuth && isAdmin ? <AdminNavbar /> : <Navbar />}
 
-      <div className="container mx-auto my-60" ref={mainRef}>
+      <div className="container mx-auto mt-28 mb-32" ref={mainRef}>
         <div>
-          <div className="bg-white relative shadow rounded-lg w-5/6 md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto">
+          <div className="bg-gray-100 relative shadow-lg rounded-lg w-5/6 md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto p-3">
             <div className="relative flex justify-center">
               <img
                 ref={imageRef}
@@ -331,7 +369,7 @@ const Profile = ({ isAuth, isAdmin }) => {
               </div>
             </div>
 
-            <div className="mt-16">
+            <div className="mt-10">
               <h1 className="font-bold text-center text-3xl text-gray-900">
                 Username : {name}
               </h1>
@@ -346,7 +384,7 @@ const Profile = ({ isAuth, isAdmin }) => {
               <div className="w-full">
                 <div className="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
                   <a
-                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-100 transition duration-150 text-lg md:text-base"
+                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block transition duration-150 text-lg md:text-base hover:bg-gray-300"
                     onClick={() => handleEditClick()}
                   >
                     <img
@@ -358,7 +396,7 @@ const Profile = ({ isAuth, isAdmin }) => {
                   </a>
                   <a
                     href="#"
-                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-100 transition duration-150 text-lg md:text-base"
+                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-300 transition duration-150 text-lg md:text-base"
                     onClick={() => handleForgetPass()}
                   >
                     <img
@@ -370,7 +408,7 @@ const Profile = ({ isAuth, isAdmin }) => {
                   </a>
                   <button
                     href="#"
-                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-100 transition duration-150 text-lg md:text-base text-start"
+                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-300 transition duration-150 text-lg md:text-base text-start"
                     onClick={editProfile}
                   >
                     <img
@@ -382,7 +420,7 @@ const Profile = ({ isAuth, isAdmin }) => {
                   </button>
                   <button
                     href="#"
-                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-100 transition duration-150 text-lg md:text-base text-start"
+                    className="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-300 transition duration-150 text-lg md:text-base text-start"
                     onClick={showExp}
                   >
                     <img
@@ -401,13 +439,20 @@ const Profile = ({ isAuth, isAdmin }) => {
 
       <div
         ref={expref}
-        className="relative z-10 bg-white p-8 rounded-lg shadow-md w-full sm:w-[96px] md:w-[420px] lg:w-[524px] mx-auto mt-20"
+        className="relative z-10 bg-gray-100 p-8 rounded-lg shadow-md w-5/6 md:w-5/6 lg:w-4/6 xl:w-3/6 mx-auto mt-20 scroll-smooth mb-10"
       >
-        <div className="font-bold flex mb-7">
+        <div className="flex flex-col font-bold">
           {exp.length > 0 ? (
             exp.map((post) => (
-              <div className="py-3 " key={post._id}>
-                Status: {post.isApproved ? "Approved" : "Not Approved"}
+              <div className={`py-3`} key={post._id}>
+                Status:
+                <span
+                  className={`${
+                    post.isApproved ? "text-green-500" : "text-red-500"
+                  } ml-2`}
+                >
+                  {post.isApproved ? "Approved" : "Pending"}
+                </span>
                 <Link to={`/post/${post._id}`}>
                   <div className="max-w-[85%] mx-auto bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow mt-8 p-2 shadow">
                     {/* Title block */}
@@ -416,7 +461,7 @@ const Profile = ({ isAuth, isAdmin }) => {
                         <div className="w-10 h-10 rounded overflow-hidden flex items-center justify-centern">
                           <img
                             className="max-w-full max-h-full object-cover"
-                            // src={getCompanyLogo(post.company)}
+                            src={getCompanyLogo(post.company)}
                             alt="Company Logo"
                           />
                         </div>
@@ -475,8 +520,6 @@ const Profile = ({ isAuth, isAdmin }) => {
           )}
         </div>
       </div>
-
-      <div className="mb-8"></div>
 
       <div
         ref={emailRef}

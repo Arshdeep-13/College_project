@@ -59,6 +59,7 @@ function Login() {
           sessionStorage.setItem("email", userDetail.email);
           sessionStorage.setItem("name", userDetail.name);
           sessionStorage.setItem("uid", userDetail.uid);
+          sessionStorage.setItem("userImage", userDetail.image);
 
           let response = await fetch(`${import.meta.env.VITE_SERVER}/login`, {
             method: "POST",

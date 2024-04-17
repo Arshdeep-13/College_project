@@ -81,6 +81,11 @@ const expSchema = mongoose.Schema({
   ipSubjects: {
     type: [],
   },
+  image: {
+    type: String,
+    default:
+      "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg",
+  },
 });
 
 const expModel = new mongoose.model("expModel", expSchema);

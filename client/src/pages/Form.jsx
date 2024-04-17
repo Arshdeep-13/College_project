@@ -33,16 +33,21 @@ function Form() {
   let hrFieldRef = useRef();
   let techFieldRef = useRef();
   let ipFieldRef = useRef();
+  const [OthereligibilityCgpa, setOthereligibilityCgpa] = useState("");
+  const [OtherCgpa, setOtherCgpa] = useState("");
+  const [userImage, setUserImage] = useState("");
 
   useEffect(() => {
     const name = sessionStorage.getItem("name");
     const email = sessionStorage.getItem("email");
     const uid = sessionStorage.getItem("uid");
+    const Image = sessionStorage.getItem("userImage");
 
     name == undefined || null ? "" : setName(name);
     email == undefined || null ? "" : setEmail(email);
     uid == undefined || null ? "" : setUniversityID(uid);
     uid == undefined || null ? "" : setBatch(20 + uid.slice(0, 2));
+    Image == undefined || null ? "" : setUserImage(Image);
   }, []);
   useEffect(() => {
     if (hrQuestions.length > 1) {
@@ -72,6 +77,9 @@ function Form() {
 
   const handleNextClick1 = () => {
     if (company.trim() !== "" && role.trim() !== "") {
+      if (OthereligibilityCgpa) {
+        setEligibility(OthereligibilityCgpa.trim());
+      }
       setQuestions(1);
     } else {
       toast.error("Please fill in all required fields.");
@@ -85,6 +93,9 @@ function Form() {
   };
   const handleNextClick2 = () => {
     if (name.trim() !== "" && email.trim() !== "") {
+      if (OtherCgpa) {
+        setCgpa(OtherCgpa.trim());
+      }
       setQuestions(2);
     } else {
       toast.error("Please fill in all required fields.");
@@ -132,6 +143,7 @@ function Form() {
       interviewPrep,
       date: [currentDate, currentTime],
       ipSubjects: IPSubjects,
+      image: userImage,
     };
 
     try {
@@ -176,23 +188,24 @@ function Form() {
                   onChange={(e) => setCompany(e.target.value)}
                   className="border-2 border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-80"
                 >
-                  <option value="Amazon">Amazon</option>
-                  <option value="Google">Google</option>
-                  <option value="Microsoft">Microsoft</option>
-                  <option value="Facebook">Facebook</option>
-                  <option value="Apple">Apple</option>
-                  <option value="Netflix">Netflix</option>
-                  <option value="Uber">Uber</option>
-                  <option value="LinkedIn">LinkedIn</option>
-                  <option value="Twitter">Twitter</option>
-                  <option value="Salesforce">Salesforce</option>
-                  <option value="Oracle">Oracle</option>
                   <option value="Adobe">Adobe</option>
-                  <option value="Paypal">Paypal</option>
+                  <option value="Amazon">Amazon</option>
+                  <option value="Apple">Apple</option>
                   <option value="Cisco">Cisco</option>
+                  <option value="Facebook">Facebook</option>
+                  <option value="Google">Google</option>
                   <option value="IBM">IBM</option>
                   <option value="Intel">Intel</option>
                   <option value="Infosys">Infosys</option>
+                  <option value="LinkedIn">LinkedIn</option>
+                  <option value="Microsoft">Microsoft</option>
+                  <option value="Netflix">Netflix</option>
+                  <option value="Oracle">Oracle</option>
+                  <option value="Others">Others</option>
+                  <option value="Paypal">Paypal</option>
+                  <option value="Salesforce">Salesforce</option>
+                  <option value="Twitter">Twitter</option>
+                  <option value="Uber">Uber</option>
                   <option value="Others">Others</option>
                 </select>
                 {company == "Others" && (
@@ -227,13 +240,36 @@ function Form() {
                 <label className="block font-semibold mt-8 mb-5">
                   Any eligibility Criteria?*
                 </label>
-                <input
+                <select
+                  name="eligibilityCriteria"
+                  id="eligibilityCriteria"
                   value={eligibility}
-                  required
-                  placeholder="Eg. CGPA Above 7 or No in case there is No Eligibility Criteria"
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4  appearance-none leading-5 text-gray-700 w-80"
                   onChange={(e) => setEligibility(e.target.value)}
-                />
+                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4  appearance-none leading-5 text-gray-700 w-80"
+                >
+                  <option value="Above 9">Above 9</option>
+                  <option value="Between 8 and 9">Between 8 and 9</option>
+                  <option value="Below 8">Below 8</option>
+                  <option value="Others">Others</option>
+                </select>
+                {eligibility == "Others" && (
+                  <input
+                    type="number"
+                    value={OthereligibilityCgpa}
+                    required
+                    placeholder="Eg. CGPA Above 7 or No in case there is No Eligibility Criteria"
+                    className="mt-2 border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4  appearance-none leading-5 text-gray-700 w-80"
+                    onChange={(e) => {
+                      if (e.target.value < 0) {
+                        setOthereligibilityCgpa(0);
+                      } else if (e.target.value > 10) {
+                        setOthereligibilityCgpa(10);
+                      } else {
+                        setOthereligibilityCgpa(e.target.value);
+                      }
+                    }}
+                  />
+                )}
               </div>
 
               <div className="w-80">
@@ -391,18 +427,34 @@ function Form() {
                 <label className="block font-semibold mt-8 mb-5">
                   Your CGPA*
                 </label>
-                <input
-                  type="number"
-                  onChange={(e) => {
-                    if (e.target.value < 0) {
-                      setCgpa(0);
-                    } else {
-                      setCgpa(e.target.value);
-                    }
-                  }}
+                <select
+                  name="eligibilityCriteria"
+                  id="eligibilityCriteria"
                   value={cgpa}
-                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
-                />
+                  onChange={(e) => setCgpa(e.target.value)}
+                  className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4  appearance-none leading-5 text-gray-700 w-80"
+                >
+                  <option value="Above 9">Above 9</option>
+                  <option value="Between 8 and 9">Between 8 and 9</option>
+                  <option value="Below 8">Below 8</option>
+                  <option value="Others">Others</option>
+                </select>
+                {cgpa == "Others" && (
+                  <input
+                    type="number"
+                    onChange={(e) => {
+                      if (e.target.value < 0) {
+                        setOtherCgpa(0);
+                      } else if (e.target.value > 10) {
+                        setOtherCgpa(10);
+                      } else {
+                        setOtherCgpa(e.target.value);
+                      }
+                    }}
+                    value={OtherCgpa}
+                    className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block  appearance-none leading-5 text-gray-700 w-80"
+                  />
+                )}
               </div>
             </div>
             <button
@@ -435,15 +487,6 @@ function Form() {
               placeholder="Please Share some preparation tips if there is any."
               className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-[80%] lg:w-[65%] "
               onChange={(e) => setMistakes(e.target.value)}
-            />
-            <label className="block font-semibold mt-8 mb-5">
-              Interview Preparation
-            </label>
-            <textarea
-              value={interviewPrep}
-              placeholder="Please Share some Interview preparation."
-              className="border-2 border-gray-300 focus:outline-none  focus:border-blue-400 rounded-md py-2 px-4 block appearance-none leading-5 text-gray-700 w-[80%] lg:w-[65%] "
-              onChange={(e) => Setinterviewprep(e.target.value)}
             />
             <label className="block font-semibold mt-8 mb-5">
               Preparation Tips
