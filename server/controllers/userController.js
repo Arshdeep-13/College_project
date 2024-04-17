@@ -324,6 +324,27 @@ const getExp = async (req, res) => {
   }
 };
 
+const editExpUser = async(req,res) =>{
+  try {
+    console.log(req.query.id)
+    console.log(req.body.selectedPost)
+    const id = req.query.id;
+    const data = await expModel.findByIdAndUpdate(id,req.body.selectedPost,{
+      new:true
+    })
+    return res.status(200).send({
+      message:"Updated succesfully",
+      success:true,
+      data:data
+    })
+  } catch (error) {
+    return res.status(501).send({
+      message: error.message,
+      success: false,
+    });
+  }
+}
+
 module.exports = {
   login,
   signup,
@@ -339,4 +360,5 @@ module.exports = {
   profileImage,
   sendProfileImage,
   getExp,
+  editExpUser
 };
