@@ -30,6 +30,7 @@ const Profile = ({ isAuth, isAdmin }) => {
   // const [loading, setLoading] = useState(false);
   // const [approvedTechQuestions, setApprovedTechQuestions] = useState([]);
   // const [approvedHRQuestions, setApprovedHRQuestions] = useState([]);
+  const [profileImageSrc, setProfileImageSrc] = useState([]);
 
   const handleDeleteQuestion = (questionIndex, questionType) => {
     const updatedQuestions = [...selectedPost[`${questionType}Questions`]];
@@ -54,7 +55,7 @@ const Profile = ({ isAuth, isAdmin }) => {
         },
       };
       const res = await axios.put(
-        `http://localhost:8000/update-user-exp?id=${id}`,
+        `${import.meta.env.VITE_SERVER}/update-user-exp?id=${id}`,
         { selectedPost },
         config
       );
@@ -67,15 +68,6 @@ const Profile = ({ isAuth, isAdmin }) => {
       toast.error("Something went wrong");
     }
   };
-  // const fetchExp = async() =>{
-  //   const email = sessionStorage.getItem("email");
-  //   try {
-  //     const config = {
-  //       headers:{
-  //         "Content-Type":"application/json"
-  //       }
-  // =======
-
   const fetchExp = async () => {
     const email = sessionStorage.getItem("email");
     try {
@@ -85,7 +77,7 @@ const Profile = ({ isAuth, isAdmin }) => {
         },
       };
       const res = await axios.post(
-        "http://localhost:8000/get-exp",
+        `${import.meta.env.VITE_SERVER}/get-exp`,
         { email },
         config
       );
@@ -158,6 +150,7 @@ const Profile = ({ isAuth, isAdmin }) => {
         imageUrl = await imageUrl.json();
 
         imageRef.current.src = "data:image/jpg;base64," + imageUrl.imagePath;
+        sessionStorage.setItem("userImage", imagePath);
         toast.success(res.message, {
           position: "top-left",
           autoClose: 1000,
@@ -370,6 +363,32 @@ const Profile = ({ isAuth, isAdmin }) => {
         return "https://files.codingninjas.in/company-25223.svg";
     }
   };
+  useEffect(() => {
+    const fetchProfileImages = async () => {
+      const promises = exp.map(async (post) => {
+        if (post.image) {
+          try {
+            const response = await fetch(
+              `${import.meta.env.VITE_SERVER}/send-profile-image/${post.image}`
+            );
+            const data = await response.json();
+            return "data:image/jpg;base64," + data.imagePath;
+          } catch (error) {
+            console.error("Error fetching profile image:", error);
+            return null;
+          }
+        } else {
+          return null;
+        }
+      });
+
+      const profileImagePaths = await Promise.all(promises);
+      // console.log(profileImagePaths);
+      setProfileImageSrc(profileImagePaths);
+    };
+
+    fetchProfileImages();
+  }, [exp]);
 
   return (
     <div>
@@ -494,79 +513,81 @@ const Profile = ({ isAuth, isAdmin }) => {
       >
         <div className="flex flex-col font-bold">
           {exp.length > 0 ? (
-            exp.map((post) => (
+            exp.map((post, idx) => (
               <div className={`py-0`} key={post._id}>
-                
-                  <div className="max-w-[85%] mx-auto bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow mt-8 p-2 shadow">
-                    <span
-                      className={`position-absolute top-0 translate-middle badge rounded-pill text-md flex border-none justify-end items-end w-full ${
-                        post.isApproved ? "text-green-600" : "text-red-600"
-                      }`}
-                    >
-                      {post.isApproved ? "Approved" : "Pending"}
-                    </span>
-                    {/* Title block */}
-                    <div className="flex items-center justify-between">
-                      <div className="p-4 flex items-center ">
-                        <div className="w-10 h-10 rounded overflow-hidden flex items-center justify-centern">
-                          <img
-                            className="max-w-full max-h-full object-cover"
-                            src={getCompanyLogo(post.company)}
-                            alt="Company Logo"
-                          />
-                        </div>
-                        <div className="ml-4">
-                          <p className="text-xl font-semibold">
-                            {post.company} | {post.role} |{" "}
-                            {post.expyr == 0
-                              ? "Fresher"
-                              : `Experience ${post.expyr} year`}
-                          </p>
-                          <p className="text-gray-600 font-bold">
-                            {post.rounds} Rounds
-                          </p>
-                        </div>
-                      </div>
-                      <div className="font-bold mr-2">{post.date[0]}</div>
-                    </div>
-                    <div className="border-t border-gray-200 my-2"></div>
-                    {/* Profile block */}
-                    <div className="px-4 py-2 flex items-center">
-                      <div className="bg-gray-300 w-12 mx-2 h-12 rounded-full overflow-hidden">
-                        {/* Profile image */}
+                <div className="max-w-[85%] mx-auto bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow mt-8 p-2 shadow">
+                  <span
+                    className={`position-absolute top-0 translate-middle badge rounded-pill text-md flex border-none justify-end items-end w-full ${
+                      post.isApproved ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {post.isApproved ? "Approved" : "Pending"}
+                  </span>
+                  {/* Title block */}
+                  <div className="flex items-center justify-between">
+                    <div className="p-4 flex items-center ">
+                      <div className="w-10 h-10 rounded overflow-hidden flex items-center justify-centern">
                         <img
-                          className="w-full  h-full object-cover"
-                          src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-                          alt="Profile"
+                          className="max-w-full max-h-full object-cover"
+                          src={getCompanyLogo(post.company)}
+                          alt="Company Logo"
                         />
                       </div>
-                      <div className="ml-4 px-1">
-                        <p className="text-">{post.name}</p>
-                        <p className="text-gray-600 text-sm">
-                          {post.batch} Batch | Chitkara University
+                      <div className="ml-4">
+                        <p className="text-xl font-semibold">
+                          {post.company} | {post.role} |{" "}
+                          {post.expyr == 0
+                            ? "Fresher"
+                            : `Experience ${post.expyr} year`}
                         </p>
-                      </div>
-                      <div className="ml-auto flex justify-center items-center">
-                        <p
-                          className={`font-bold ${
-                            post.gotOffer === "yes"
-                              ? "text-green-500"
-                              : "text-red-900"
-                          }`}
-                        >
-                          {post.gotOffer === "yes"
-                            ? "Selected"
-                            : "Not Selected"}
+                        <p className="text-gray-600 font-bold">
+                          {post.rounds} Rounds
                         </p>
-                        <button
-                          className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                          onClick={() =>editFromUser(post)}
-                        >
-                          Edit
-                        </button>
                       </div>
                     </div>
+                    <div className="font-bold mr-2">{post.date[0]}</div>
                   </div>
+                  <div className="border-t border-gray-200 my-2"></div>
+                  {/* Profile block */}
+                  <div className="px-4 py-2 flex items-center">
+                    <div className="bg-gray-300 w-12 mx-2 h-12 rounded-full overflow-hidden">
+                      {/* Profile image */}
+                      {/* {console.log(profileImageSrc[idx])} */}
+                      <img
+                        className="w-full  h-full object-cover"
+                        src={
+                          profileImageSrc[idx]
+                            ? profileImageSrc[idx]
+                            : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+                        }
+                        alt="Profile"
+                      />
+                    </div>
+                    <div className="ml-4 px-1">
+                      <p className="text-">{post.name}</p>
+                      <p className="text-gray-600 text-sm">
+                        {post.batch} Batch | Chitkara University
+                      </p>
+                    </div>
+                    <div className="ml-auto flex justify-center items-center">
+                      <p
+                        className={`font-bold ${
+                          post.gotOffer === "yes"
+                            ? "text-green-500"
+                            : "text-red-900"
+                        }`}
+                      >
+                        {post.gotOffer === "yes" ? "Selected" : "Not Selected"}
+                      </p>
+                      <button
+                        className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={() => editFromUser(post)}
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  </div>
+                </div>
                 <div className="border-t border-gray-200 my-2"></div>
               </div>
             ))

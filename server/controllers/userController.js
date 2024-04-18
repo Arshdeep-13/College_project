@@ -309,6 +309,7 @@ const getExp = async (req, res) => {
   try {
     // console.log(req.body);
     const data = await expModel.find({ email: req.body.email });
+    console.log(data);
     if (data) {
       return res.status(201).send({
         message: "Data fetch succesfully",
@@ -324,26 +325,26 @@ const getExp = async (req, res) => {
   }
 };
 
-const editExpUser = async(req,res) =>{
+const editExpUser = async (req, res) => {
   try {
-    console.log(req.query.id)
-    console.log(req.body.selectedPost)
+    console.log(req.query.id);
+    console.log(req.body.selectedPost);
     const id = req.query.id;
-    const data = await expModel.findByIdAndUpdate(id,req.body.selectedPost,{
-      new:true
-    })
+    const data = await expModel.findByIdAndUpdate(id, req.body.selectedPost, {
+      new: true,
+    });
     return res.status(200).send({
-      message:"Updated succesfully",
-      success:true,
-      data:data
-    })
+      message: "Updated succesfully",
+      success: true,
+      data: data,
+    });
   } catch (error) {
     return res.status(501).send({
       message: error.message,
       success: false,
     });
   }
-}
+};
 
 module.exports = {
   login,
@@ -360,5 +361,5 @@ module.exports = {
   profileImage,
   sendProfileImage,
   getExp,
-  editExpUser
+  editExpUser,
 };

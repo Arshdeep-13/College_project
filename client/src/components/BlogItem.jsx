@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 // import { db } from "../firebase";
 // import { collection, getDocs } from "firebase/firestore";
@@ -75,6 +75,8 @@ function BlogItem() {
   const companyRef = useRef();
   const postImageRef = useRef();
   let [approvedPost, setApprovedPost] = useState(0);
+  let [presentPostImg, setPresentPostImg] = useState("");
+  const [profileImageSrc, setProfileImageSrc] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -154,20 +156,36 @@ function BlogItem() {
       setSearchedPosts(selectedCompanyPosts);
     }
   };
-  const postImageSrc = async (imgUrl) => {
-    let res = await fetch(
-      `${import.meta.env.VITE_SERVER}/send-profile-image/${imgUrl}`
-    );
-    res = await res.json();
 
-    console.log(res);
-    if (res.success) {
-      postImageRef.current.src = "data:image/jpg;base64," + res.imagePath;
-    } else {
-      postImageRef.current.src =
-        "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg";
-    }
-  };
+  useEffect(() => {
+    const fetchProfileImages = async () => {
+      const promises = searchedPosts.map(async (post) => {
+        if (post.image) {
+          try {
+            const response = await fetch(
+              `${import.meta.env.VITE_SERVER}/send-profile-image/${post.image}`
+            );
+            const data = await response.json();
+            return "data:image/jpg;base64," + data.imagePath;
+          } catch (error) {
+            console.error("Error fetching profile image:", error);
+            return null;
+          }
+        } else {
+          return null;
+        }
+      });
+
+      const profileImagePaths = await Promise.all(promises);
+
+      setProfileImageSrc(profileImagePaths);
+    };
+
+    fetchProfileImages();
+  }, [searchedPosts]);
+
+  // admin@prephelp.com
+  // admin123
 
   return (
     <div id="list_of_exp">
@@ -259,7 +277,7 @@ function BlogItem() {
         <Loader />
       ) : searchedPosts.length > 0 && approvedPost > 0 ? (
         searchedPosts.map(
-          (post) =>
+          (post, idx) =>
             post.isApproved && (
               <div className="py-3 " key={post._id}>
                 <Link to={`/post/${post._id}`}>
@@ -293,11 +311,10 @@ function BlogItem() {
                     <div className="px-4 py-2 flex items-center">
                       <div className="bg-gray-300 w-12 mx-2 h-12 rounded-full overflow-hidden">
                         <img
-                          className="w-full  h-full object-cover"
-                          ref={postImageRef}
+                          className="w-full h-full object-cover"
                           src={
-                            post.img
-                              ? postImageSrc(post.image)
+                            profileImageSrc[idx]
+                              ? profileImageSrc[idx]
                               : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
                           }
                           alt="Profile"

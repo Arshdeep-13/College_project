@@ -145,7 +145,7 @@ function Form() {
       ipSubjects: IPSubjects,
       image: userImage,
     };
-
+    // console.log(formData);
     try {
       let res = await fetch(`${import.meta.env.VITE_SERVER}/experience`, {
         method: "POST",
@@ -300,6 +300,7 @@ function Form() {
                       value="yes"
                       onChange={(e) => setGotOffer(e.target.value)}
                       checked={gotOffer === "yes"}
+                      required
                     />
                     <span className="mx-5">Yes</span>
                   </label>
