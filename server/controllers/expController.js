@@ -1,7 +1,8 @@
 const expModel = require("../models/expModel.js");
 const expData = async (req, res) => {
+  console.log(req.body);
   try {
-    const expData = new expModel(req.body);
+    const expData = await new expModel(req.body);
     await expData.save();
     return res.status(200).send({
       message: "Data saved succesfully",
@@ -42,6 +43,7 @@ const getQues = async (req, res) => {
       data: getQues,
       techques: getQues.techQuestions,
       hrques: getQues.hrQuestions,
+      grpques: getQues.groupDiscussion,
     });
   } catch (error) {
     res.status(500).send({ message: error.message, success: false });

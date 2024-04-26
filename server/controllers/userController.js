@@ -75,15 +75,19 @@ const login = async (req, res) => {
     const dbPass = userExit.password;
     const passMatch = await bcrypt.compare(userPass, dbPass);
     if (passMatch) {
-      const token = jwt.sign({ userId: userExit._id }, process.env.SECRET_KEY, {
-        expiresIn: "1d",
-      });
+      console.log(userExit.isAdmin);
+      const token = jwt.sign(
+        { userId: userExit._id, isAdmin: userExit.isAdmin },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: "1d",
+        }
+      );
       return res.status(200).send({
         message: "Login successfully",
         success: true,
         data: userExit,
         token: token,
-        isAdmin: userExit.isAdmin,
       });
     } else {
       return res.status(200).send({
@@ -309,7 +313,7 @@ const getExp = async (req, res) => {
   try {
     // console.log(req.body);
     const data = await expModel.find({ email: req.body.email });
-    console.log(data);
+    // console.log(data);
     if (data) {
       return res.status(201).send({
         message: "Data fetch succesfully",
@@ -327,8 +331,8 @@ const getExp = async (req, res) => {
 
 const editExpUser = async (req, res) => {
   try {
-    console.log(req.query.id);
-    console.log(req.body.selectedPost);
+    // console.log(req.query.id);
+    // console.log(req.body.selectedPost);
     const id = req.query.id;
     const data = await expModel.findByIdAndUpdate(id, req.body.selectedPost, {
       new: true,

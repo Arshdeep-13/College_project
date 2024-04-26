@@ -58,7 +58,7 @@ const expSchema = mongoose.Schema({
     type: String,
   },
   techQuestions: {
-    type: [],
+    type: Array,
   },
   interviewPrep: {
     type: String,
@@ -76,10 +76,13 @@ const expSchema = mongoose.Schema({
     default: 0,
   },
   hrQuestions: {
-    type: [],
+    type: Array,
   },
   ipSubjects: {
-    type: [],
+    type: Array,
+  },
+  groupDiscussion: {
+    type: Array,
   },
   image: {
     type: String,
