@@ -269,7 +269,7 @@ const profileImage = async (req, res) => {
       });
     } else {
       // console.log(user);
-      user.profileImage = req.files[0].path;
+      user.image = req.files[0].path;
       return res.status(200).send({
         message: "Image uploaded successfully",
         imagePath: req.files[0].path,
