@@ -257,10 +257,10 @@ const changeName = async (req, res) => {
 };
 const profileImage = async (req, res) => {
   // optimise this function
+  // console.log(req.body, req.files);
   try {
-    const user = await userModel.findOneAndUpdate({
+    const user = await userModel.find({
       email: req.body.email,
-      image: req.files[0].path,
     });
     if (!user) {
       return res.status(200).send({
@@ -268,6 +268,8 @@ const profileImage = async (req, res) => {
         success: false,
       });
     } else {
+      // console.log(user);
+      user.profileImage = req.files[0].path;
       return res.status(200).send({
         message: "Image uploaded successfully",
         imagePath: req.files[0].path,

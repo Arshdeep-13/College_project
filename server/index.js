@@ -7,7 +7,6 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 dotenv.config();
 const PORT = process.env.PORT || 8000;
-import serverless from "serverless-http";
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -17,5 +16,3 @@ app.use(Route);
 app.listen(PORT, () => {
   console.log("Server is running...");
 });
-
-export const handler = serverless(app);
