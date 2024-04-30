@@ -75,7 +75,7 @@ const login = async (req, res) => {
     const dbPass = userExit.password;
     const passMatch = await bcrypt.compare(userPass, dbPass);
     if (passMatch) {
-      console.log(userExit.isAdmin);
+      // console.log(userExit.isAdmin);
       const token = jwt.sign(
         { userId: userExit._id, isAdmin: userExit.isAdmin },
         process.env.SECRET_KEY,
@@ -269,7 +269,9 @@ const profileImage = async (req, res) => {
       });
     } else {
       // console.log(user);
-      user.image = req.files[0].path;
+      user[0].image = req.files[0].path;
+      await user[0].save();
+      // console.log(user);
       return res.status(200).send({
         message: "Image uploaded successfully",
         imagePath: req.files[0].path,
