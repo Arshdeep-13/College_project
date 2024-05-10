@@ -312,7 +312,6 @@ const sendProfileImage = async (req, res) => {
     });
   }
 };
-
 const getExp = async (req, res) => {
   try {
     // console.log(req.body);
@@ -332,7 +331,6 @@ const getExp = async (req, res) => {
     });
   }
 };
-
 const editExpUser = async (req, res) => {
   try {
     // console.log(req.query.id);

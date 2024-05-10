@@ -1,6 +1,5 @@
 const expModel = require("../models/expModel.js");
 const expData = async (req, res) => {
-  console.log(req.body);
   try {
     const expData = await new expModel(req.body);
     await expData.save();
